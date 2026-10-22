@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Voidline Iceland</title>
+
+    <!--
+      FONT — dua jenis, masing-masing punya tugas.
+
+      Cinzel  : judul dan angka besar. Bentuknya geometris dengan tarikan tebal
+                tipis yang tajam — inilah wajah "gothic" yang cocok untuk brand
+                merah–hitam–putih: tegas dan berkelas.
+      Inter   : seluruh teks isi. Cinzel tidak layak untuk paragraf — huruf
+                kecilnya sempit dan cepat melelahkan mata. Inter menjaga
+                keterbacaan, dan pasangan keduanya terbaca sebagai satu
+                rancangan, bukan dua gaya yang bertabrakan.
+
+      preconnect dipakai supaya koneksi ke server font sudah dibuka sebelum
+      CSS-nya diminta, sehingga teks tidak berkedip berganti rupa.
+
+      Bila jaringan font gagal, situs tetap memakai font sistem (lihat
+      index.css) — halaman tidak rusak, hanya berganti wajah.
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,258 @@
+@import "tailwindcss";
+
+/* =============================================================================
+   PALET WARNA — MERAH · HITAM · PUTIH
+
+   Satu palet saja, tidak ada mode gelap. Inilah palet brand Voidline. Situs
+   dibangun dari tiga warna itu saja, tanpa warna keempat.
+
+   PRINSIP PEMAKAIAN — dibaca dari luas ke sempit:
+
+     HITAM   dasar seluruh halaman. Seluruh bidang yang memenuhi lebar layar
+             berlatar hitam; itulah "dinding" situs.
+     PUTIH   bahan panel. Yang duduk di atas dinding hitam dan harus dibaca
+             sebagai benda tersendiri — kartu koleksi, kotak mint, kertas —
+             memakai putih atau krem. Jadi putih tidak dipakai sebagai latar
+             halaman, melainkan sebagai bahan yang ditempel di atasnya.
+     MERAH   aksen pemandu. Dipakai untuk hal yang harus diklik atau harus
+             dibaca lebih dulu: tombol, angka, garis penanda, bingkai pada
+             keadaan aktif/hover. Merah kehilangan dayanya kalau dipakai rata
+             di semua tempat — jadi ia sengaja jarang.
+
+   Nama variabelnya sengaja tidak menyebut "terang" atau "gelap". `--bg` adalah
+   latar halaman, `--panel` adalah bahan panel, `--fg` adalah warna teks di atas
+   latar halaman, dan `--panel-fg` adalah warna teks di atas panel. Dengan
+   penamaan ini, membalik palet sewaktu-waktu tidak memaksa mengganti nama.
+
+   Nilai netralnya dibuat sedikit hangat (bukan biru) supaya serasi berdampingan
+   dengan merah.
+
+   Variabel di bawah adalah SATU-SATUNYA sumber warna situs; `@theme inline`
+   mendaftarkannya sebagai warna Tailwind (bg-panel, text-fg, text-accent, dst).
+   Menambah warna baru harus lewat sini, bukan langsung di komponen — supaya
+   seluruh situs tetap bisa disetel dari satu tempat.
+   ============================================================================= */
+
+:root {
+  /* ── Dinding: latar seluruh halaman ────────────────────────────────────── */
+  --bg: #0a0a0b;
+  /* `surface` adalah permukaan redup di atas dinding — dipakai untuk kartu dan
+     kotak yang TIDAK putih: bagian yang perlu terlihat sebagai bidang, tetapi
+     tidak boleh bersaing dengan panel putih. 0.055 putih terlalu samar (nyaris
+     tidak terlihat), jadi nilainya dinaikkan sampai batasnya jelas terbaca
+     tanpa berubah menjadi terang. */
+  --surface: rgba(255, 255, 255, 0.07);
+  --surface-hover: rgba(255, 255, 255, 0.11);
+  --surface-muted: rgba(255, 255, 255, 0.16);
+  --border: rgba(255, 255, 255, 0.16);
+  --border-strong: rgba(255, 255, 255, 0.32);
+
+  /* Teks di atas dinding hitam. */
+  --fg: #ffffff;
+  --fg-muted: rgba(255, 255, 255, 0.66);
+
+  /* ── Panel: bahan putih yang ditempel di atas dinding ──────────────────── */
+  /* Ini yang membuat kartu koleksi dan kotak mint terbaca sebagai benda,
+     bukan sebagai lubang di latar. Karena itu nilainya harus benar-benar
+     putih, bukan putih yang diturunkan. */
+  --panel: #ffffff;
+  --panel-muted: #f6f4f3;
+  --panel-border: rgba(0, 0, 0, 0.1);
+
+  /* Teks di atas panel. Nilainya HAMPIR SAMA dengan --bg dan --fg-muted, tetapi
+     ditulis terpisah: begitu salah satu latar berubah, keduanya bisa disetel
+     sendiri tanpa saling menyeret. Untuk teks di atas panel, merah yang dipakai
+     adalah merah tua (lihat --accent-on-panel) — merah cerah pada putih kurang
+     kontras untuk teks kecil. */
+  --panel-fg: #0a0a0b;
+  --panel-fg-muted: #5f5f68;
+
+  /* ── Aksen ─────────────────────────────────────────────────────────────── */
+  /* `--accent` untuk di atas hitam. `--accent-on-panel` untuk di atas putih;
+     nilainya lebih gelap supaya tetap terbaca pada teks ukuran kecil. Merah
+     untuk tombol sama di kedua latar, karena tombol selalu membawa teks putih
+     di atasnya. */
+  --accent: #e01b24;
+  --accent-deep: #b01018;
+  --accent-fg: #ffffff;
+  --accent-on-panel: #c0181f;
+  --accent-soft: rgba(224, 27, 36, 0.12);
+  /* Garis aksen tipis di tepi halaman (navbar, footer). Merah penuh terlalu
+     mencolok untuk garis sepanjang lebar layar — versi ini meredupkannya
+     supaya tetap terasa sebagai aksen, bukan sebagai garis yang menjerit. */
+  --accent-line: rgba(224, 27, 36, 0.4);
+
+  /* ── Garis & bayangan ──────────────────────────────────────────────────── */
+  /* Di atas hitam, bayangan tidak terlihat — karena itu pemisah antar-panel
+     mengandalkan garis, bukan bayangan. Bayangan tetap didefinisikan untuk
+     keperluan lain (mis. panel yang menumpuk di atas panel). */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45), 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.35);
+
+  color-scheme: dark;
+}
+
+/* Daftarkan variabel sebagai warna Tailwind, sehingga bisa dipakai sebagai
+   bg-panel, text-fg, border-border, text-accent, dst. */
+@theme inline {
+  /* Dinding */
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-surface-muted: var(--surface-muted);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+
+  /* Panel putih yang ditempel di atas dinding */
+  --color-panel: var(--panel);
+  --color-panel-muted: var(--panel-muted);
+  --color-panel-border: var(--panel-border);
+  --color-panel-fg: var(--panel-fg);
+  --color-panel-fg-muted: var(--panel-fg-muted);
+
+  /* Aksen */
+  --color-accent: var(--accent);
+  --color-accent-deep: var(--accent-deep);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-on-panel: var(--accent-on-panel);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-line: var(--accent-line);
+
+  /* Bayangan — dipakai lewat shadow-brand-sm/md/lg. */
+  --shadow-brand-sm: var(--shadow-sm);
+  --shadow-brand-md: var(--shadow-md);
+  --shadow-brand-lg: var(--shadow-lg);
+
+  /* Warna brand Voidline — bertahan apa adanya meski variabel palet di atas
+     berubah. Dipakai di tempat yang memang harus selalu merah / hitam / putih,
+     seperti tiga bidang palet di halaman About Us. */
+  --color-void-red: #e01b24;
+  --color-void-red-deep: #b01018;
+  --color-void-black: #0a0a0b;
+  --color-void-white: #ffffff;
+
+  /* Font: --font-* di Tailwind v4 otomatis menjadi utilitas font-display,
+     font-body, dan font-sans. */
+  --font-display: "Cinzel", "URW Gothic", "Century Schoolbook", Georgia, serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-sans: var(--font-body);
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Gulir halaman dan kontrol bawaan browser ikut gelap. Tanpa ini, bilah
+     gulir tetap terang dan menjadi satu-satunya bagian halaman yang bukan
+     hitam. */
+  color-scheme: dark;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Fokus keyboard tetap terlihat */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* =============================================================================
+   LATAR HUJAN GARIS
+
+   Garis merah tegak jatuh dari bawah navbar sampai atas footer, warna penuh
+   tanpa memudar, terus diganti selama halaman terbuka. Digambar di kanvas oleh
+   `LatarHujan.tsx`; semua bentuk, warna, dan waktunya lahir di sana.
+   Stylesheet ini hanya mengurus wadahnya.
+
+   Dipasang per halaman (Home saja), bukan oleh body, supaya halaman kerja
+   seperti /generate tetap tenang.
+
+   Satu hal yang menentukan latar ini terlihat atau tidak: elemen <canvas>
+   adalah elemen inline dengan ukuran bawaan 300 × 150. Tanpa `width/height:
+   100%` dan `display: block`, gambar mengecil ke pojok kiri dan halaman
+   terlihat kosong.
+   ============================================================================= */
+
+/* Pembungkus hujan mengisi seluruh tinggi halaman: dari bawah navbar (karena
+   halaman dimulai selepas navbar) sampai tepat di atas footer.
+
+   Hujan harus SELALU di belakang isi halaman. Pembungkus halaman membuat
+   lapisan tumpuk sendiri (`isolate`). Di dalamnya, latar dan isi halaman
+   sama-sama elemen tanpa posisi, jadi urutan gambarnya murni urutan dokumen —
+   kecuali elemen yang membentuk lapisan sendiri (kartu ber-`transform`, panel
+   ber-`opacity`) yang naik di atasnya. Akibatnya garis bisa tergambar menimpa
+   kartu putih.
+
+   `z-index: -1` menutup celah itu: apa pun yang datang sesudahnya, berposisi
+   maupun tidak, tetap di atas hujan. Nilai negatif aman karena pembungkusnya
+   `isolate` — latar tidak akan jatuh menembus ke belakang navbar atau body. */
+.latar-hujan {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  /* overflow disembunyikan supaya garis yang keluar dari tepi tidak memaksa
+     peramban menumbuhkan area gulir. */
+  overflow: hidden;
+}
+
+/* Kanvas di dalamnya juga elemen inline berukuran 300 × 150. Tanpa aturan ini
+   `ukur()` membaca 300 × 150 lalu menetapkan ukuran piksel dari angka itu —
+   latar tetap tampil sebagai kotak kecil walau pembungkusnya sudah penuh. */
+.latar-hujan canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Bilah gulir yang disembunyikan ──────────────────────────────────────────
+   Dipakai strip sorotan karya di beranda. Strip mendatar memang harus bisa
+   digeser, tapi bilah gulirnya muncul sebagai garis abu-abu setinggi 10 px di
+   bawah kartu — di atas bidang hitam ia terbaca sebagai cacat tata letak,
+   bukan sebagai petunjuk bahwa isinya bisa digeser.
+
+   Gesekan jari di layar sentuh dan tombol panah di papan ketik tetap bekerja;
+   yang hilang hanya bilahnya. Karena itu strip tetap diberi `tabIndex={0}`
+   supaya bisa difokuskan tanpa tetikus. */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hormati pengguna yang mematikan animasi */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Latar garis tidak punya aturan khusus di sini: komponennya sendiri membaca
+     `prefers-reduced-motion` dan menggambar satu susunan diam lalu berhenti
+     menjadwalkan bingkai. Jadi tidak ada animasi CSS maupun animasi kanvas
+     yang perlu dimatikan dari sisi stylesheet. */
+}
