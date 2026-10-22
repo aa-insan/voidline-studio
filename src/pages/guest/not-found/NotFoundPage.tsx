@@ -47,7 +47,7 @@ export default function NotFoundPage() {
             {t("page.notFound.home")}
           </Link>
           <Link
-            to="/generate"
+            to="/compose"
             className="inline-flex items-center justify-center rounded-xl border border-border-strong px-6 py-3 text-sm font-semibold text-fg transition-colors hover:border-void-red hover:text-void-red"
           >
             {t("page.notFound.generate")}

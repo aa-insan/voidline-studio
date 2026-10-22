@@ -12,9 +12,9 @@ export const translations = {
   en: {
     /* Nama menu memakai bahasa galeri, bukan bahasa perangkat lunak:
        "Atrium" ruang masuk, "Collection" terbitan, "Compose" tempat menyusun
-       karya, "Studio" sang pembuatnya, "Reach" kanal masuk. Kuncinya sengaja
-       tetap home/collection/generate/about/contact supaya alamat dan kode
-       tidak ikut berubah — yang berubah hanya yang terbaca pengunjung.
+       karya, "Studio" sang pembuatnya, "Reach" kanal masuk. Kunci kamusnya
+       tetap home/collection/generate/about/contact — kunci itu hanya nama di
+       dalam kode, tidak terlihat pengunjung, dan sudah dipakai puluhan tempat.
 
        Menu About sengaja TIDAK bernama "The Voidline": nama itu sudah ada di
        logo kiri navbar, dan mengulanginya membuat satu baris memuat kata yang
@@ -267,6 +267,10 @@ export const translations = {
         "A handful of pieces from the latest album, chosen one by one. The rest of the collection lives on xrp.cafe.",
       lihatSemua: "See the full album",
       segera: "Coming soon",
+      misteri: "Unrevealed",
+      sebelumnya: "Previous piece",
+      berikutnya: "Next piece",
+      keKarya: "Go to piece {n}",
       "1": { judul: "First Light", catatan: "1 of 1" },
       "2": { judul: "Red Line", catatan: "Legendary" },
       "3": { judul: "Quiet Room", catatan: "Rare" },
@@ -601,6 +605,10 @@ export const translations = {
         "Beberapa karya dari album terbaru, dipilih satu per satu. Sisanya tetap ada di xrp.cafe.",
       lihatSemua: "Lihat album lengkap",
       segera: "Segera",
+      misteri: "Belum dibuka",
+      sebelumnya: "Karya sebelumnya",
+      berikutnya: "Karya berikutnya",
+      keKarya: "Ke karya {n}",
       "1": { judul: "Cahaya Pertama", catatan: "1 dari 1" },
       "2": { judul: "Garis Merah", catatan: "Legendaris" },
       "3": { judul: "Ruang Sunyi", catatan: "Langka" },

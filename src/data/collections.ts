@@ -2,8 +2,8 @@
    DAFTAR KOLEKSI
 
    Satu sumber kebenaran untuk semua koleksi NFT Voidline Studio. Setiap koleksi
-   punya kolom di halaman /collections dan halaman mint-nya sendiri di
-   /collections/mint/:slug.
+   punya kolom di halaman /collection dan halaman mint-nya sendiri di
+   /collection/mint/:slug.
 
    Menambah koleksi baru: tambahkan satu objek di array ini. Judul dan deskripsi
    diambil dari kamus bahasa lewat `titleKey` / `subtitleKey`, jadi tidak ada teks
@@ -27,7 +27,7 @@
 import type { TextKey } from "../i18n/useLanguage";
 
 export type Collection = {
-  /** Alamat halaman mint di situs kita: /collections/mint/:slug */
+  /** Alamat halaman mint di situs kita: /collection/mint/:slug */
   slug: string;
   /** Vanity di xrp.cafe — harus sama persis, kalau tidak widget tidak muncul. */
   vanity: string;

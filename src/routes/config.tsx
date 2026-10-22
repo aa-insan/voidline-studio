@@ -3,9 +3,9 @@ import GuestLayout from "../layouts/GuestLayout";
 import HomePage from "../pages/guest/home/HomePage";
 import CollectionPage from "../pages/guest/collection/CollectionPage";
 import MintPage from "../pages/guest/collection/MintPage";
-import GeneratePage from "../pages/guest/generate/GeneratePage";
-import AboutUsPage from "../pages/guest/about-us/AboutUsPage";
-import ContactUsPage from "../pages/guest/contact-us/ContactUsPage";
+import ComposePage from "../pages/guest/compose/ComposePage";
+import StudioPage from "../pages/guest/studio/StudioPage";
+import ReachPage from "../pages/guest/reach/ReachPage";
 import NotFoundPage from "../pages/guest/not-found/NotFoundPage";
 
 /**
@@ -15,7 +15,7 @@ import NotFoundPage from "../pages/guest/not-found/NotFoundPage";
  * `children` sebuah layout, sehingga otomatis memakai kerangka layout tersebut
  * tanpa perlu menulis navbar/footer di setiap halaman.
  *
- * Alamat memakai bahasa Inggris (/collections, bukan /koleksi) supaya sama
+ * Alamat memakai bahasa Inggris (/collection, bukan /koleksi) supaya sama
  * dengan label menunya. Alamat yang terlihat pengunjung sebaiknya satu bahasa,
  * apa pun bahasa yang sedang dipilih.
  *
@@ -28,11 +28,11 @@ export const routes: RouteObject[] = [
     element: <GuestLayout />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: "collections", element: <CollectionPage /> },
-      { path: "collections/mint/:slug", element: <MintPage /> },
-      { path: "generate", element: <GeneratePage /> },
-      { path: "about-us", element: <AboutUsPage /> },
-      { path: "contact-us", element: <ContactUsPage /> },
+      { path: "collection", element: <CollectionPage /> },
+      { path: "collection/mint/:slug", element: <MintPage /> },
+      { path: "compose", element: <ComposePage /> },
+      { path: "studio", element: <StudioPage /> },
+      { path: "reach", element: <ReachPage /> },
       // Rute penangkap: alamat apa pun yang tidak dikenal tetap memakai navbar
       // dan footer situs, bukan layar galat bawaan React Router.
       { path: "*", element: <NotFoundPage /> },

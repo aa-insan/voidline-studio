@@ -2,7 +2,7 @@ import { useLanguage } from "../../../i18n/useLanguage";
 import HalamanBerlatar from "../../../components/guest/HalamanBerlatar";
 
 /**
- * Halaman Contact Us.
+ * Halaman Reach.
  *
  * Menampilkan kanal resmi studio. Tidak ada formulir: pada tahap ini surat
  * elektronik dan pesan langsung di media sosial sudah cukup, dan formulir
@@ -47,7 +47,7 @@ const CHANNELS = [
   },
 ] as const;
 
-export default function ContactUsPage() {
+export default function ReachPage() {
   const { t } = useLanguage();
 
   return (

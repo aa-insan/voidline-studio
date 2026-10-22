@@ -175,7 +175,7 @@ body {
    Stylesheet ini hanya mengurus wadahnya.
 
    Dipasang per halaman (Home saja), bukan oleh body, supaya halaman kerja
-   seperti /generate tetap tenang.
+   seperti /compose tetap tenang.
 
    Satu hal yang menentukan latar ini terlihat atau tidak: elemen <canvas>
    adalah elemen inline dengan ukuran bawaan 300 × 150. Tanpa `width/height:

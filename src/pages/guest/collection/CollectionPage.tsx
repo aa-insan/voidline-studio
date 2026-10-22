@@ -72,7 +72,7 @@ export default function CollectionPage() {
                 </p>
 
                 <Link
-                  to={`/collections/mint/${collection.slug}`}
+                  to={`/collection/mint/${collection.slug}`}
                   className="mt-5 inline-block rounded-xl bg-void-red px-5 py-2.5 text-center text-sm font-semibold text-void-white transition-opacity hover:opacity-90"
                 >
                   {t("collection.mintNow")}
@@ -96,7 +96,7 @@ export default function CollectionPage() {
             </p>
           </div>
           <Link
-            to="/about-us"
+            to="/studio"
             className="inline-flex items-center gap-1.5 whitespace-nowrap text-sm font-semibold text-void-red underline-offset-4 hover:underline"
           >
             {t("collection.standardCta")}

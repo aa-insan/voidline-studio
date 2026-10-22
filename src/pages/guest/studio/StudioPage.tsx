@@ -4,7 +4,7 @@ import AboutLogo from "../../../assets/Logo.gif";
 import HalamanBerlatar from "../../../components/guest/HalamanBerlatar";
 
 /* =============================================================================
-   HALAMAN ABOUT US
+   HALAMAN STUDIO
 
    Halaman profil studio. Alurnya dibaca dari atas ke bawah seperti sebuah
    perkenalan: siapa kami → gaya kami → yang kami kerjakan → silakan masuk.
@@ -52,7 +52,7 @@ const SWATCHES = [
   { key: "about.style.swatches.white", kelas: "bg-void-white" },
 ] as const;
 
-export default function AboutUsPage() {
+export default function StudioPage() {
   const { t } = useLanguage();
 
   return (
@@ -214,13 +214,13 @@ export default function AboutUsPage() {
 
           <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
             <Link
-              to="/collections"
+              to="/collection"
               className="inline-flex items-center justify-center rounded-xl bg-void-red px-6 py-3 text-sm font-semibold text-void-white transition-opacity hover:opacity-90"
             >
               {t("about.invitation.ctaCollections")}
             </Link>
             <Link
-              to="/generate"
+              to="/compose"
               className="inline-flex items-center justify-center rounded-xl border border-border-strong px-6 py-3 text-sm font-semibold text-fg transition-colors hover:border-void-red hover:text-void-red"
             >
               {t("about.invitation.ctaGenerate")}

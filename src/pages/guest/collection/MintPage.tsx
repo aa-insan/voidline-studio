@@ -7,7 +7,7 @@ import HalamanBerlatar from "../../../components/guest/HalamanBerlatar";
 /**
  * Halaman mint untuk satu koleksi.
  *
- * Alamatnya /collections/mint/:slug — satu halaman per koleksi, dipisah dari
+ * Alamatnya /collection/mint/:slug — satu halaman per koleksi, dipisah dari
  * halaman daftar supaya pengunjung bisa fokus menyelesaikan mint tanpa
  * terganggu grid karya lain.
  *
@@ -39,7 +39,7 @@ export default function MintPage() {
           {t("collection.notFound.subtitle")}
         </p>
         <Link
-          to="/collections"
+          to="/collection"
           className="mt-8 inline-block rounded-xl bg-void-red px-6 py-3 text-sm font-semibold text-void-white shadow-brand-md transition-opacity hover:opacity-90"
         >
           {t("collection.back")}
@@ -60,7 +60,7 @@ export default function MintPage() {
           {/* Jalan kembali — pengunjung yang datang dari daftar koleksi perlu
               bisa mundur tanpa bergantung pada tombol browser. */}
           <Link
-            to="/collections"
+            to="/collection"
             className="inline-flex items-center gap-1.5 text-sm text-fg-muted transition-colors hover:text-void-red"
           >
             <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">

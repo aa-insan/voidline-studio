@@ -1,13 +1,13 @@
 /* =============================================================================
-   HALAMAN GENERATE — alat dan penjelasan dalam satu halaman
+   HALAMAN COMPOSE — alat dan penjelasan dalam satu halaman
 
    Pengunjung tidak dipisah dari alatnya. Begitu halaman terbuka, generator
    sudah siap dipakai di depan mata; cara pakai ada di bawahnya, bisa dibuka
    kapan saja tanpa meninggalkan halaman.
 
    MENGAPA TIDAK DIPISAH LAGI
-   Versi sebelumnya memisahkan halaman penjelasan (/generate) dan alatnya
-   (/generate/studio). Itu memaksa pengunjung membaca dulu, lalu pindah
+   Versi sebelumnya memisahkan halaman penjelasan dan alatnya menjadi dua
+   alamat. Itu memaksa pengunjung membaca dulu, lalu pindah
    halaman untuk mencoba — padahal generator ini justru paling mudah dipahami
    dengan mencobanya. Menyatukan keduanya menghapus satu perpindahan yang
    tidak memberi apa-apa.
@@ -36,7 +36,7 @@ import HalamanBerlatar from "../../../components/guest/HalamanBerlatar";
 import EmptyStart from "../../../features/generator/components/EmptyStart";
 import { namaBerkasAman, unduhBlob } from "../../../features/generator/lib/unduh";
 
-export default function GeneratePage() {
+export default function ComposePage() {
   const { t } = useLanguage();
   const {
     keadaan,
@@ -504,7 +504,7 @@ export default function GeneratePage() {
             {t("page.generate.closingBody")}
           </p>
           <Link
-            to="/collections"
+            to="/collection"
             className="mt-6 inline-flex items-center justify-center rounded-xl border border-border-strong px-6 py-3 text-sm font-semibold text-fg transition-colors hover:border-void-red hover:text-void-red"
           >
             {t("page.generate.ctaExample")}

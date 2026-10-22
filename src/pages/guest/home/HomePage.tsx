@@ -37,7 +37,7 @@ import { collections } from "../../../data/collections";
    ditulis langsung di sini. Menambah bahasa baru cukup dari kamus.
 
    Gambar karya belum tersedia, jadi kartu koleksi memakai tempat kosong yang
-   sama dengan halaman /collections. Begitu gambar ada, ubah di satu tempat:
+   sama dengan halaman /collection. Begitu gambar ada, ubah di satu tempat:
    src/data/collections.ts.
    ============================================================================= */
 
@@ -51,7 +51,7 @@ const GENERATE_STEPS = [
 export default function HomePage() {
   const { t } = useLanguage();
 
-  // Tiga koleksi pertama dianggap unggulan. Halaman /collections tetap
+  // Tiga koleksi pertama dianggap unggulan. Halaman /collection tetap
   // menampilkan daftar lengkapnya.
   const featured = collections.slice(0, 3);
 
@@ -86,7 +86,7 @@ export default function HomePage() {
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
-                to="/collections"
+                to="/collection"
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-void-red px-6 py-3 text-sm font-semibold text-void-white transition-opacity hover:opacity-90"
               >
                 {t("home.hero.ctaCollections")}
@@ -96,7 +96,7 @@ export default function HomePage() {
               </Link>
 
               <Link
-                to="/generate"
+                to="/compose"
                 className="inline-flex items-center justify-center rounded-xl border border-border px-6 py-3 text-sm font-semibold text-fg transition-colors hover:border-void-red hover:text-void-red"
               >
                 {t("home.hero.ctaGenerate")}
@@ -191,7 +191,7 @@ export default function HomePage() {
                 </p>
 
                 <Link
-                  to={`/collections/mint/${collection.slug}`}
+                  to={`/collection/mint/${collection.slug}`}
                   className="mt-5 inline-block rounded-xl bg-void-red px-5 py-2.5 text-center text-sm font-semibold text-void-white transition-opacity hover:opacity-90"
                 >
                   {t("collection.mintNow")}
@@ -203,7 +203,7 @@ export default function HomePage() {
 
         <div className="mt-8">
           <Link
-            to="/collections"
+            to="/collection"
             className="inline-flex items-center gap-1.5 text-sm font-medium text-void-red underline-offset-4 hover:underline"
           >
             {t("home.collections.viewAll")}
@@ -251,7 +251,7 @@ export default function HomePage() {
 
           <div className="mt-8">
             <Link
-              to="/generate"
+              to="/compose"
               className="inline-flex items-center gap-1.5 text-sm font-semibold text-void-red underline-offset-4 hover:underline"
             >
               {t("home.generate.cta")}
@@ -272,7 +272,7 @@ export default function HomePage() {
           {t("home.closing.subtitle")}
         </p>
         <Link
-          to="/collections"
+          to="/collection"
           className="mt-8 inline-block rounded-xl bg-accent px-6 py-3 text-sm font-semibold text-accent-fg shadow-brand-md transition-opacity hover:opacity-90"
         >
           {t("home.closing.cta")}

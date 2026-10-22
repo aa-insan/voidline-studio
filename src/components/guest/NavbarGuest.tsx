@@ -48,21 +48,21 @@ import LanguageSwitch from "./LanguageSwitch";
  */
 const NAV_ITEMS = [
   { key: "nav.home", to: "/", end: true },
-  { key: "nav.collection", to: "/collections", end: false },
-  { key: "nav.generate", to: "/generate", end: false },
-  { key: "nav.about", to: "/about-us", end: false },
-  { key: "nav.contact", to: "/contact-us", end: false },
+  { key: "nav.collection", to: "/collection", end: false },
+  { key: "nav.generate", to: "/compose", end: false },
+  { key: "nav.about", to: "/studio", end: false },
+  { key: "nav.contact", to: "/reach", end: false },
 ] as const;
 
 /**
  * Tujuan tombol "Buy Now".
  *
- * Diambil dari `collections[0]`, bukan ditulis tetap ("/collections/mint/apesvoidline"),
+ * Diambil dari `collections[0]`, bukan ditulis tetap ("/collection/mint/apesvoidline"),
  * supaya tombol ini selalu menunjuk koleksi pertama yang BENAR. Begitu urutan
  * koleksi di data/collections.ts diubah, tombol ikut menyesuaikan sendiri dan
  * tidak akan menunjuk koleksi yang sudah tidak ada.
  */
-const BUY_NOW_TO = `/collections/mint/${collections[0].slug}`;
+const BUY_NOW_TO = `/collection/mint/${collections[0].slug}`;
 
 export default function NavbarGuest() {
   const { t } = useLanguage();
