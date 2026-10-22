@@ -1,54 +1,97 @@
+import { useState } from "react";
+import { Link } from "react-router";
 import { useLanguage } from "../../../i18n/useLanguage";
 import HalamanBerlatar from "../../../components/guest/HalamanBerlatar";
+import Logo from "../../../assets/Logo.gif";
 
 /**
  * Halaman Reach.
  *
- * Menampilkan kanal resmi studio. Tidak ada formulir: pada tahap ini surat
- * elektronik dan pesan langsung di media sosial sudah cukup, dan formulir
- * tanpa backend hanya akan menampung pesan yang tidak sampai ke siapa pun.
+ * Satu halaman, dua jalur: karya pesanan (commission) dan jasa studio. Di
+ * bawahnya panduan menulis, tiga kebijakan, lalu kanal — email sebagai jalur
+ * utama, media sosial sebagai pelengkap.
  *
  * SUSUNAN
- *   1. Kepala   tujuan halaman
- *   2. Kanal    empat kanal, masing-masing satu kartu
- *   3. Catatan  jam balasan, supaya pengunjung tahu harus menunggu
+ *   1. Kepala     tujuan halaman + baris keadaan (menerima kerja, balasan)
+ *   2. Dua jalur  kartu commission (merah, gelap) | kartu jasa studio (putih)
+ *   3. Panduan    tiga langkah sebelum menulis
+ *   4. Kebijakan  beli NFT · pakai artwork · kolaborasi
+ *   5. Kanal      panel email + tombol salin, lalu tautan media sosial
+ *   6. Studio     penutup: siapa yang menjawab, tautan ke /studio
  *
  * WARNA
- * Kartu kanal memakai panel PUTIH di atas latar hitam — pola yang sama dengan
- * kartu koleksi, supaya seluruh situs terbaca sebagai satu rancangan. Ikon dan
- * judul memakai merah; saat kartu disorot, garisnya ikut menyala merah.
+ * Kartu jasa memakai panel PUTIH seperti kartu koleksi; kartu commission
+ * sengaja gelap dengan pendar merah supaya kedua jalur tidak terbaca sebagai
+ * dua blok yang sama pentingnya. Merah hanya dipakai untuk penanda, angka, dan
+ * tombol.
+ *
+ * Tidak ada formulir: tanpa backend, formulir hanya menampung pesan yang tidak
+ * sampai ke siapa pun. Surel langsung lebih jujur.
  */
 
-/** Empat kanal resmi studio. Sama dengan daftar di footer — satu sumber. */
-const CHANNELS = [
+const EMAIL = "febriyantojajang@gmail.com";
+
+/** Empat jasa studio. Urutan sama dengan tampilan. */
+const JASA = [
+  { key: "png", num: "01" },
+  { key: "gif", num: "02" },
+  { key: "web", num: "03" },
+  { key: "generator", num: "04" },
+] as const;
+
+/** Panduan sebelum menulis — tiga langkah. */
+const LANGKAH = ["1", "2", "3"] as const;
+
+/** Kebijakan singkat. `tautan` menandai baris yang punya jalan keluar. */
+const KEBIJAKAN = ["nft", "karya", "kolaborasi"] as const;
+
+/** Media sosial — sama dengan daftar di footer. */
+const SOSIAL = [
   {
-    key: "page.contact.channels.email",
-    href: "mailto:febriyantojajang@gmail.com",
-    label: "febriyantojajang@gmail.com",
-    path: "M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67zM22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z",
-  },
-  {
-    key: "page.contact.channels.x",
+    key: "x",
     href: "https://x.com/JajangOsle",
     label: "@JajangOsle",
     path: "M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z",
   },
   {
-    key: "page.contact.channels.instagram",
+    key: "instagram",
     href: "https://www.instagram.com/jajangstd.art",
     label: "@jajangstd.art",
     path: "M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z",
   },
   {
-    key: "page.contact.channels.threads",
+    key: "threads",
     href: "https://www.threads.com/@jajangstd.art",
     label: "@jajangstd.art",
     path: "M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.291a13.853 13.853 0 011.533.012 10.755 10.755 0 00-.418-1.83c-.541-1.368-1.468-2.07-2.831-2.14-1.203-.062-2.099.34-2.493.526l-.855-1.81c.53-.24 1.79-.803 3.62-.71 2.037.108 3.463 1.19 4.24 3.214.485 1.263.775 2.837.865 4.68.852.352 1.585.853 2.18 1.49 1.063 1.132 1.63 2.611 1.595 4.163-.036 1.605-.704 3.05-1.929 4.177-1.795 1.652-4.09 2.486-7.123 2.508zm1.253-8.222c-.245.02-.498.032-.75.03-1.302-.008-2.144.51-2.126 1.303.02.822.933 1.26 1.83 1.213.876-.046 2.038-.418 2.283-2.386a10.42 10.42 0 00-1.237-.16z",
   },
 ] as const;
 
+/** Judul bagian dengan garis tipis yang mengisi sisa lebar. */
+function KepalaBagian({ teks }: { teks: string }) {
+  return (
+    <div className="mb-7 flex items-baseline gap-4">
+      <h2 className="font-display text-2xl font-semibold tracking-tight">{teks}</h2>
+      <span aria-hidden="true" className="h-px flex-1 bg-border" />
+    </div>
+  );
+}
+
 export default function ReachPage() {
   const { t } = useLanguage();
+  const [tersalin, setTersalin] = useState(false);
+
+  /** Salin alamat surel. Kalau peramban menolak (izin clipboard), tidak ada
+   *  yang berubah — tombol "Open mail app" di sebelahnya tetap jadi jalan. */
+  const salinAlamat = async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+      setTersalin(true);
+      window.setTimeout(() => setTersalin(false), 1600);
+    } catch {
+      setTersalin(false);
+    }
+  };
 
   return (
     <HalamanBerlatar>
@@ -58,7 +101,7 @@ export default function ReachPage() {
           <div className="absolute -left-1/4 top-0 h-full w-1/2 rotate-12 bg-linear-to-r from-void-red to-transparent" />
         </div>
 
-        <div className="relative mx-auto max-w-6xl px-5 pb-16 pt-16 sm:pb-20 sm:pt-20">
+        <div className="relative mx-auto max-w-6xl px-5 pb-14 pt-16 sm:pb-16 sm:pt-20">
           <div className="max-w-3xl">
             <p className="inline-flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.28em] text-void-red">
               <span className="h-px w-8 bg-void-red" aria-hidden="true" />
@@ -72,65 +115,260 @@ export default function ReachPage() {
             <p className="mt-6 max-w-2xl text-base leading-relaxed text-fg-muted sm:text-lg">
               {t("page.contact.lead")}
             </p>
+
+            {/* Baris keadaan: satu pandangan memberi tahu apakah studio sedang
+                menerima kerja dan seberapa cepat balasannya. */}
+            <ul className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-full border border-accent-line bg-white/3 px-4 py-2 text-xs text-fg sm:text-[0.8rem]">
+              <li className="flex items-center gap-2 font-medium">
+                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-void-red" />
+                {t("page.contact.status.open")}
+              </li>
+              <li aria-hidden="true" className="text-white/30">
+                ·
+              </li>
+              <li className="text-fg-muted">{t("page.contact.status.terms")}</li>
+              <li aria-hidden="true" className="text-white/30">
+                ·
+              </li>
+              <li className="text-fg-muted">{t("page.contact.status.reply")}</li>
+            </ul>
           </div>
         </div>
       </section>
 
-      {/* ── 2. KANAL ──────────────────────────────────────────────────────
-          Empat kartu PUTIH di atas latar hitam — pola yang sama dengan kartu
-          koleksi. Seluruh kartu bisa diklik, bukan hanya tautannya. */}
-      <section className="mx-auto max-w-6xl px-5 pb-16 sm:pb-20">
-        <div className="grid gap-5 sm:grid-cols-2">
-          {CHANNELS.map((channel) => (
+      {/* ── 2. DUA JALUR ──────────────────────────────────────────────── */}
+      <section className="mx-auto max-w-6xl px-5 pb-14">
+        <div className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
+          {/* Commission — satu-satunya tombol merah penuh di halaman ini. */}
+          <div className="relative flex flex-col overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-[#141114] to-[#0b0b0d] p-7 sm:p-8">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -right-[30%] -top-[40%] h-[150%] w-[70%] bg-[radial-gradient(circle,rgba(224,27,36,0.30),transparent_62%)]"
+            />
+
+            <div className="relative flex flex-1 flex-col">
+              <p className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-void-red">
+                {t("page.contact.commission.num")}
+              </p>
+              <h2 className="mt-4 font-display text-2xl font-semibold leading-tight sm:text-[1.7rem]">
+                {t("page.contact.commission.title")}
+              </h2>
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-fg-muted">
+                {t("page.contact.commission.body")}
+              </p>
+
+              <ul className="mt-6 flex flex-wrap gap-2">
+                {["single", "series", "commercial", "revenue"].map((chip) => (
+                  <li
+                    key={chip}
+                    className="rounded-full border border-border px-3 py-1.5 text-xs text-white/80"
+                  >
+                    {t(`page.contact.commission.chips.${chip}` as never)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
             <a
-              key={channel.key}
-              href={channel.href}
-              target={channel.href.startsWith("http") ? "_blank" : undefined}
-              rel={channel.href.startsWith("http") ? "noreferrer noopener" : undefined}
-              className="group flex items-center gap-4 rounded-2xl border-2 border-transparent bg-panel p-5 shadow-brand-md transition-colors hover:border-accent"
+              href={`mailto:${EMAIL}?subject=${encodeURIComponent(t("page.contact.commission.mailSubject"))}`}
+              className="relative mt-7 inline-flex w-fit items-center gap-2 rounded-lg bg-void-red px-4 py-3 text-sm font-semibold text-void-white transition-colors hover:bg-void-red-deep"
             >
-              {/* Ikon dalam kotak merah — penanda kanal, sekaligus titik merah
-                  yang mengarahkan mata sebelum membaca. */}
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-void-red text-void-white">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  className="fill-current"
-                  aria-hidden="true"
-                >
-                  <path d={channel.path} />
-                </svg>
-              </span>
-
-              <span className="min-w-0">
-                <span className="block font-display text-base font-semibold tracking-tight text-panel-fg">
-                  {t(channel.key)}
-                </span>
-                <span className="mt-0.5 block truncate text-sm text-panel-fg-muted">
-                  {channel.label}
-                </span>
-              </span>
-
-              {/* Panah keluar — muncul saat kartu disorot, menegaskan bahwa
-                  seluruh kartu bisa diklik. */}
-              <svg
-                viewBox="0 0 24 24"
-                className="ml-auto h-4 w-4 shrink-0 fill-current text-panel-fg-muted opacity-0 transition-opacity group-hover:opacity-100"
-                aria-hidden="true"
-              >
-                <path d="M14 3h7v7h-2V6.41l-8.29 8.3-1.42-1.42 8.3-8.29H14V3ZM5 5h5v2H7v10h10v-3h2v5H5V5Z" />
-              </svg>
+              {t("page.contact.commission.cta")}
+              <span aria-hidden="true">→</span>
             </a>
+          </div>
+
+          {/* Jasa studio — panel putih, tidak bisa diklik seluruhnya karena
+              isinya daftar, bukan satu tujuan. */}
+          <div className="flex flex-col rounded-2xl bg-panel p-7 text-panel-fg sm:p-8">
+            <h2 className="font-display text-xl font-semibold leading-tight">
+              {t("page.contact.services.title")}
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-panel-fg-muted">
+              {t("page.contact.services.sub")}
+            </p>
+
+            <ul className="mt-5">
+              {JASA.map(({ key, num }) => (
+                <li
+                  key={key}
+                  className="flex gap-3 border-t border-black/8 py-3 first:border-t-0 first:pt-0"
+                >
+                  <span className="min-w-5 pt-0.5 font-display text-xs text-accent-on-panel">
+                    {num}
+                  </span>
+                  <span>
+                    <span className="block text-sm font-semibold">
+                      {t(`page.contact.services.items.${key}.name` as never)}
+                    </span>
+                    <span className="mt-0.5 block text-xs leading-relaxed text-panel-fg-muted">
+                      {t(`page.contact.services.items.${key}.note` as never)}
+                    </span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+
+            <p className="mt-auto pt-5 text-xs leading-relaxed text-panel-fg-muted">
+              {t("page.contact.services.foot")}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 3. PANDUAN SEBELUM MENULIS ─────────────────────────────────── */}
+      <section className="mx-auto max-w-6xl px-5 pb-14">
+        <KepalaBagian teks={t("page.contact.before.title")} />
+
+        <div className="grid gap-6 sm:grid-cols-3">
+          {LANGKAH.map((n) => (
+            <article key={n} className="border-t border-border pt-4">
+              <p className="font-display text-xs tracking-[0.18em] text-void-red">
+                {`0${n}`}
+              </p>
+              <h3 className="mt-2.5 font-display text-base font-semibold">
+                {t(`page.contact.before.steps.${n}.title` as never)}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-fg-muted">
+                {t(`page.contact.before.steps.${n}.body` as never)}
+              </p>
+            </article>
           ))}
         </div>
+      </section>
 
-        {/* Catatan jam balasan — supaya pengunjung tahu harus menunggu, bukan
-            mengira pesannya tidak sampai. */}
-        <p className="mt-8 text-center text-xs leading-relaxed text-fg-muted">
-          {t("page.contact.replyNote")}
+      {/* ── 4. KEBIJAKAN ───────────────────────────────────────────────── */}
+      <section className="mx-auto max-w-6xl px-5 pb-14">
+        <div className="grid gap-px overflow-hidden rounded-xl bg-border">
+          {KEBIJAKAN.map((key) => (
+            <div
+              key={key}
+              className="flex flex-col gap-2 bg-bg px-6 py-5 sm:flex-row sm:gap-6"
+            >
+              <h3 className="font-display text-sm font-semibold leading-relaxed sm:min-w-44">
+                {t(`page.contact.policy.${key}.title` as never)}
+              </h3>
+              <p className="text-sm leading-relaxed text-fg-muted">
+                {t(`page.contact.policy.${key}.body` as never)}
+                {key === "nft" && (
+                  <>
+                    {" "}
+                    <a
+                      href="/collection"
+                      className="text-void-red underline decoration-accent-line underline-offset-4 transition-colors hover:decoration-void-red"
+                    >
+                      {t("page.contact.policy.nft.link")}
+                    </a>
+                    .
+                  </>
+                )}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── 5. KANAL ───────────────────────────────────────────────────── */}
+      <section className="mx-auto max-w-6xl px-5 pb-14">
+        <KepalaBagian teks={t("page.contact.channels.title")} />
+
+        <div className="flex flex-wrap items-center gap-5 rounded-2xl bg-panel p-6 text-panel-fg sm:p-7">
+          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-void-red text-void-white">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.7"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="2.5" y="4.5" width="19" height="15" rx="2.5" />
+              <path d="M3 6.5l9 6 9-6" />
+            </svg>
+          </span>
+
+          <div className="min-w-0 flex-1">
+            <p className="text-[0.7rem] uppercase tracking-[0.16em] text-panel-fg-muted">
+              {t("page.contact.channels.emailLabel")}
+            </p>
+            <a
+              href={`mailto:${EMAIL}`}
+              className="mt-1 block break-all font-display text-lg font-semibold tracking-tight hover:text-accent-on-panel"
+            >
+              {EMAIL}
+            </a>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={salinAlamat}
+              className="rounded-lg bg-panel-fg px-4 py-2.5 text-sm font-semibold text-void-white transition-opacity hover:opacity-85"
+            >
+              {tersalin ? t("page.contact.channels.copied") : t("page.contact.channels.copy")}
+            </button>
+            <a
+              href={`mailto:${EMAIL}`}
+              className="rounded-lg border border-black/15 px-4 py-2.5 text-sm font-semibold transition-colors hover:border-black/40"
+            >
+              {t("page.contact.channels.open")}
+            </a>
+          </div>
+        </div>
+
+        {/* `aria-live` supaya pembaca layar ikut mendengar konfirmasi salin. */}
+        <p aria-live="polite" className="sr-only">
+          {tersalin ? t("page.contact.channels.copied") : ""}
         </p>
+
+        <ul className="mt-3.5 flex flex-wrap gap-2.5">
+          {SOSIAL.map((sosial) => (
+            <li key={sosial.key}>
+              <a
+                href={sosial.href}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="inline-flex items-center gap-2.5 rounded-lg border border-border px-4 py-2.5 text-sm text-fg-muted transition-colors hover:border-accent hover:bg-accent-soft hover:text-fg"
+              >
+                <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
+                  <path d={sosial.path} />
+                </svg>
+                {sosial.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* ── 6. STUDIO ──────────────────────────────────────────────────── */}
+      <section className="mx-auto max-w-6xl px-5 pb-20">
+        <div className="flex flex-col gap-5 rounded-2xl border border-border p-6 sm:flex-row sm:items-center sm:gap-7 sm:p-7">
+          <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full border border-border bg-white/5">
+            <img
+              src={Logo}
+              alt=""
+              className="h-10 w-10 max-w-none object-contain"
+            />
+          </span>
+
+          <div className="min-w-0 flex-1">
+            <h2 className="font-display text-lg font-semibold">{t("page.contact.studio.title")}</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-fg-muted">
+              {t("page.contact.studio.body")}
+            </p>
+          </div>
+
+          <Link
+            to="/studio"
+            className="shrink-0 self-start border-b border-accent-line pb-0.5 text-sm font-semibold text-void-red transition-colors hover:border-void-red sm:self-auto"
+          >
+            {t("page.contact.studio.cta")}
+          </Link>
+        </div>
       </section>
     </HalamanBerlatar>
   );

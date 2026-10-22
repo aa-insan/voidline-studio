@@ -215,14 +215,107 @@ export const translations = {
         kicker: "Get in Touch",
         subtitle: "Contact details will be added here.",
         lead:
-          "Questions about a collection, a custom piece, or the generator? Reach the studio on any channel below.",
-        replyNote: "The studio replies within one to two working days.",
+          "Two things we take on: custom artwork for collectors, and studio services for other creators — PNG art, animated GIFs, websites, and generator setups with ready metadata.",
+        status: {
+          open: "Taking new work",
+          terms: "Scope and terms agreed up front",
+          reply: "Replies in one to two working days",
+        },
+        commission: {
+          num: "01 — Commission",
+          title: "Custom artwork, made for you",
+          body:
+            "One piece or a short series in the Voidline style — red, black and white, built from dots and lines that move. Tell us what it is for, and the scope is agreed before anything is drawn.",
+          cta: "Start a commission",
+          mailSubject: "Commission enquiry",
+          chips: {
+            single: "Single piece",
+            series: "Series",
+            commercial: "Commercial use",
+            revenue: "Revenue share",
+          },
+        },
+        services: {
+          title: "Studio services",
+          sub:
+            "The same things we build for our own collections, for creators who would rather work with us than start from scratch.",
+          foot:
+            "The list may grow. If what you need is not here, ask — we will say plainly whether we can do it.",
+          items: {
+            png: {
+              name: "PNG artwork",
+              note: "Hand-drawn pieces, delivered at full resolution.",
+            },
+            gif: {
+              name: "Animated GIF",
+              note: "Looping animation — the form we know best.",
+            },
+            web: {
+              name: "Website",
+              note: "A site like this one, built and handed over ready to run.",
+            },
+            generator: {
+              name: "Generator & metadata",
+              note: "Layered collection generator with metadata, filled from a sample you provide.",
+            },
+          },
+        },
+        before: {
+          title: "Before you write",
+          steps: {
+            "1": {
+              title: "Say what it is for",
+              body:
+                "A collection, a personal piece, a product, a site. The purpose decides the shape of the work, so it is worth agreeing on first.",
+            },
+            "2": {
+              title: "Send one or two references",
+              body:
+                "Anything that shows the direction — ours or someone else's. One picture saves a paragraph of explanation.",
+            },
+            "3": {
+              title: "Name your deadline",
+              body:
+                "We work to a deadline rather than fixed hours. A real date tells us at once whether the work fits.",
+            },
+          },
+        },
+        policy: {
+          nft: {
+            title: "Buying an NFT",
+            body:
+              "Every collection is minted on the XRP Ledger and minted directly on its own page. Minting does not happen by message — see",
+            link: "the collections",
+          },
+          karya: {
+            title: "Using collection artwork",
+            body:
+              "The collections are personal work, not stock. When you own a piece you may resell or mirror it; anything else needs a written agreement first.",
+          },
+          kolaborasi: {
+            title: "Collaboration",
+            body:
+              "Exhibitions, interviews and joint projects are welcome. Tell us the shape of the idea and what you expect from the studio, and we will reply with what we can offer.",
+          },
+        },
         channels: {
+          title: "Write to us",
+          emailLabel: "Email — the quickest route",
+          copy: "Copy address",
+          copied: "Copied",
+          open: "Open mail app",
           email: "Email",
           x: "X",
           instagram: "Instagram",
           threads: "Threads",
         },
+        studio: {
+          title: "Voidline Studio",
+          body:
+            "A drawing style built from living dots and lines, held to three colours without compromise. We make looping animated GIFs, mint them on the XRP Ledger, and build the tools that let others do the same.",
+          cta: "The studio story →",
+        },
+        replyNote: "The studio replies within one to two working days.",
       },
     },
 
@@ -555,14 +648,107 @@ export const translations = {
         kicker: "Hubungi Studio",
         subtitle: "Detail kontak akan ditambahkan di sini.",
         lead:
-          "Ada pertanyaan soal koleksi, karya khusus, atau generatornya? Hubungi studio lewat kanal mana pun di bawah ini.",
-        replyNote: "Studio membalas dalam satu sampai dua hari kerja.",
+          "Dua hal yang kami kerjakan: karya pesanan untuk kolektor, dan jasa studio untuk kreator lain — seni PNG, GIF animasi, situs web, serta pemasangan generator lengkap dengan metadata.",
+        status: {
+          open: "Menerima pekerjaan baru",
+          terms: "Lingkup dan ketentuan disepakati di awal",
+          reply: "Dibalas dalam satu sampai dua hari kerja",
+        },
+        commission: {
+          num: "01 — Pesanan",
+          title: "Karya khusus, dibuat untuk Anda",
+          body:
+            "Satu karya atau seri pendek dengan gaya Voidline — merah, hitam, putih, dibangun dari titik dan garis yang bergerak. Sebutkan untuk apa karyanya, lingkupnya disepakati sebelum apa pun digambar.",
+          cta: "Mulai pesanan",
+          mailSubject: "Pertanyaan pesanan karya",
+          chips: {
+            single: "Satu karya",
+            series: "Seri",
+            commercial: "Pemakaian komersial",
+            revenue: "Bagi hasil",
+          },
+        },
+        services: {
+          title: "Jasa studio",
+          sub:
+            "Hal yang sama kami bangun untuk koleksi sendiri, untuk kreator yang lebih memilih bekerja bersama kami daripada mulai dari nol.",
+          foot:
+            "Daftarnya bisa bertambah. Kalau yang Anda butuhkan belum ada di sini, tanyakan — kami akan menjawab terus terang sanggup atau tidak.",
+          items: {
+            png: {
+              name: "Seni PNG",
+              note: "Karya gambar tangan, diserahkan dalam resolusi penuh.",
+            },
+            gif: {
+              name: "GIF animasi",
+              note: "Animasi berulang — bentuk yang paling kami kuasai.",
+            },
+            web: {
+              name: "Situs web",
+              note: "Situs seperti ini, dibangun dan diserahkan siap jalan.",
+            },
+            generator: {
+              name: "Generator & metadata",
+              note: "Generator koleksi berlapis lengkap dengan metadata, diisi dari contoh yang Anda berikan.",
+            },
+          },
+        },
+        before: {
+          title: "Sebelum menulis",
+          steps: {
+            "1": {
+              title: "Sebutkan untuk apa",
+              body:
+                "Koleksi, karya pribadi, produk, atau situs. Tujuannya menentukan bentuk karyanya, jadi lebih baik disepakati lebih dulu.",
+            },
+            "2": {
+              title: "Kirim satu dua acuan",
+              body:
+                "Apa pun yang menunjukkan arah — karya kami atau karya orang lain. Satu gambar menghemat satu paragraf penjelasan.",
+            },
+            "3": {
+              title: "Sebutkan tenggatnya",
+              body:
+                "Kami bekerja berdasarkan tenggat, bukan jam tetap. Tanggal yang pasti langsung memberi tahu apakah pekerjaannya masuk.",
+            },
+          },
+        },
+        policy: {
+          nft: {
+            title: "Membeli NFT",
+            body:
+              "Setiap koleksi di-mint di XRP Ledger dan di-mint langsung di halamannya sendiri. Mint tidak lewat pesan — lihat",
+            link: "koleksinya",
+          },
+          karya: {
+            title: "Pemakaian karya koleksi",
+            body:
+              "Koleksi ini karya pribadi, bukan stok. Kalau Anda memiliki sebuah karya, Anda boleh menjual ulang atau memindahkannya; selain itu perlu kesepakatan tertulis lebih dulu.",
+          },
+          kolaborasi: {
+            title: "Kolaborasi",
+            body:
+              "Pameran, wawancara, dan proyek bersama kami terima. Jelaskan bentuk idenya dan apa yang Anda harapkan dari studio, kami balas dengan apa yang bisa kami tawarkan.",
+          },
+        },
         channels: {
+          title: "Tulis ke kami",
+          emailLabel: "Email — jalur tercepat",
+          copy: "Salin alamat",
+          copied: "Tersalin",
+          open: "Buka aplikasi email",
           email: "Email",
           x: "X",
           instagram: "Instagram",
           threads: "Threads",
         },
+        studio: {
+          title: "Voidline Studio",
+          body:
+            "Gaya gambar yang dibangun dari titik dan garis hidup, dijaga pada tiga warna tanpa kompromi. Kami membuat GIF animasi berulang, meng-mint-nya di XRP Ledger, dan membangun alat supaya orang lain bisa melakukannya juga.",
+          cta: "Kisah studio →",
+        },
+        replyNote: "Studio membalas dalam satu sampai dua hari kerja.",
       },
     },
 
