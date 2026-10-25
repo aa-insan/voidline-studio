@@ -76,6 +76,17 @@
   --accent-deep: #b01018;
   --accent-fg: #ffffff;
   --accent-on-panel: #c0181f;
+  /* Teks merah di atas dinding hitam untuk ukuran KECIL.
+
+     `--accent` (#e01b24) hanya mencapai 4,10:1 terhadap --bg, di bawah ambang
+     WCAG AA 4,5:1 untuk teks normal. Selisihnya tipis di mata, tetapi label
+     kicker 12 px berekor renggang dipakai di hampir setiap halaman, jadi
+     variabel ini disediakan khusus untuk itu. #ef3b41 = 5,06:1.
+
+     Yang TIDAK boleh memakai variabel ini: tombol berlatar merah (tetap
+     --accent agar identik dengan logo), dan garis/bingkai (tetap
+     --accent-line) — kontras teks bukan alasan mengubah warna brand. */
+  --accent-bright: #ef3b41;
   --accent-soft: rgba(224, 27, 36, 0.12);
   /* Garis aksen tipis di tepi halaman (navbar, footer). Merah penuh terlalu
      mencolok untuk garis sepanjang lebar layar — versi ini meredupkannya
@@ -118,6 +129,7 @@
   --color-accent-deep: var(--accent-deep);
   --color-accent-fg: var(--accent-fg);
   --color-accent-on-panel: var(--accent-on-panel);
+  --color-accent-bright: var(--accent-bright);
   --color-accent-soft: var(--accent-soft);
   --color-accent-line: var(--accent-line);
 
@@ -163,7 +175,115 @@ body {
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
-  border-radius: 6px;
+}
+
+/* Kontrol bawaan browser (input pencarian, textarea) ikut tema gelap situs.
+   Dropdown koleksi sudah komponen custom (DropdownKoleksi.tsx) — tidak ada
+   <select> lagi, tapi aturan ini tetap menjaga input dan kontrol bawaan lain
+   agar tidak melawan tema. */
+input[type="search"],
+input[type="text"],
+input[type="email"],
+input[type="number"],
+textarea {
+  background-color: var(--surface);
+  color: var(--fg);
+  border-color: var(--border);
+  /* Sorotan bawaan browser (opsi yang disorot kursor, kotak centang) memakai
+     warna sistem — biru terang. `accent-color` mengubahnya jadi merah situs. */
+  accent-color: var(--accent);
+}
+
+input[type="search"]:focus,
+input[type="text"]:focus {
+  background-color: var(--surface-hover);
+  border-color: var(--accent);
+}
+
+/* Jaring pengaman bila suatu saat ada <select> asli lagi: item terpilih dan
+   yang disorot kursor memakai merah situs, bukan sorotan biru sistem. */
+option:checked,
+option:hover {
+  background-color: var(--accent);
+  color: var(--accent-fg);
+}
+
+/* =============================================================================
+   BAHAN BAKU TATA LETAK (LAYOUT PRIMITIVES)
+
+   Satu-satunya sumber lebar, ritme vertikal, tipografi judul, dan bentuk
+   tombol di seluruh situs. Dipakai lewat nama kelas (className="wadah bagian")
+   supaya setiap halaman punya posisi tepi yang sama, ritme yang sama, dan
+   tombol yang sama — tanpa menyalin string panjang per halaman.
+
+   Nama kelas memakai bahasa Indonesia karena itu bahasa kerja halaman ini;
+   nama properti di dalamnya tetap kelas Tailwind biasa.
+   ============================================================================= */
+
+@layer components {
+  /* Wadah konten: lebar maksimal yang sama untuk navbar, isi halaman, dan
+     footer, dengan napas yang makin lebar seiring layar makin besar. */
+  .wadah {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8;
+  }
+
+  /* Ritme vertikal standar sebuah bagian penuh. */
+  .bagian {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+
+  /* Tepi atas halaman — dipakai di bagian pertama tiap halaman. */
+  .bagian-kepala-halaman {
+    @apply pt-12 sm:pt-16 lg:pt-20;
+  }
+
+  /* Label penanda bagian: teks kecil renggang + garis merah pendek. */
+  .kicker {
+    @apply inline-flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.28em] text-accent-bright;
+  }
+
+  .kicker-garis {
+    @apply h-px w-8 bg-void-red;
+  }
+
+  /* Judul H1 halaman — membesar halus mengikuti lebar layar, satu skala
+     untuk semua halaman, bukan ukuran yang ditulis ulang per halaman. */
+  .judul-halaman {
+    @apply font-display font-bold leading-[1.08] tracking-tight;
+    font-size: clamp(1.875rem, 1.15rem + 3.2vw, 3.25rem);
+  }
+
+  /* Judul bagian (H2) — lebih kecil dari judul halaman, satu skala juga. */
+  .judul-bagian {
+    @apply font-display font-bold leading-[1.15] tracking-tight;
+    font-size: clamp(1.375rem, 1.12rem + 1.3vw, 2rem);
+  }
+
+  /* Bentuk tombol: satu keluarga, tiga wajah (merah, garis, samar).
+     Semua tombol situs memakai kelas ini supaya tinggi, sudut, dan hurufnya
+     konsisten di tiap halaman. */
+  .tombol {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-colors;
+  }
+
+  .tombol-merah {
+    @apply bg-void-red text-void-white hover:bg-void-red-deep;
+  }
+
+  .tombol-garis {
+    @apply border border-border-strong text-fg hover:border-void-red hover:text-void-red;
+  }
+
+  /* Tautan lanjutan: teks + panah, dipakai di bawah bagian yang menunjuk ke
+     halaman lain. */
+  .tautan-lanjut {
+    @apply inline-flex items-center gap-1.5 text-sm font-semibold text-void-red underline-offset-4 hover:underline;
+  }
+
+  /* Formulir pencarian — wajah yang sama di /collection dan /new-collection. */
+  .bidang-cari {
+    @apply w-full rounded-xl border border-border bg-surface py-2.5 pl-10 pr-9 text-sm text-fg outline-none transition-colors placeholder:text-fg-muted/60 hover:border-border-strong focus:border-accent focus:bg-surface-hover;
+  }
 }
 
 /* =============================================================================

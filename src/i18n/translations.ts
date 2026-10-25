@@ -29,6 +29,8 @@ export const translations = {
       menu: "Menu",
       openMenu: "Open menu",
       closeMenu: "Close menu",
+      skipToContent: "Skip to content",
+      composeComingSoon: "The generator is not open yet.",
     },
 
     footer: {
@@ -43,7 +45,11 @@ export const translations = {
       },
       collection: {
         title: "Collection",
-        subtitle: "Every Voidline Studio collection in one place. Mint directly here — no need to leave the site.",
+        subtitle: "Every Voidline Iceland collection in one place. Mint directly here — no need to leave the site.",
+      },
+      newCollection: {
+        title: "Newest Collection",
+        subtitle: "The latest release from Voidline Iceland — fresh from the XRP Ledger, updated automatically.",
       },
       generate: {
         title: "Compose",
@@ -53,7 +59,17 @@ export const translations = {
         privacy: "Everything runs in your browser. Your images never leave your device.",
         saved: "Saved on this device",
         savedAt: "Saved on this device at {waktu}",
+        saveFailed:
+          "The project could not be saved — this browser's storage may be full. Export a ZIP to keep your work.",
         restoring: "Restoring your saved project…",
+        errors: {
+          unsupportedSize: "The file format is not supported, or the file is larger than 10 MB.",
+          noUsableFiles: "No usable files were found.",
+          skipped:
+            "{jumlah} file skipped — unsupported format or larger than 10 MB.",
+          unreadableFile: "One file could not be read and is not usable yet.",
+          exampleFailed: "The demo project failed to load.",
+        },
         startNew: "Start a new project",
         startNewConfirm:
           "Delete the saved project and all of its images from this browser? This cannot be undone.",
@@ -130,6 +146,8 @@ export const translations = {
           shuffle: "Shuffle",
           empty: "Add layers and traits to see a live preview.",
           canvasLabel: "Preview of a generated combination",
+          loading: "Drawing preview…",
+          failed: "The preview could not be drawn. Try shuffling, or check that the image files can be read.",
         },
         dropzone: {
           loading: "Reading files…",
@@ -204,7 +222,15 @@ export const translations = {
         title: "This page does not exist",
         body: "The address may have changed or been mistyped. Everything else is still where you left it.",
         home: "Back to home",
-        generate: "Open the generator",
+        collection: "Browse the collection",
+      },
+      /* Muncul saat React gagal merender sebuah halaman. Nadanya sengaja tidak
+         menyebut "kesalahan" atau kode: pengunjung tidak bisa memperbaikinya,
+         dan yang mereka butuhkan hanya jalan kembali ke beranda. */
+      error: {
+        title: "Something went wrong on this page",
+        body: "The page could not be displayed. Reloading usually fixes it — nothing you saved was lost.",
+        home: "Back to home",
       },
       about: {
         title: "Studio",
@@ -227,7 +253,6 @@ export const translations = {
           body:
             "One piece or a short series in the Voidline style — red, black and white, built from dots and lines that move. Tell us what it is for, and the scope is agreed before anything is drawn.",
           cta: "Start a commission",
-          mailSubject: "Commission enquiry",
           chips: {
             single: "Single piece",
             series: "Series",
@@ -300,17 +325,15 @@ export const translations = {
         },
         channels: {
           title: "Write to us",
-          emailLabel: "Email — the quickest route",
-          copy: "Copy address",
-          copied: "Copied",
-          open: "Open mail app",
-          email: "Email",
+          discordLabel: "Discord — the quickest route",
+          discordName: "Voidline Iceland",
+          discordCta: "Open Discord",
           x: "X",
           instagram: "Instagram",
           threads: "Threads",
         },
         studio: {
-          title: "Voidline Studio",
+          title: "About the studio",
           body:
             "A drawing style built from living dots and lines, held to three colours without compromise. We make looping animated GIFs, mint them on the XRP Ledger, and build the tools that let others do the same.",
           cta: "The studio story →",
@@ -321,9 +344,17 @@ export const translations = {
 
     collection: {
       mintNow: "Mint Now",
+      viewCollection: "View collection",
+      mintHere: "Mint on xrp.cafe",
+      mintOutside: "Minting for this collection is not set up here yet — the piece is viewable on xrp.cafe.",
+      viewOnXrpCafe: "View on xrp.cafe",
       back: "Back to collections",
       imageSoon: "Artwork coming soon",
       count: "{count} collections",
+      works: "{count} pieces",
+      allWorks: "All pieces",
+      loadingArt: "Loading artwork…",
+      artFailed: "The artwork could not be loaded from IPFS.",
       mintLabel: "Mint on XRPL",
       standardLabel: "XRPL Standard",
       standardNote:
@@ -337,17 +368,39 @@ export const translations = {
         title: "Collection not found",
         subtitle: "The collection you are looking for does not exist or is no longer available.",
       },
+      workNotFound: "This piece does not exist or is no longer listed.",
+      newCollectionLabel: "Newest collection",
+      newCollectionEmpty:
+        "No new collection is live yet. The newest release will appear here automatically once it is minted.",
+      newCollectionBrowse: "Browse all collections",
+      soldOut: "Sold out",
+      available: "Available",
+      soldOutNote: "This piece already has an owner. It can still be viewed on xrp.cafe.",
+      tokenId: "NFTokenID",
       apes: {
         title: "Apes Voidline",
-        subtitle: "The Apes Voidline collection by Voidline Studio.",
+        subtitle: "The Apes Voidline collection by Voidline Iceland.",
       },
       jajang: {
         title: "Jajang Voidline",
-        subtitle: "The Jajang Voidline collection by Voidline Studio.",
+        subtitle: "The Jajang Voidline collection by Voidline Iceland.",
       },
       fineart: {
         title: "Fine Art Voidline",
-        subtitle: "The Fine Art Voidline collection by Voidline Studio.",
+        subtitle: "The Fine Art Voidline collection by Voidline Iceland.",
+      },
+      filterLabel: "Collection",
+      searchLabel: "Search artworks",
+      searchPlaceholder: "Search by title or edition number…",
+      allCollections: "All collections ({count})",
+      noMatch: "No artwork matches that search.",
+      kelompok: {
+        apid: "Apes Voidline",
+        favo: "Fine Art Voidline",
+        javo: "Jajang Voidline",
+        neo: "Neo",
+        lepas: "Standalone pieces",
+        puko: "Pukonimichi",
       },
     },
 
@@ -372,16 +425,18 @@ export const translations = {
       "6": { judul: "Half Tone", catatan: "Rare" },
       "7": { judul: "Paper Cut", catatan: "Uncommon" },
       "8": { judul: "Last Frame", catatan: "1 of 1" },
+      "9": { judul: "Second Sun", catatan: "Rare" },
+      "10": { judul: "Night Draft", catatan: "Uncommon" },
     },
 
     home: {
       hero: {
-        badge: "XRP Ledger NFT Studio",
-        title: "Digital art, minted on the XRP Ledger",
+        badge: "Welcome to Jajang Osle's NFT Gallery",
+        title: "NFT GIF Animation",
         subtitle:
-          "Voidline Studio is an independent art studio building hand-drawn NFT collections — and the tools that let creators make their own.",
+          "Voidline is gif animation art made frame by frame, bringing the movement of dots and lines to life.",
         ctaCollections: "Explore Collections",
-        ctaGenerate: "Try the Generator",
+        ctaLatestCollection: "Newest collection",
       },
       stats: {
         collections: "Collections",
@@ -389,12 +444,26 @@ export const translations = {
         standard: "XRPL Standard",
         standardValue: "XLS-20",
       },
+      rilis: {
+        badge: "Releasing today",
+        title: "Mom Ape — new collection drops today",
+        subtitle:
+          "The newest Voidline collection is live on xrp.cafe. Grab yours while the drop is open.",
+        cta: "Mint on xrp.cafe",
+      },
       collections: {
         kicker: "The Work",
         title: "Featured Collections",
         subtitle:
           "Each collection is drawn by hand and minted straight from this site — no detours.",
         viewAll: "View all collections",
+      },
+      gallery: {
+        kicker: "Latest Works",
+        title: "Fresh from the ledger",
+        subtitle:
+          "A rotating strip of pieces from every collection — each one live on the XRP Ledger and minted from this site.",
+        cta: "See all 654 pieces",
       },
       generate: {
         kicker: "The Tool",
@@ -409,9 +478,9 @@ export const translations = {
         cta: "See how it works",
       },
       closing: {
-        title: "Collect a piece of the studio",
+        title: "Take a piece of Voidline home",
         subtitle:
-          "Every artwork is a one-off from the hands of the studio. Mint yours directly, without leaving this site.",
+          "Every piece is drawn by hand in this studio. Mint yours right here — no need to go anywhere else.",
         cta: "Browse collections",
       },
     },
@@ -462,6 +531,8 @@ export const translations = {
       menu: "Menu",
       openMenu: "Buka menu",
       closeMenu: "Tutup menu",
+      skipToContent: "Lompat ke isi",
+      composeComingSoon: "Generator belum dibuka.",
     },
 
     footer: {
@@ -476,7 +547,11 @@ export const translations = {
       },
       collection: {
         title: "Koleksi",
-        subtitle: "Semua koleksi Voidline Studio di satu tempat. Mint langsung di sini — tanpa perlu keluar dari situs.",
+        subtitle: "Semua koleksi Voidline Iceland di satu tempat. Mint langsung di sini — tanpa perlu keluar dari situs.",
+      },
+      newCollection: {
+        title: "Koleksi Terbaru",
+        subtitle: "Rilis terbaru dari Voidline Iceland — langsung dari XRP Ledger, diperbarui otomatis.",
       },
       generate: {
         title: "Komposisi",
@@ -486,7 +561,17 @@ export const translations = {
         privacy: "Semuanya berjalan di browser. Gambarmu tidak pernah keluar dari perangkatmu.",
         saved: "Tersimpan di perangkat ini",
         savedAt: "Tersimpan di perangkat ini pukul {waktu}",
+        saveFailed:
+          "Proyek gagal disimpan — penyimpanan browser mungkin penuh. Ekspor ZIP untuk menjaga hasil kerja.",
         restoring: "Memuat proyek tersimpan…",
+        errors: {
+          unsupportedSize: "Format berkas tidak didukung atau ukurannya lebih dari 10 MB.",
+          noUsableFiles: "Tidak ada berkas yang bisa dipakai.",
+          skipped:
+            "{jumlah} berkas dilewati karena format tidak didukung atau lebih dari 10 MB.",
+          unreadableFile: "Satu berkas tidak bisa dibaca dan belum bisa dipakai.",
+          exampleFailed: "Proyek contoh gagal dimuat.",
+        },
         startNew: "Mulai proyek baru",
         startNewConfirm:
           "Hapus proyek tersimpan beserta semua gambarnya dari browser ini? Tindakan ini tidak bisa dibatalkan.",
@@ -563,6 +648,8 @@ export const translations = {
           shuffle: "Acak ulang",
           empty: "Tambahkan layer dan trait untuk melihat pratinjau.",
           canvasLabel: "Pratinjau hasil kombinasi",
+          loading: "Menggambar pratinjau…",
+          failed: "Pratinjau gagal digambar. Coba acak ulang, atau periksa apakah berkas gambarnya bisa dibaca.",
         },
         dropzone: {
           loading: "Membaca berkas…",
@@ -637,7 +724,12 @@ export const translations = {
         title: "Halaman ini tidak ada",
         body: "Alamatnya mungkin sudah berubah atau salah ketik. Sisanya masih di tempat semula.",
         home: "Kembali ke beranda",
-        generate: "Buka generator",
+        collection: "Lihat koleksi",
+      },
+      error: {
+        title: "Ada yang tidak berjalan di halaman ini",
+        body: "Halamannya gagal ditampilkan. Memuat ulang biasanya membereskan ini — tidak ada yang Anda simpan ikut hilang.",
+        home: "Kembali ke beranda",
       },
       about: {
         title: "Studio",
@@ -660,7 +752,6 @@ export const translations = {
           body:
             "Satu karya atau seri pendek dengan gaya Voidline — merah, hitam, putih, dibangun dari titik dan garis yang bergerak. Sebutkan untuk apa karyanya, lingkupnya disepakati sebelum apa pun digambar.",
           cta: "Mulai pesanan",
-          mailSubject: "Pertanyaan pesanan karya",
           chips: {
             single: "Satu karya",
             series: "Seri",
@@ -733,17 +824,15 @@ export const translations = {
         },
         channels: {
           title: "Tulis ke kami",
-          emailLabel: "Email — jalur tercepat",
-          copy: "Salin alamat",
-          copied: "Tersalin",
-          open: "Buka aplikasi email",
-          email: "Email",
+          discordLabel: "Discord — jalur tercepat",
+          discordName: "Voidline Iceland",
+          discordCta: "Buka Discord",
           x: "X",
           instagram: "Instagram",
           threads: "Threads",
         },
         studio: {
-          title: "Voidline Studio",
+          title: "Tentang studio",
           body:
             "Gaya gambar yang dibangun dari titik dan garis hidup, dijaga pada tiga warna tanpa kompromi. Kami membuat GIF animasi berulang, meng-mint-nya di XRP Ledger, dan membangun alat supaya orang lain bisa melakukannya juga.",
           cta: "Kisah studio →",
@@ -754,9 +843,17 @@ export const translations = {
 
     collection: {
       mintNow: "Mint Sekarang",
+      viewCollection: "Lihat koleksi",
+      mintHere: "Mint di xrp.cafe",
+      mintOutside: "Mint untuk koleksi ini belum tersedia di sini — karyanya bisa dilihat di xrp.cafe.",
+      viewOnXrpCafe: "Lihat di xrp.cafe",
       back: "Kembali ke koleksi",
       imageSoon: "Karya segera hadir",
       count: "{count} koleksi",
+      works: "{count} karya",
+      allWorks: "Semua karya",
+      loadingArt: "Memuat karya…",
+      artFailed: "Karya gagal dimuat dari IPFS.",
       mintLabel: "Mint di XRPL",
       standardLabel: "Standar XRPL",
       standardNote:
@@ -770,17 +867,39 @@ export const translations = {
         title: "Koleksi tidak ditemukan",
         subtitle: "Koleksi yang kamu cari tidak ada atau sudah tidak tersedia.",
       },
+      workNotFound: "Karya ini tidak ada atau sudah tidak terdaftar.",
+      newCollectionLabel: "Koleksi terbaru",
+      newCollectionEmpty:
+        "Belum ada koleksi baru yang tayang. Rilis terbaru akan muncul di sini otomatis begitu di-mint.",
+      newCollectionBrowse: "Jelajahi semua koleksi",
+      soldOut: "Sudah laku",
+      available: "Tersedia",
+      soldOutNote: "Karya ini sudah punya pemilik. Karyanya tetap bisa dilihat di xrp.cafe.",
+      tokenId: "NFTokenID",
       apes: {
         title: "Apes Voidline",
-        subtitle: "Koleksi Apes Voidline dari Voidline Studio.",
+        subtitle: "Koleksi Apes Voidline dari Voidline Iceland.",
       },
       jajang: {
         title: "Jajang Voidline",
-        subtitle: "Koleksi Jajang Voidline dari Voidline Studio.",
+        subtitle: "Koleksi Jajang Voidline dari Voidline Iceland.",
       },
       fineart: {
         title: "Fine Art Voidline",
-        subtitle: "Koleksi Fine Art Voidline dari Voidline Studio.",
+        subtitle: "Koleksi Fine Art Voidline dari Voidline Iceland.",
+      },
+      filterLabel: "Koleksi",
+      searchLabel: "Cari karya",
+      searchPlaceholder: "Cari judul atau nomor edisi…",
+      allCollections: "Semua koleksi ({count})",
+      noMatch: "Tidak ada karya yang cocok.",
+      kelompok: {
+        apid: "Apes Voidline",
+        favo: "Fine Art Voidline",
+        javo: "Jajang Voidline",
+        neo: "Neo",
+        lepas: "Karya lepas",
+        puko: "Pukonimichi",
       },
     },
 
@@ -803,16 +922,18 @@ export const translations = {
       "6": { judul: "Nada Separo", catatan: "Langka" },
       "7": { judul: "Sayat Kertas", catatan: "Tidak Umum" },
       "8": { judul: "Bingkai Terakhir", catatan: "1 dari 1" },
+      "9": { judul: "Matahari Kedua", catatan: "Langka" },
+      "10": { judul: "Rancangan Malam", catatan: "Tidak Umum" },
     },
 
     home: {
       hero: {
-        badge: "Studio NFT di XRP Ledger",
-        title: "Karya digital, di-mint di XRP Ledger",
+        badge: "Selamat Datang di Galeri NFT Jajang Osle",
+        title: "NFT GIF Animation",
         subtitle:
-          "Voidline Studio adalah studio seni independen yang membangun koleksi NFT gambar tangan — sekaligus alat yang memungkinkan kreator membuat koleksinya sendiri.",
+          "Voidline adalah seni animasi gif yang dibuat frame by brame dengan menghidupkan gerakan titik dan garis",
         ctaCollections: "Jelajahi Koleksi",
-        ctaGenerate: "Coba Generator",
+        ctaLatestCollection: "Koleksi terbaru",
       },
       stats: {
         collections: "Koleksi",
@@ -820,12 +941,26 @@ export const translations = {
         standard: "Standar XRPL",
         standardValue: "XLS-20",
       },
+      rilis: {
+        badge: "Rilis hari ini",
+        title: "Mom Ape — koleksi terbaru rilis hari ini",
+        subtitle:
+          "Koleksi Voidline terbaru sudah tayang di xrp.cafe. Ambil milikmu selama masa rilis dibuka.",
+        cta: "Mint di xrp.cafe",
+      },
       collections: {
         kicker: "Karyanya",
         title: "Koleksi Unggulan",
         subtitle:
           "Setiap koleksi digambar dengan tangan dan di-mint langsung dari situs ini — tanpa perlu pindah tempat.",
         viewAll: "Lihat semua koleksi",
+      },
+      gallery: {
+        kicker: "Karya Terbaru",
+        title: "Segar dari ledger",
+        subtitle:
+          "Gulungan karya dari setiap koleksi — semuanya hidup di XRP Ledger dan bisa di-mint langsung dari situs ini.",
+        cta: "Lihat semua 654 karya",
       },
       generate: {
         kicker: "Alatnya",
@@ -840,9 +975,9 @@ export const translations = {
         cta: "Lihat cara kerjanya",
       },
       closing: {
-        title: "Koleksi satu karya dari studio",
+        title: "Bawa pulang sepotong Voidline",
         subtitle:
-          "Setiap karya adalah satu-satunya dari tangan studio. Mint langsung milikmu, tanpa keluar dari situs ini.",
+          "Setiap karya digambar tangan di studio ini. Mint langsung di sini — tanpa perlu pindah tempat.",
         cta: "Jelajahi koleksi",
       },
     },

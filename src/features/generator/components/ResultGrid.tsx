@@ -99,7 +99,7 @@ export default function ResultGrid({
     <div>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="inline-flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.28em] text-void-red">
+          <p className="inline-flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.28em] text-accent-bright">
             <span className="h-px w-8 bg-void-red" aria-hidden="true" />
             {t("page.generator.results.kicker")}
           </p>

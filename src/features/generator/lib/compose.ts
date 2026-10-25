@@ -27,8 +27,9 @@
 export type GambarSiap = {
   /** Nama trait, untuk keperluan debug dan pesan galat. */
   nama: string;
-  /** Bitmap gambar. */
-  bitmap: ImageBitmap;
+  /** Bitmap gambar. ImageBitmap jika didukung; HTMLImageElement sebagai jatuh
+   * bangun untuk Safari lama. Keduanya diterima drawImage. */
+  bitmap: CanvasImageSource;
   width: number;
   height: number;
 };
@@ -56,7 +57,7 @@ export async function muatGambar(blob: Blob, nama: string): Promise<GambarSiap> 
     });
     // Elemen gambar tetap hidup karena object URL belum dicabut; pemanggil
     // bertanggung jawab mencabutnya lewat `lepasGambar`.
-    return { nama, bitmap: img as unknown as ImageBitmap, width: img.naturalWidth || 1, height: img.naturalHeight || 1 };
+    return { nama, bitmap: img, width: img.naturalWidth || 1, height: img.naturalHeight || 1 };
   } finally {
     // Object URL tetap dicabut setelah gambar termuat: gambar sudah memegang
     // datanya sendiri dan tidak butuh URL lagi.
@@ -144,11 +145,18 @@ export function susunKeKanvasTetap(
   }
 }
 
-/** Melepas memori sebuah gambar hasil muat. */
+/** Melepas memori sebuah gambar hasil muat.
+ *
+ * Hanya ImageBitmap yang punya `close()`. Elemen <img> dari jalur jatuh bangun
+ * tidak menyimpan memori bitmap terpisah, jadi cukup dilewati — pemeriksaan
+ * `in` di bawah membuat cast tidak diperlukan sama sekali.
+ */
 export function lepasGambar(g: GambarSiap | undefined): void {
   if (!g) return;
-  const bitmap = g.bitmap as ImageBitmap;
-  if (typeof bitmap.close === "function") bitmap.close();
+  const { bitmap } = g;
+  if ("close" in bitmap && typeof bitmap.close === "function") {
+    bitmap.close();
+  }
 }
 
 /** Melepas banyak gambar sekaligus. */

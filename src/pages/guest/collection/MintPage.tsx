@@ -28,23 +28,22 @@ export default function MintPage() {
 
   if (!collection) {
     return (
-      <section className="mx-auto max-w-2xl px-5 py-20 text-center">
-        <p className="font-display text-5xl font-bold leading-none text-void-red/30" aria-hidden="true">
-          404
-        </p>
-        <h1 className="mt-6 font-display text-2xl font-bold tracking-tight sm:text-3xl">
-          {t("collection.notFound.title")}
-        </h1>
-        <p className="mt-4 leading-relaxed text-fg-muted">
-          {t("collection.notFound.subtitle")}
-        </p>
-        <Link
-          to="/collection"
-          className="mt-8 inline-block rounded-xl bg-void-red px-6 py-3 text-sm font-semibold text-void-white shadow-brand-md transition-opacity hover:opacity-90"
-        >
-          {t("collection.back")}
-        </Link>
-      </section>
+      <HalamanBerlatar>
+        <section className="wadah flex min-h-[70vh] flex-col justify-center py-20 text-center">
+          <p className="font-display text-5xl font-bold leading-none text-void-red/30" aria-hidden="true">
+            404
+          </p>
+          <h1 className="judul-bagian mt-6">
+            {t("collection.notFound.title")}
+          </h1>
+          <p className="mt-4 leading-relaxed text-fg-muted">
+            {t("collection.notFound.subtitle")}
+          </p>
+          <Link to="/collection" className="tombol tombol-merah mx-auto mt-8">
+            {t("collection.back")}
+          </Link>
+        </section>
+      </HalamanBerlatar>
     );
   }
 
@@ -56,7 +55,7 @@ export default function MintPage() {
           <div className="absolute -right-1/4 top-0 h-full w-1/2 -rotate-12 bg-linear-to-l from-void-red to-transparent" />
         </div>
 
-        <div className="relative mx-auto max-w-2xl px-5 pb-12 pt-10">
+        <div className="wadah relative pb-12 pt-10">
           {/* Jalan kembali — pengunjung yang datang dari daftar koleksi perlu
               bisa mundur tanpa bergantung pada tombol browser. */}
           <Link
@@ -69,12 +68,12 @@ export default function MintPage() {
             {t("collection.back")}
           </Link>
 
-          <p className="mt-8 inline-flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.28em] text-void-red">
-            <span className="h-px w-8 bg-void-red" aria-hidden="true" />
+          <p className="kicker mt-8">
+            <span className="kicker-garis" aria-hidden="true" />
             {t("collection.mintLabel")}
           </p>
 
-          <h1 className="mt-4 font-display text-2xl font-bold tracking-tight sm:text-3xl">
+          <h1 className="judul-bagian mt-4">
             {t(collection.titleKey)}
           </h1>
           <p className="mt-3 leading-relaxed text-fg-muted">
@@ -86,7 +85,7 @@ export default function MintPage() {
       {/* Kotak mint milik xrp.cafe — panel putih, satu-satunya benda terang di
           halaman ini. Ditarik sedikit ke atas supaya terasa menempel pada
           kepala halaman, bukan mengambang terpisah. */}
-      <section className="mx-auto -mt-6 max-w-2xl px-5 pb-16">
+      <section className="wadah -mt-6 max-w-2xl pb-16">
         <MintEmbed collection={collection} />
       </section>
     </HalamanBerlatar>

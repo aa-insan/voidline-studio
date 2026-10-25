@@ -193,7 +193,7 @@ export default function MintEmbed({ collection }: Props) {
   return (
     <section
       aria-label={t(collection.titleKey)}
-      className="overflow-hidden rounded-2xl border-2 border-transparent border-t-accent bg-panel shadow-brand-lg"
+      className="overflow-hidden rounded-2xl border border-border bg-panel shadow-brand-lg"
     >
       <div className="relative p-4">
         {/* Wadah xrp.cafe — berisi tag skrip SAJA, tanpa saudara. React tidak
@@ -201,9 +201,16 @@ export default function MintEmbed({ collection }: Props) {
             tidak pernah ikut tergeser. Lihat catatan di atas berkas. */}
         <div ref={containerRef} className={MIN_HEIGHT} />
 
-        {/* Penanda memuat — elemen TERPISAH, bukan di dalam wadah skrip. */}
+        {/* Penanda memuat — elemen TERPISAH, bukan di dalam wadah skrip.
+            role="status" + aria-live: pengguna pembaca layar diberi tahu bahwa
+            kotak mint sedang dimuat, tanpa harus menebak dari teks yang muncul
+            tiba-tiba. */}
         {status === "memuat" && (
-          <div className="pointer-events-none absolute inset-0 grid place-items-center">
+          <div
+            className="pointer-events-none absolute inset-0 grid place-items-center"
+            role="status"
+            aria-live="polite"
+          >
             <span className="flex items-center gap-2 text-sm text-panel-fg-muted">
               <svg
                 viewBox="0 0 24 24"
@@ -222,7 +229,7 @@ export default function MintEmbed({ collection }: Props) {
         {/* Jaring pengaman: widget tidak pernah datang. Pengunjung diberi jalan
             keluar, bukan layar kosong. */}
         {status === "gagal" && (
-          <div className="absolute inset-0 grid place-items-center px-6 text-center">
+          <div className="absolute inset-0 grid place-items-center px-6 text-center" role="alert">
             <span className="text-sm leading-relaxed text-panel-fg-muted">
               {t("collection.loadFailed")}
             </span>

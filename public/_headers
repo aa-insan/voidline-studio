@@ -1,0 +1,34 @@
+# HEADER KEAMANAN — aktif di Netlify dan Cloudflare Pages.
+#
+# Berkas ini dibaca host statis saat publikasi (Vercel memakai vercel.json,
+# isinya sama). Karena berkas provisi host berubah jarang, komentar yang
+# panjang diletakkan di sini dan tidak diulang di berkas lain.
+#
+# ATURAN: latar di atas URL membedakan penerapan. Seluruh situs kena semua
+# header di bawah — ada satu pengecualian: halaman /404.html tetap kena juga,
+# jadi nilai di bawah harus aman untuk SEMUA halaman.
+
+/*
+  # ── Content-Security-Policy ──────────────────────────────────────────────
+  # daftar sumber yang BOLEH dimuat halaman; sisanya diblokir peramban.
+  #   script-src : 'self' + https://xrp.cafe — widget mint disuntikkan dari
+  #                sana (MintEmbed.tsx). Tidak ada host lain.
+  #   style-src  : 'unsafe-inline' DIPERLUKAN — Tailwind dan beberapa komponen
+  #                memakai atribut style="" inline (mis. blur SorotanKarya).
+  #   font-src   : Google Fonts.
+  #   img-src    : https: — karya dipajang dari gateway NFT mana pun (IPFS,
+  #                xrp.cafe) yang tidak bisa didaftarkan satu per satu.
+  #   frame-src  : hanya xrp.cafe — satu-satunya iframe di situs.
+  #   frame-ancestors : situs dilarang ditampilkan di iframe pihak lain
+  #                (anti-clickjacking; halaman mint memakai dompet Web3).
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://xrp.cafe; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://xrp.cafe; frame-src https://xrp.cafe; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+  X-Frame-Options: DENY
+  # Jangan kirim alamat klik keluar ke situs tujuan.
+  Referrer-Policy: strict-origin-when-cross-origin
+  # Cegah MIME-sniffing (gambar/skrip menyamar sebagai dokumen lain).
+  X-Content-Type-Options: nosniff
+  # Situs tidak perlu kamera, mikrofon, atau lokasi.
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  # Paksa HTTPS dua tahun, termasuk subdomain. Hapus includeSubDomains bila
+  # suatu saat ada subdomain yang harus diakses via HTTP.
+  Strict-Transport-Security: max-age=63072000; includeSubDomains

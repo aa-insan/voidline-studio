@@ -39,11 +39,17 @@ import {
 import { useKoleksi } from "./useKoleksi";
 import { usePenyimpanan } from "./usePenyimpanan";
 import { buatContoh } from "../lib/contoh";
+import { useLanguage } from "../../../i18n/useLanguage";
 
 /** Satu gumpalan berkas yang akan dimasukkan ke satu layer. */
 export type GumpalanLayer = { namaLayer: string; berkas: File[] };
 
 export function useGenerator() {
+  // Pesan galat disimpan sebagai teks jadi lewat kamus bahasa: hook ini hanya
+  // `useContext` di baliknya, jadi aman dipanggil di sini. Sebelumnya pesan
+  // ditulis langsung dalam bahasa Indonesia, sehingga pengunjung berbahasa
+  // Inggris melihat pesan galat berbahasa lain.
+  const { t } = useLanguage();
   const [keadaan, dispatch] = useReducer(generatorReducer, undefined, keadaanAwal);
 
   /**
@@ -74,18 +80,17 @@ export function useGenerator() {
       if (sah.length === 0) {
         setGalat(
           ditolak > 0
-            ? "Format berkas tidak didukung atau ukurannya lebih dari 10 MB."
-            : "Tidak ada berkas yang bisa dipakai.",
+            ? t("page.generate.errors.unsupportedSize")
+            : t("page.generate.errors.noUsableFiles"),
         );
         return 0;
       }
 
       setGalat(
         ditolak > 0
-          ? `${ditolak} berkas dilewati karena format tidak didukung atau lebih dari 10 MB.`
+          ? t("page.generate.errors.skipped", { jumlah: ditolak })
           : null,
       );
-
       // Reducer membuat id trait. id itu perlu ditangkap supaya gambarnya bisa
       // dipasangkan. Karena itu keadaan dihitung lebih dulu di sini, bukan
       // lewat dispatch dan membaca ulang hasilnya — dua langkah itu tidak
@@ -111,7 +116,7 @@ export function useGenerator() {
             lemariAset.pasang(traitId, { traitId, blob: berkas, width, height });
           } catch {
             // Gambar rusak: trait tetap ditambahkan tanpa aset, dan dilaporkan.
-            setGalat("Satu berkas tidak bisa dibaca dan belum bisa dipakai.");
+            setGalat(t("page.generate.errors.unreadableFile"));
           }
         }),
       );
@@ -123,7 +128,9 @@ export function useGenerator() {
       setVersiAset((v) => v + 1);
       return traitBaru.length;
     },
-    [],
+    // `t` di deps: pesan galat mengikuti bahasa aktif. Tanpa ini, pesan tidak
+    // ikut berganti bahasa bila pengunjung mengganti bahasa di tengah kerja.
+    [t],
   );
 
   // ── Pengelolaan layer & trait ──────────────────────────────────────────────
@@ -269,7 +276,7 @@ export function useGenerator() {
       }
 
       if (layerBaru.length === 0) {
-        setGalat("Tidak ada berkas yang bisa dipakai.");
+        setGalat(t("page.generate.errors.noUsableFiles"));
         return;
       }
 
@@ -281,7 +288,8 @@ export function useGenerator() {
       });
       setVersiAset((v) => v + 1);
     },
-    [keadaan],
+    // `t` di deps: pesan galat mengikuti bahasa aktif.
+    [keadaan, t],
   );
 
   const muatContoh = useCallback(async (): Promise<void> => {
@@ -302,11 +310,11 @@ export function useGenerator() {
       });
       setVersiAset((v) => v + 1);
     } catch (e) {
-      setGalat(e instanceof Error ? e.message : "Proyek contoh gagal dimuat.");
+      setGalat(e instanceof Error ? e.message : t("page.generate.errors.exampleFailed"));
     } finally {
       setMemuatContoh(false);
     }
-  }, []);
+  }, [t]);
 
   /** Semua trait yang sah untuk digambar: bukan dikecualikan, bobot > 0. */
   const traitAktif = useMemo(

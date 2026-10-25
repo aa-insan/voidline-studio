@@ -74,6 +74,7 @@ export default function ComposePage() {
     memulihkan,
     adaSimpanan,
     tersimpanPada,
+    galatSimpan,
     mulaiBaru,
   } = useGenerator();
 
@@ -126,12 +127,12 @@ export default function ComposePage() {
         <div className="relative mx-auto max-w-7xl px-5 pb-8 pt-10">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div className="max-w-2xl">
-              <p className="inline-flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.28em] text-void-red">
-                <span className="h-px w-8 bg-void-red" aria-hidden="true" />
+              <p className="kicker">
+                <span className="kicker-garis" aria-hidden="true" />
                 {t("page.generate.kicker")}
               </p>
 
-              <h1 className="mt-4 font-display text-3xl font-bold leading-[1.1] tracking-tight sm:text-4xl">
+              <h1 className="judul-halaman mt-4">
                 {t("page.generate.title")}
               </h1>
 
@@ -169,6 +170,25 @@ export default function ComposePage() {
 
               {memulihkan && (
                 <p className="mt-2 text-[11px] text-fg-muted">{t("page.generate.restoring")}</p>
+              )}
+
+              {galatSimpan && (
+                <p
+                  role="alert"
+                  className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-void-red"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-3.5 w-3.5 shrink-0 fill-none stroke-current"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 8v4M12 16h.01" />
+                  </svg>
+                  {t("page.generate.saveFailed")}
+                </p>
               )}
             </div>
 
@@ -455,11 +475,11 @@ export default function ComposePage() {
       <section className="border-t border-border">
         <div className="mx-auto max-w-7xl px-5 py-14">
           <header className="max-w-2xl">
-            <p className="inline-flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.28em] text-void-red">
-              <span className="h-px w-8 bg-void-red" aria-hidden="true" />
+            <p className="kicker">
+              <span className="kicker-garis" aria-hidden="true" />
               {t("page.generate.flow.kicker")}
             </p>
-            <h2 className="mt-4 font-display text-2xl font-bold tracking-tight sm:text-3xl">
+            <h2 className="judul-bagian mt-4">
               {t("page.generate.flow.title")}
             </h2>
           </header>
@@ -503,10 +523,7 @@ export default function ComposePage() {
           <p className="mx-auto mt-2 max-w-xl text-sm leading-relaxed text-fg-muted">
             {t("page.generate.closingBody")}
           </p>
-          <Link
-            to="/collection"
-            className="mt-6 inline-flex items-center justify-center rounded-xl border border-border-strong px-6 py-3 text-sm font-semibold text-fg transition-colors hover:border-void-red hover:text-void-red"
-          >
+          <Link to="/collection" className="tombol tombol-garis mt-6">
             {t("page.generate.ctaExample")}
           </Link>
         </div>

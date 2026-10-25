@@ -1,0 +1,50 @@
+# =============================================================================
+# TARIK KARYA OTOMATIS — perbarui data karya dari XRP Ledger setiap hari.
+#
+# Kalau skrip menemukan karya baru (rilis terbaru di xrp.cafe), ia menulis
+# ulang berkas data, commit, dan push. Push itu memicu build ulang di Vercel,
+# sehingga koleksi baru tampil di situs tanpa sentuhan tangan.
+#
+# Menjalankan manual: tab "Actions" di GitHub → "Tarik karya" → Run workflow.
+# =============================================================================
+
+name: Tarik karya
+
+on:
+  schedule:
+    # 00:30 UTC setiap hari — dipilih menepi dari pergantian hari supaya
+    # tidak bertabrakan dengan job penuh trafik di menit 00.
+    - cron: "30 0 * * *"
+  workflow_dispatch: # tombol "Run workflow" manual di tab Actions
+
+permissions:
+  contents: write
+
+jobs:
+  tarik:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ambil kode
+        uses: actions/checkout@v4
+
+      - name: Pasang Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Tarik karya dari ledger
+        run: python3 scripts/tarik-karya.py
+
+      - name: Commit bila ada karya baru
+        run: |
+          git config user.name "voidline-bot"
+          git config user.email "actions@voidline.studio"
+          git add src/data/karyaNft.ts src/data/karyaDetail.ts
+          if git diff --cached --quiet; then
+            echo "Tidak ada karya baru — tidak ada yang di-commit."
+          else
+            JUMLAH=$(grep -c 'ipfs://' src/data/karyaNft.ts || true)
+            git commit -m "karya: perbarui data dari ledger ($(date -u +%F))"
+            git push
+            echo "Karya baru dipush — Vercel akan build ulang otomatis."
+          fi

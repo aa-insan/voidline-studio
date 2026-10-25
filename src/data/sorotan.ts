@@ -21,18 +21,28 @@
    Selama `gambar` masih berisi alamat, situs memakai gambar itu — berguna
    sebelum album rilis, atau untuk pratinjau karya yang belum di-mint.
 
+   ── SUMBER GAMBAR SAAT INI ─────────────────────────────────────────────────
+   Sepuluh baris di bawah memakai GIF yang sudah ada di `src/assets/`, diimpor
+   langsung supaya Vite ikut membundelnya (bukan ditaruh di `public/`). Yang
+   TIDAK dipakai hanya `Logo.gif` — itu tanda studio, bukan karya.
+
    ── URUTAN ─────────────────────────────────────────────────────────────────
    Urutan di array = urutan di layar. Taruh yang paling ingin dilihat lebih dulu:
    pengunjung hanya melihat dua-tiga kartu pertama tanpa menggulir ke samping.
-
-   ── MENGAPA `sorotan` DIISI CONTOH ────────────────────────────────────────
-   Album baru rilis hari Minggu, jadi belum ada NFTokenID yang bisa dipakai.
-   Sepuluh baris di bawah adalah contoh bentuk data — ganti seluruhnya begitu
-   ID asli tersedia. Tidak ada yang menandai ini sebagai contoh di layar, jadi
-   jangan rilis situs dengan data contoh masih terpasang.
    ============================================================================= */
 
 import type { TextKey } from "../i18n/useLanguage";
+
+import blueDarkPurple from "../assets/Blue Dark Purple.gif";
+import blueRed from "../assets/Blue Red.gif";
+import blueWhite from "../assets/Blue White.gif";
+import redBlue from "../assets/Red Blue.gif";
+import redDarkGrey from "../assets/Red Dark Grey.gif";
+import redWhite from "../assets/Red White.gif";
+import whiteBlue from "../assets/White Blue.gif";
+import whiteDarkGrey from "../assets/White Dark Grey.gif";
+import whiteDarkPurple from "../assets/White Dark Purple.gif";
+import whiteRed from "../assets/White Red.gif";
 
 export type Sorotan = {
   /** NFTokenID (64 heksadesimal). Kosongkan kalau karya belum di-mint. */
@@ -48,15 +58,18 @@ export type Sorotan = {
 /**
  * Karya yang dipajang di beranda.
  *
- * CATATAN: isi saat ini adalah contoh. Lihat komentar di atas.
+ * Sepuluh GIF karya yang tersedia, satu per kartu. Begitu NFTokenID asli
+ * tersedia, ganti `gambar` dengan `tokenId` — bentuk barisnya tetap.
  */
 export const sorotan: Sorotan[] = [
-  { gambar: "contoh-1", judulKey: "sorotan.1.judul", catatanKey: "sorotan.1.catatan" },
-  { gambar: "contoh-2", judulKey: "sorotan.2.judul", catatanKey: "sorotan.2.catatan" },
-  { gambar: "contoh-3", judulKey: "sorotan.3.judul", catatanKey: "sorotan.3.catatan" },
-  { gambar: "contoh-4", judulKey: "sorotan.4.judul", catatanKey: "sorotan.4.catatan" },
-  { gambar: "contoh-5", judulKey: "sorotan.5.judul", catatanKey: "sorotan.5.catatan" },
-  { gambar: "contoh-6", judulKey: "sorotan.6.judul", catatanKey: "sorotan.6.catatan" },
-  { gambar: "contoh-7", judulKey: "sorotan.7.judul", catatanKey: "sorotan.7.catatan" },
-  { gambar: "contoh-8", judulKey: "sorotan.8.judul", catatanKey: "sorotan.8.catatan" },
+  { gambar: redDarkGrey, judulKey: "sorotan.1.judul", catatanKey: "sorotan.1.catatan" },
+  { gambar: redBlue, judulKey: "sorotan.2.judul", catatanKey: "sorotan.2.catatan" },
+  { gambar: blueRed, judulKey: "sorotan.3.judul", catatanKey: "sorotan.3.catatan" },
+  { gambar: whiteRed, judulKey: "sorotan.4.judul", catatanKey: "sorotan.4.catatan" },
+  { gambar: redWhite, judulKey: "sorotan.5.judul", catatanKey: "sorotan.5.catatan" },
+  { gambar: blueWhite, judulKey: "sorotan.6.judul", catatanKey: "sorotan.6.catatan" },
+  { gambar: whiteBlue, judulKey: "sorotan.7.judul", catatanKey: "sorotan.7.catatan" },
+  { gambar: blueDarkPurple, judulKey: "sorotan.8.judul", catatanKey: "sorotan.8.catatan" },
+  { gambar: whiteDarkPurple, judulKey: "sorotan.9.judul", catatanKey: "sorotan.9.catatan" },
+  { gambar: whiteDarkGrey, judulKey: "sorotan.10.judul", catatanKey: "sorotan.10.catatan" },
 ];

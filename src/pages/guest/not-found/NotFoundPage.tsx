@@ -23,7 +23,7 @@ export default function NotFoundPage() {
     <HalamanBerlatar>
       {/* min-h supaya hujan mengisi seluruh layar walau isinya pendek: 404 yang
           hanya sepertiga layar akan menyisakan latar kosong di bawahnya. */}
-      <section className="mx-auto flex min-h-[70vh] max-w-2xl flex-col justify-center px-5 py-24 text-center">
+      <section className="wadah flex min-h-[70vh] flex-col justify-center py-24 text-center">
         <p
           className="font-display text-6xl font-bold leading-none text-void-red/30 sm:text-7xl"
           aria-hidden="true"
@@ -31,7 +31,7 @@ export default function NotFoundPage() {
           404
         </p>
 
-        <h1 className="mt-6 font-display text-2xl font-bold tracking-tight sm:text-3xl">
+        <h1 className="judul-bagian mt-6">
           {t("page.notFound.title")}
         </h1>
 
@@ -40,17 +40,11 @@ export default function NotFoundPage() {
         </p>
 
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-xl bg-void-red px-6 py-3 text-sm font-semibold text-void-white transition-colors hover:bg-void-red-deep"
-          >
+          <Link to="/" className="tombol tombol-merah">
             {t("page.notFound.home")}
           </Link>
-          <Link
-            to="/compose"
-            className="inline-flex items-center justify-center rounded-xl border border-border-strong px-6 py-3 text-sm font-semibold text-fg transition-colors hover:border-void-red hover:text-void-red"
-          >
-            {t("page.notFound.generate")}
+          <Link to="/collection" className="tombol tombol-garis">
+            {t("page.notFound.collection")}
           </Link>
         </div>
       </section>

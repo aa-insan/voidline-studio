@@ -36,6 +36,7 @@ export default function PreviewCanvas({ gambar, versi, adaIsi }: Props) {
   const { t } = useLanguage();
   const kanvasRef = useRef<HTMLCanvasElement>(null);
   const [menyiapkan, setMenyiapkan] = useState(false);
+  const [gagal, setGagal] = useState(false);
 
   useEffect(() => {
     const kanvas = kanvasRef.current;
@@ -44,9 +45,15 @@ export default function PreviewCanvas({ gambar, versi, adaIsi }: Props) {
     let dibatalkan = false;
     setMenyiapkan(true);
 
+    // `.catch` wajib ada meski galat sudah ditangani lewat `gagal`: tanpa itu
+    // promise yang reject menjadi unhandled rejection, dan di beberapa peramban
+    // peringatan itu muncul di konsol seolah ada bug yang belum ditangani.
     void (async () => {
       try {
         await gambar(kanvas);
+        if (!dibatalkan) setGagal(false);
+      } catch {
+        if (!dibatalkan) setGagal(true);
       } finally {
         if (!dibatalkan) setMenyiapkan(false);
       }
@@ -90,8 +97,20 @@ export default function PreviewCanvas({ gambar, versi, adaIsi }: Props) {
         )}
 
         {menyiapkan && adaIsi && (
-          <div className="absolute inset-0 grid place-items-center">
-            <span className="h-5 w-5 animate-spin rounded-full border-2 border-border-strong border-t-accent" />
+          <div className="absolute inset-0 grid place-items-center" role="status" aria-live="polite">
+            <span className="sr-only">{t("page.generator.preview.loading")}</span>
+            <span
+              aria-hidden="true"
+              className="h-5 w-5 animate-spin rounded-full border-2 border-border-strong border-t-accent"
+            />
+          </div>
+        )}
+
+        {gagal && !menyiapkan && (
+          <div className="absolute inset-0 grid place-items-center px-6 text-center" role="alert">
+            <p className="text-xs leading-relaxed text-fg-muted">
+              {t("page.generator.preview.failed")}
+            </p>
           </div>
         )}
       </div>
@@ -103,7 +122,12 @@ export default function PreviewCanvas({ gambar, versi, adaIsi }: Props) {
           const kanvas = kanvasRef.current;
           if (!kanvas) return;
           setMenyiapkan(true);
-          void gambar(kanvas).finally(() => setMenyiapkan(false));
+          // Sama seperti di atas: `.catch` menutup promise, `.finally` hanya
+          // merapikan keadaan tampilan.
+          void gambar(kanvas)
+            .then(() => setGagal(false))
+            .catch(() => setGagal(true))
+            .finally(() => setMenyiapkan(false));
         }}
         className="inline-flex items-center justify-center gap-2 rounded-lg border border-border px-3.5 py-2 text-xs font-medium text-fg-muted transition-colors hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-border disabled:hover:text-fg-muted"
       >

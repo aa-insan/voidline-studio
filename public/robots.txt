@@ -1,0 +1,13 @@
+# Voidline Iceland
+#
+# Semua halaman publik boleh diindeks. Halaman 404 diberi noindex lewat
+# <meta name="robots"> saat runtime (src/i18n/useDocumentMeta.ts), bukan di sini —
+# robots.txt hanya mengatur peramban, tidak mengubah status HTTP sebuah alamat.
+#
+# Ganti alamat di baris Sitemap bila domain akhirnya berbeda; nilai ini harus
+# sama persis dengan <link rel="canonical"> di index.html.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://voidlineiceland.com/sitemap.xml

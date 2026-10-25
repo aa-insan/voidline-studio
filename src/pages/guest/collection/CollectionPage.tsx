@@ -1,111 +1,157 @@
-import { Link } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useLanguage } from "../../../i18n/useLanguage";
-import { collections } from "../../../data/collections";
+import { karyaPerKelompok, urutanKelompok, type KodeKelompok } from "../../../data/karyaNft";
+import DropdownKoleksi from "../../../components/guest/DropdownKoleksi";
 import HalamanBerlatar from "../../../components/guest/HalamanBerlatar";
+import KartuKarya from "../../../components/guest/KartuKarya";
 
 /**
- * Halaman daftar koleksi.
+ * Halaman daftar koleksi — berisi karya dari seluruh wallet studio.
  *
- * Menampilkan setiap koleksi sebagai kartu dengan tombol menuju halaman
- * mint-nya. Daftarnya dibaca dari src/data/collections.ts, jadi menambah
- * koleksi baru tidak perlu menyentuh file ini.
+ * ── SEMUANYA TAMPIL, TANPA SARINGAN NAMA ───────────────────────────────────
+ * Versi sebelumnya menyaring ke koleksi yang namanya mengandung "Voidline".
+ * Saringan itu dibuang: ia bergantung pada tebakan nama, dan setiap koleksi
+ * baru menuntut seseorang mengingat untuk menambahkannya ke daftar. Yang
+ * terlihat bukan aturan, melainkan kelalaian yang menumpuk.
  *
- * WARNA
- * Halaman berlatar hitam seperti seluruh situs. Yang menonjol adalah kartu:
- * panel PUTIH dengan teks gelap di dalamnya. Karena itu seluruh teks di dalam
- * kartu memakai keluarga panel-* — bukan fg / fg-muted yang putih dan tidak
- * akan terbaca di atas kertas putih.
+ * Sekarang yang tampil adalah apa adanya: setiap NFT yang diterbitkan wallet
+ * studio di XRP Ledger. Koleksi baru muncul tanpa perlu ada yang mengubah kode,
+ * asalkan data sumbernya diperbarui.
  *
- * Kartu tidak bergaris saat diam, lalu bergaris MERAH saat disorot. Pada
- * halaman yang isinya berulang seperti ini, perubahan garis itulah yang
- * menunjukkan kartu mana yang sedang aktif — bukan warnanya.
+ * ── FILTER DAN PENCARIAN ────────────────────────────────────────────────────
+ * Dropdown menyaring berdasarkan kelompok; pencarian menyaring judul. Keduanya
+ * berdiri sendiri — keduanya boleh dipakai bersamaan, keduanya boleh kosong.
+ * Daftar kelompok ikut data (`urutanKelompok`), bukan ditulis ulang di sini.
  *
- * Grid masih berisi teks, bukan gambar karya: gambar NFT belum tersedia.
- * Setelah gambarnya ada, cukup tambahkan satu kolom di data koleksi dan kartu
- * ini menampilkannya.
+ * ── BIAYA RENDER ────────────────────────────────────────────────────────────
+ * Ratusan kartu bukan jumlah yang ringan untuk React. Yang membuatnya aman
+ * adalah gambarnya: `KartuKarya` tidak memuat apa pun sampai kartunya masuk
+ * layar. Jadi membuka halaman ini tidak mengunduh ratusan GIF — hanya belasan
+ * yang terlihat. Pencarian tidak menambah beban: menyaring 654 judul adalah
+ * operasi yang tidak terasa, yang berat adalah gambarnya — dan itu tetap
+ * ditunda sampai kartu masuk layar.
  */
+
+type Pilihan = KodeKelompok | "semua";
+
+/** Nilai filter yang sah di dropdown — dipakai untuk memvalidasi URL. */
+const KODE_SAHIH = new Set<string>(urutanKelompok);
+
 export default function CollectionPage() {
   const { t } = useLanguage();
+  // Filter awal bisa datang dari URL (?filter=apid) — dipakai tombol kartu
+  // unggulan di halaman atrium yang membuka koleksi tertentu langsung.
+  const [parameter] = useSearchParams();
+  const filterUrl = parameter.get("filter") ?? "";
+  const awal: Pilihan = KODE_SAHIH.has(filterUrl) ? (filterUrl as Pilihan) : "semua";
+  const [pilihan, setPilihan] = useState<Pilihan>(awal);
+  const [kueri, setKueri] = useState("");
+
+  // Cari di judul, apa adanya: tanpa memandang huruf besar-kecil. Nomor edisi
+  // ikut dicari — "#39" menemukan Apes Voidline #39.
+  const kueriRendah = kueri.trim().toLowerCase();
+
+  // Menyaring 654 judul adalah pekerjaan yang tidak terasa — useMemo di sini
+  // bukan demi kecepatan, melainkan supaya identitas daftarnya stabil antar
+  // render, sehingga React tidak me-render ulang 654 kartu tanpa alasan.
+  const hasil = useMemo(
+    () =>
+      (pilihan === "semua" ? urutanKelompok : [pilihan]).flatMap((kode) =>
+        (karyaPerKelompok[kode] ?? [])
+          .filter((karya) => !kueriRendah || karya[1].toLowerCase().includes(kueriRendah))
+          .map((karya) => ({ karya, kode })),
+      ),
+    [pilihan, kueriRendah],
+  );
+
+  const jumlahSemua = urutanKelompok.reduce(
+    (n, kode) => n + (karyaPerKelompok[kode]?.length ?? 0),
+    0,
+  );
 
   return (
     <HalamanBerlatar>
-      <section className="relative mx-auto max-w-6xl px-5 pb-16 pt-14 sm:pb-20 sm:pt-16">
+      <section className="wadah bagian-kepala-halaman pb-16 sm:pb-20">
         <header className="max-w-2xl">
-          <p className="inline-flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.28em] text-void-red">
-            <span className="h-px w-8 bg-void-red" aria-hidden="true" />
-            {t("collection.count", { count: collections.length })}
+          <p className="kicker">
+            <span className="kicker-garis" aria-hidden="true" />
+            {t("collection.works", { count: jumlahSemua })}
           </p>
-          <h1 className="mt-4 font-display text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+          <h1 className="judul-halaman mt-4">
             {t("page.collection.title")}
           </h1>
-          <p className="mt-4 leading-relaxed text-fg-muted">
-            {t("page.collection.subtitle")}
-          </p>
+          <p className="mt-4 leading-relaxed text-fg-muted">{t("page.collection.subtitle")}</p>
         </header>
 
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {collections.map((collection) => (
-            <article
-              key={collection.slug}
-              className="group flex flex-col overflow-hidden rounded-2xl border-2 border-transparent bg-panel shadow-brand-md transition-colors hover:border-accent"
+        {/* ── PENCARIAN ──────────────────────────────────────────────────────
+            Satu baris, tanpa tombol. Menyaring judul karya — nomor edisi ikut
+            ditemukan karena nomornya memang bagian dari judul ("Apes Voidline
+            #39"). Hasilnya mengganti seluruh grid, jadi pencarian dan dropdown
+            saling menggantikan tanpa perlu tombol "hapus saringan". */}
+        <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <label className="relative flex-1">
+            <span className="sr-only">{t("collection.searchLabel")}</span>
+            <svg
+              viewBox="0 0 24 24"
+              className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 fill-current text-fg-muted"
+              aria-hidden="true"
             >
-              {/* Ruang gambar karya — diisi setelah NFT-nya tersedia.
-                  Di dalam panel putih, ruang kosong ini dibuat hitam supaya
-                  tetap terbaca sebagai "gambar belum ada", bukan sebagai
-                  bagian dari kertasnya. */}
-              <div className="relative grid aspect-4/3 place-items-center overflow-hidden bg-void-black">
-                <div
-                  aria-hidden="true"
-                  className="absolute -left-1/4 top-0 h-full w-1/2 rotate-12 bg-linear-to-r from-void-red/25 to-transparent"
-                />
-                <span className="relative text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-void-white/60">
-                  {t("collection.imageSoon")}
-                </span>
-              </div>
-
-              <div className="flex flex-1 flex-col p-5">
-                <h2 className="font-display text-lg font-semibold tracking-tight text-panel-fg">
-                  {t(collection.titleKey)}
-                </h2>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-panel-fg-muted">
-                  {t(collection.subtitleKey)}
-                </p>
-
-                <Link
-                  to={`/collection/mint/${collection.slug}`}
-                  className="mt-5 inline-block rounded-xl bg-void-red px-5 py-2.5 text-center text-sm font-semibold text-void-white transition-opacity hover:opacity-90"
-                >
-                  {t("collection.mintNow")}
-                </Link>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      {/* Catatan standar. Dulunya blok hitam; sekarang tidak perlu bidang
-          sendiri karena latarnya sudah hitam — cukup dipisahkan oleh garis. */}
-      <section className="relative border-t border-border">
-        <div className="mx-auto flex max-w-6xl flex-col items-start gap-4 px-5 py-10 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="font-display text-xs font-semibold uppercase tracking-[0.24em] text-void-red">
-              {t("collection.standardLabel")}
-            </p>
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-fg-muted">
-              {t("collection.standardNote")}
-            </p>
-          </div>
-          <Link
-            to="/studio"
-            className="inline-flex items-center gap-1.5 whitespace-nowrap text-sm font-semibold text-void-red underline-offset-4 hover:underline"
-          >
-            {t("collection.standardCta")}
-            <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
-              <path d="M9.47 5.47a.75.75 0 0 1 1.06 0l6 6a.75.75 0 0 1 0 1.06l-6 6a.75.75 0 1 1-1.06-1.06L14.19 12 9.47 7.28a.75.75 0 0 1 0-1.06Z" />
+              <path d="M10 4a6 6 0 1 0 4.47 7.47l4.53 4.53 1.41-1.41-4.52-4.53A6 6 0 0 0 10 4Zm-4 6a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z" />
             </svg>
-          </Link>
+            <input
+              type="search"
+              value={kueri}
+              onChange={(e) => setKueri(e.target.value)}
+              placeholder={t("collection.searchPlaceholder")}
+              aria-label={t("collection.searchLabel")}
+              className="bidang-cari"
+            />
+          </label>
+
+          {/* Dropdown custom — bukan <select> asli, supaya sorotan, warna, dan
+              geraknya milik situs, bukan milik sistem operasi. */}
+          <DropdownKoleksi
+            nilai={pilihan}
+            ganti={(v) => setPilihan(v as Pilihan)}
+            label={t("collection.filterLabel")}
+            opsi={[
+              { nilai: "semua", label: t("collection.allCollections", { count: jumlahSemua }) },
+              ...urutanKelompok.map((kode) => ({
+                nilai: kode,
+                label: `${t(`collection.kelompok.${kode}`)} (${karyaPerKelompok[kode]?.length ?? 0})`,
+              })),
+            ]}
+          />
         </div>
+
+        <p className="sr-only" role="status" aria-live="polite">
+          {t("collection.works", { count: hasil.length })}
+        </p>
+
+        {hasil.length === 0 ? (
+          <p className="mt-16 text-center text-sm text-fg-muted">
+            {t("collection.noMatch")}
+          </p>
+        ) : (
+          /* ── GRID ──────────────────────────────────────────────────────────
+              Dua kolom di ponsel: gambar karya lebih penting daripada ukurannya,
+              dan satu kolom berarti menggulir 654 layar. */
+          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4 xl:grid-cols-5">
+            {hasil.map(({ karya, kode }, indeks) => (
+              <KartuKarya
+                key={`${kode}-${karya[3]}`}
+                karya={karya}
+                koleksi={t(`collection.kelompok.${kode}`)}
+                // Dua belas pertama dimuat tanpa menunggu masuk layar, supaya
+                // bagian atas halaman langsung terisi saat dibuka.
+                prioritas={indeks < 12}
+              />
+            ))}
+          </div>
+        )}
       </section>
     </HalamanBerlatar>
   );
 }
+

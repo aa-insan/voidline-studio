@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "react-router";
 import { useLanguage } from "../../../i18n/useLanguage";
 import HalamanBerlatar from "../../../components/guest/HalamanBerlatar";
@@ -8,7 +7,7 @@ import Logo from "../../../assets/Logo.gif";
  * Halaman Reach.
  *
  * Satu halaman, dua jalur: karya pesanan (commission) dan jasa studio. Di
- * bawahnya panduan menulis, tiga kebijakan, lalu kanal — email sebagai jalur
+ * bawahnya panduan menulis, tiga kebijakan, lalu kanal — Discord sebagai jalur
  * utama, media sosial sebagai pelengkap.
  *
  * SUSUNAN
@@ -16,7 +15,7 @@ import Logo from "../../../assets/Logo.gif";
  *   2. Dua jalur  kartu commission (merah, gelap) | kartu jasa studio (putih)
  *   3. Panduan    tiga langkah sebelum menulis
  *   4. Kebijakan  beli NFT · pakai artwork · kolaborasi
- *   5. Kanal      panel email + tombol salin, lalu tautan media sosial
+ *   5. Kanal      panel Discord, lalu tautan media sosial
  *   6. Studio     penutup: siapa yang menjawab, tautan ke /studio
  *
  * WARNA
@@ -25,11 +24,12 @@ import Logo from "../../../assets/Logo.gif";
  * dua blok yang sama pentingnya. Merah hanya dipakai untuk penanda, angka, dan
  * tombol.
  *
- * Tidak ada formulir: tanpa backend, formulir hanya menampung pesan yang tidak
- * sampai ke siapa pun. Surel langsung lebih jujur.
+ * Tidak ada formulir dan tidak ada email: tanpa backend, formulir hanya
+ * menampung pesan yang tidak sampai ke siapa pun, dan surel satu-satunya jalan
+ * yang bisa dipakai tidak lebih baik daripada percakapan langsung di Discord.
  */
 
-const EMAIL = "febriyantojajang@gmail.com";
+const DISCORD_URL = "https://discord.com/users/934785696667942923";
 
 /** Empat jasa studio. Urutan sama dengan tampilan. */
 const JASA = [
@@ -70,74 +70,76 @@ const SOSIAL = [
 /** Judul bagian dengan garis tipis yang mengisi sisa lebar. */
 function KepalaBagian({ teks }: { teks: string }) {
   return (
-    <div className="mb-7 flex items-baseline gap-4">
+    <div className="mb-5 flex items-baseline gap-4">
       <h2 className="font-display text-2xl font-semibold tracking-tight">{teks}</h2>
       <span aria-hidden="true" className="h-px flex-1 bg-border" />
     </div>
   );
 }
 
+/** Logo Discord — satu-satunya tanda kanal utama di halaman ini. */
+function IkonDiscord({ ukuran = 20 }: { ukuran?: number }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width={ukuran}
+      height={ukuran}
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M20.317 4.369a19.79 19.79 0 00-4.885-1.515.074.074 0 00-.079.037c-.211.375-.444.864-.608 1.249a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.249.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.056 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.009c.12.099.246.198.373.292a.077.077 0 01-.006.127 12.3 12.3 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.331c-1.182 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.419 0 1.334-.956 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.419 0 1.334-.946 2.419-2.157 2.419z" />
+    </svg>
+  );
+}
+
 export default function ReachPage() {
   const { t } = useLanguage();
-  const [tersalin, setTersalin] = useState(false);
-
-  /** Salin alamat surel. Kalau peramban menolak (izin clipboard), tidak ada
-   *  yang berubah — tombol "Open mail app" di sebelahnya tetap jadi jalan. */
-  const salinAlamat = async () => {
-    try {
-      await navigator.clipboard.writeText(EMAIL);
-      setTersalin(true);
-      window.setTimeout(() => setTersalin(false), 1600);
-    } catch {
-      setTersalin(false);
-    }
-  };
 
   return (
     <HalamanBerlatar>
       {/* ── 1. KEPALA ───────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden border-t-4 border-accent">
+      <section className="relative overflow-hidden border-t border-border">
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.18]">
           <div className="absolute -left-1/4 top-0 h-full w-1/2 rotate-12 bg-linear-to-r from-void-red to-transparent" />
         </div>
 
-        <div className="relative mx-auto max-w-6xl px-5 pb-14 pt-16 sm:pb-16 sm:pt-20">
+        <div className="wadah bagian-kepala-halaman relative pb-20 sm:pb-24">
           <div className="max-w-3xl">
-            <p className="inline-flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.28em] text-void-red">
-              <span className="h-px w-8 bg-void-red" aria-hidden="true" />
+            <p className="kicker">
+              <span className="kicker-garis" aria-hidden="true" />
               {t("page.contact.kicker")}
             </p>
 
-            <h1 className="mt-6 font-display text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl">
+            <h1 className="judul-halaman mt-6">
               {t("page.contact.title")}
             </h1>
 
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-fg-muted sm:text-lg">
+            <p className="mt-6 max-w-[34rem] text-base leading-relaxed text-fg-muted sm:text-lg">
               {t("page.contact.lead")}
             </p>
 
             {/* Baris keadaan: satu pandangan memberi tahu apakah studio sedang
-                menerima kerja dan seberapa cepat balasannya. */}
-            <ul className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-full border border-accent-line bg-white/3 px-4 py-2 text-xs text-fg sm:text-[0.8rem]">
-              <li className="flex items-center gap-2 font-medium">
+                menerima kerja dan seberapa cepat balasannya. Di layar sempit
+                keterangan turun bersusun — titik pemisah hanya muncul saat
+                semua muat satu baris. */}
+            <ul className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-fg sm:text-sm">
+              <li className="flex items-center gap-2 rounded-full border border-accent-line bg-white/3 px-3.5 py-1.5 font-medium">
                 <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-void-red" />
                 {t("page.contact.status.open")}
               </li>
-              <li aria-hidden="true" className="text-white/30">
-                ·
+              <li className="text-fg-muted sm:before:mr-3 sm:before:text-white/30 sm:before:content-['·']">
+                {t("page.contact.status.terms")}
               </li>
-              <li className="text-fg-muted">{t("page.contact.status.terms")}</li>
-              <li aria-hidden="true" className="text-white/30">
-                ·
+              <li className="text-fg-muted sm:before:mr-3 sm:before:text-white/30 sm:before:content-['·']">
+                {t("page.contact.status.reply")}
               </li>
-              <li className="text-fg-muted">{t("page.contact.status.reply")}</li>
             </ul>
           </div>
         </div>
       </section>
 
       {/* ── 2. DUA JALUR ──────────────────────────────────────────────── */}
-      <section className="mx-auto max-w-6xl px-5 pb-14">
+      <section className="wadah pb-16 sm:pb-20">
         <div className="grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
           {/* Commission — satu-satunya tombol merah penuh di halaman ini. */}
           <div className="relative flex flex-col overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-[#141114] to-[#0b0b0d] p-7 sm:p-8">
@@ -147,32 +149,35 @@ export default function ReachPage() {
             />
 
             <div className="relative flex flex-1 flex-col">
-              <p className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-void-red">
+              <p className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-accent-bright">
                 {t("page.contact.commission.num")}
               </p>
               <h2 className="mt-4 font-display text-2xl font-semibold leading-tight sm:text-[1.7rem]">
                 {t("page.contact.commission.title")}
               </h2>
-              <p className="mt-4 max-w-xl text-sm leading-relaxed text-fg-muted">
+              <p className="mt-4 max-w-[34rem] text-sm leading-relaxed text-fg-muted">
                 {t("page.contact.commission.body")}
               </p>
 
               <ul className="mt-6 flex flex-wrap gap-2">
-                {["single", "series", "commercial", "revenue"].map((chip) => (
+                {(["single", "series", "commercial", "revenue"] as const).map((chip) => (
                   <li
                     key={chip}
                     className="rounded-full border border-border px-3 py-1.5 text-xs text-white/80"
                   >
-                    {t(`page.contact.commission.chips.${chip}` as never)}
+                    {t(`page.contact.commission.chips.${chip}`)}
                   </li>
                 ))}
               </ul>
             </div>
 
             <a
-              href={`mailto:${EMAIL}?subject=${encodeURIComponent(t("page.contact.commission.mailSubject"))}`}
-              className="relative mt-7 inline-flex w-fit items-center gap-2 rounded-lg bg-void-red px-4 py-3 text-sm font-semibold text-void-white transition-colors hover:bg-void-red-deep"
+              href={DISCORD_URL}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="tombol tombol-merah relative mt-7 w-fit"
             >
+              <IkonDiscord ukuran={16} />
               {t("page.contact.commission.cta")}
               <span aria-hidden="true">→</span>
             </a>
@@ -184,7 +189,7 @@ export default function ReachPage() {
             <h2 className="font-display text-xl font-semibold leading-tight">
               {t("page.contact.services.title")}
             </h2>
-            <p className="mt-2 text-sm leading-relaxed text-panel-fg-muted">
+            <p className="mt-2 max-w-[34rem] text-sm leading-relaxed text-panel-fg-muted">
               {t("page.contact.services.sub")}
             </p>
 
@@ -199,17 +204,17 @@ export default function ReachPage() {
                   </span>
                   <span>
                     <span className="block text-sm font-semibold">
-                      {t(`page.contact.services.items.${key}.name` as never)}
+                      {t(`page.contact.services.items.${key}.name`)}
                     </span>
                     <span className="mt-0.5 block text-xs leading-relaxed text-panel-fg-muted">
-                      {t(`page.contact.services.items.${key}.note` as never)}
+                      {t(`page.contact.services.items.${key}.note`)}
                     </span>
                   </span>
                 </li>
               ))}
             </ul>
 
-            <p className="mt-auto pt-5 text-xs leading-relaxed text-panel-fg-muted">
+            <p className="mt-auto max-w-[34rem] pt-5 text-xs leading-relaxed text-panel-fg-muted">
               {t("page.contact.services.foot")}
             </p>
           </div>
@@ -217,20 +222,20 @@ export default function ReachPage() {
       </section>
 
       {/* ── 3. PANDUAN SEBELUM MENULIS ─────────────────────────────────── */}
-      <section className="mx-auto max-w-6xl px-5 pb-14">
+      <section className="wadah pb-16 sm:pb-20">
         <KepalaBagian teks={t("page.contact.before.title")} />
 
         <div className="grid gap-6 sm:grid-cols-3">
           {LANGKAH.map((n) => (
             <article key={n} className="border-t border-border pt-4">
-              <p className="font-display text-xs tracking-[0.18em] text-void-red">
+              <p className="font-display text-xs tracking-[0.18em] text-accent-bright">
                 {`0${n}`}
               </p>
               <h3 className="mt-2.5 font-display text-base font-semibold">
-                {t(`page.contact.before.steps.${n}.title` as never)}
+                {t(`page.contact.before.steps.${n}.title`)}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-fg-muted">
-                {t(`page.contact.before.steps.${n}.body` as never)}
+              <p className="mt-2 max-w-[34rem] text-sm leading-relaxed text-fg-muted">
+                {t(`page.contact.before.steps.${n}.body`)}
               </p>
             </article>
           ))}
@@ -238,7 +243,7 @@ export default function ReachPage() {
       </section>
 
       {/* ── 4. KEBIJAKAN ───────────────────────────────────────────────── */}
-      <section className="mx-auto max-w-6xl px-5 pb-14">
+      <section className="wadah pb-16 sm:pb-20">
         <div className="grid gap-px overflow-hidden rounded-xl bg-border">
           {KEBIJAKAN.map((key) => (
             <div
@@ -246,19 +251,19 @@ export default function ReachPage() {
               className="flex flex-col gap-2 bg-bg px-6 py-5 sm:flex-row sm:gap-6"
             >
               <h3 className="font-display text-sm font-semibold leading-relaxed sm:min-w-44">
-                {t(`page.contact.policy.${key}.title` as never)}
+                {t(`page.contact.policy.${key}.title`)}
               </h3>
-              <p className="text-sm leading-relaxed text-fg-muted">
-                {t(`page.contact.policy.${key}.body` as never)}
+              <p className="max-w-[40rem] text-sm leading-relaxed text-fg-muted">
+                {t(`page.contact.policy.${key}.body`)}
                 {key === "nft" && (
                   <>
                     {" "}
-                    <a
-                      href="/collection"
+                    <Link
+                      to="/collection"
                       className="text-void-red underline decoration-accent-line underline-offset-4 transition-colors hover:decoration-void-red"
                     >
                       {t("page.contact.policy.nft.link")}
-                    </a>
+                    </Link>
                     .
                   </>
                 )}
@@ -269,63 +274,52 @@ export default function ReachPage() {
       </section>
 
       {/* ── 5. KANAL ───────────────────────────────────────────────────── */}
-      <section className="mx-auto max-w-6xl px-5 pb-14">
+      <section className="wadah pb-16 sm:pb-20">
         <KepalaBagian teks={t("page.contact.channels.title")} />
 
-        <div className="flex flex-wrap items-center gap-5 rounded-2xl bg-panel p-6 text-panel-fg sm:p-7">
-          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-void-red text-void-white">
+        {/* Discord adalah jalur utama — satu kanal, satu tombol. Tidak ada
+            alamat yang perlu disalin; tekan tombolnya, percakapan langsung
+            terbuka. */}
+        <div className="flex flex-col gap-4 rounded-2xl bg-panel p-5 text-panel-fg sm:flex-row sm:items-center sm:gap-6 sm:p-6">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[#5865F2] text-white">
+            <IkonDiscord ukuran={22} />
+          </span>
+
+          <div className="min-w-0 flex-1">
+            <p className="text-xs uppercase tracking-[0.16em] text-panel-fg-muted">
+              {t("page.contact.channels.discordLabel")}
+            </p>
+            <p className="mt-1 font-display text-lg font-semibold tracking-tight sm:text-xl">
+              {t("page.contact.channels.discordName")}
+            </p>
+          </div>
+
+          <a
+            href={DISCORD_URL}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-panel-fg px-4 py-2.5 text-sm font-semibold text-void-white transition-opacity hover:opacity-85"
+          >
+            {t("page.contact.channels.discordCta")}
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="22"
-              height="22"
               viewBox="0 0 24 24"
+              width="15"
+              height="15"
               fill="none"
               stroke="currentColor"
-              strokeWidth="1.7"
+              strokeWidth="1.8"
               strokeLinecap="round"
               strokeLinejoin="round"
               aria-hidden="true"
             >
-              <rect x="2.5" y="4.5" width="19" height="15" rx="2.5" />
-              <path d="M3 6.5l9 6 9-6" />
+              <path d="M14 3h7v7" />
+              <path d="M21 3l-8.5 8.5" />
+              <path d="M19 14v5.5A1.5 1.5 0 0117.5 21h-13A1.5 1.5 0 013 19.5v-13A1.5 1.5 0 014.5 5H10" />
             </svg>
-          </span>
-
-          <div className="min-w-0 flex-1">
-            <p className="text-[0.7rem] uppercase tracking-[0.16em] text-panel-fg-muted">
-              {t("page.contact.channels.emailLabel")}
-            </p>
-            <a
-              href={`mailto:${EMAIL}`}
-              className="mt-1 block break-all font-display text-lg font-semibold tracking-tight hover:text-accent-on-panel"
-            >
-              {EMAIL}
-            </a>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={salinAlamat}
-              className="rounded-lg bg-panel-fg px-4 py-2.5 text-sm font-semibold text-void-white transition-opacity hover:opacity-85"
-            >
-              {tersalin ? t("page.contact.channels.copied") : t("page.contact.channels.copy")}
-            </button>
-            <a
-              href={`mailto:${EMAIL}`}
-              className="rounded-lg border border-black/15 px-4 py-2.5 text-sm font-semibold transition-colors hover:border-black/40"
-            >
-              {t("page.contact.channels.open")}
-            </a>
-          </div>
+          </a>
         </div>
 
-        {/* `aria-live` supaya pembaca layar ikut mendengar konfirmasi salin. */}
-        <p aria-live="polite" className="sr-only">
-          {tersalin ? t("page.contact.channels.copied") : ""}
-        </p>
-
-        <ul className="mt-3.5 flex flex-wrap gap-2.5">
+        <ul className="mt-4 flex flex-wrap gap-2.5">
           {SOSIAL.map((sosial) => (
             <li key={sosial.key}>
               <a
@@ -345,7 +339,7 @@ export default function ReachPage() {
       </section>
 
       {/* ── 6. STUDIO ──────────────────────────────────────────────────── */}
-      <section className="mx-auto max-w-6xl px-5 pb-20">
+      <section className="wadah pb-20 sm:pb-24">
         <div className="flex flex-col gap-5 rounded-2xl border border-border p-6 sm:flex-row sm:items-center sm:gap-7 sm:p-7">
           <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full border border-border bg-white/5">
             <img
@@ -357,7 +351,7 @@ export default function ReachPage() {
 
           <div className="min-w-0 flex-1">
             <h2 className="font-display text-lg font-semibold">{t("page.contact.studio.title")}</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-fg-muted">
+            <p className="mt-2 max-w-[34rem] text-sm leading-relaxed text-fg-muted">
               {t("page.contact.studio.body")}
             </p>
           </div>

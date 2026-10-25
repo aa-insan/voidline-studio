@@ -4,6 +4,7 @@ import Logo from "../../assets/Logo.gif";
 import { collections } from "../../data/collections";
 import { useLanguage } from "../../i18n/useLanguage";
 import LanguageSwitch from "./LanguageSwitch";
+import ComposeLink from "../ComposeLink";
 
 /**
  * Navbar pengunjung yang belum login.
@@ -90,10 +91,10 @@ export default function NavbarGuest() {
           Karena kolom kiri dan kanan sama-sama 1fr, kolom tengah otomatis
           berada tepat di tengah halaman — menu tidak bergeser walau panjang
           teks di kanan berubah (mis. saat bahasa berganti). */}
-      {/* Lebar dan padding navbar sengaja sama persis dengan container konten
-          halaman (max-w-6xl + px-5) supaya tepi kiri-kanan navbar sejajar dengan
-          tepi kiri-kanan isi halaman di semua lebar layar. */}
-      <div className="mx-auto grid h-18 max-w-6xl grid-cols-[1fr_auto_1fr] items-center gap-4 px-5">
+      {/* Lebar dan padding navbar memakai kelas .wadah yang sama dengan
+          konten halaman supaya tepi kiri-kanan navbar sejajar dengan tepi
+          kiri-kanan isi halaman di semua lebar layar. */}
+      <div className="wadah grid h-18 grid-cols-[1fr_auto_1fr] items-center gap-4">
         {/* Kolom 1 — logo, rata kiri.
             Ukuran logo dilepas dari alur layout (`absolute`) supaya bisa lebih
             besar dari tinggi navbar tanpa menambah tinggi baris atau menggeser
@@ -122,11 +123,11 @@ export default function NavbarGuest() {
         <Link
           to="/"
           className="relative h-11 w-11 shrink-0 justify-self-start lg:h-12 lg:w-12"
-          aria-label="Voidline Studio"
+          aria-label="Voidline Iceland"
         >
           <img
             src={Logo}
-            alt="Voidline Studio"
+            alt="Voidline Iceland"
             fetchPriority="high"
             decoding="async"
             className="absolute left-0 top-1/2 h-11 w-11 max-w-none -translate-y-1/2 rounded-full object-contain lg:h-12 lg:w-12"
@@ -139,11 +140,22 @@ export default function NavbarGuest() {
           aria-label={t("nav.menu")}
           className="hidden items-center gap-5 text-sm font-medium lg:flex xl:gap-7"
         >
-          {NAV_ITEMS.map((item) => (
-            <NavLink key={item.to} to={item.to} end={item.end} className={desktopLinkClass}>
-              {t(item.key)}
-            </NavLink>
-          ))}
+          {NAV_ITEMS.map((item) =>
+            item.to === "/compose" ? (
+              // Menu Compose ikut nonaktif selama generator belum dibuka; lihat
+              // COMPOSE_TERBUKA di src/components/ComposeLink.tsx.
+              <ComposeLink
+                key={item.to}
+                className={`relative cursor-not-allowed py-2 font-normal text-fg-muted opacity-50`}
+              >
+                {t(item.key)}
+              </ComposeLink>
+            ) : (
+              <NavLink key={item.to} to={item.to} end={item.end} className={desktopLinkClass}>
+                {t(item.key)}
+              </NavLink>
+            ),
+          )}
         </nav>
 
         {/* Kolom 3 — satu deretan "tabs-lift": bahasa · auth. Semua elemen duduk
@@ -177,7 +189,7 @@ export default function NavbarGuest() {
             aria-label={menuOpen ? t("nav.closeMenu") : t("nav.openMenu")}
             aria-expanded={menuOpen}
             aria-controls="mobile-nav-panel"
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-fg-muted transition-colors hover:bg-surface-muted hover:text-fg lg:hidden"
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-lg text-fg-muted transition-colors hover:bg-surface-muted hover:text-fg lg:hidden"
           >
             {menuOpen ? (
               <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
@@ -195,32 +207,56 @@ export default function NavbarGuest() {
       {/* Panel menu mobile */}
       <div
         id="mobile-nav-panel"
+        /* `inert` saat tertutup: kelima tautan di dalamnya tetap ada di DOM
+           (supaya transisi max-height tetap berjalan) tetapi tidak bisa difokus
+           Tab dan tidak dibacakan pembaca layar. Tanpa ini fokus keyboard masuk
+           ke area tak terlihat dan "menghilang". */
+        inert={!menuOpen}
         className={`overflow-hidden border-t border-border transition-[max-height,opacity] duration-300 lg:hidden ${
           menuOpen ? "max-h-128 opacity-100" : "max-h-0 border-t-0 opacity-0"
         }`}
       >
-        <div className="mx-auto flex max-w-6xl flex-col px-5 py-3">
-          {NAV_ITEMS.map((item, index) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.end}
-              onClick={() => setMenuOpen(false)}
-              className={({ isActive }) =>
-                `border-b border-border/60 py-3 text-sm font-medium transition-colors last:border-b-0 ${
-                  isActive ? "font-semibold text-accent" : "text-fg-muted hover:text-fg"
-                }`
-              }
-            >
-              {/* Nomor urut kecil di depan tiap menu: mengulang bahasa visual
-                  "01 / 02" halaman About Us, dan memakai ruang kosong di kiri
-                  yang tadinya cuma jarak. */}
-              <span className="mr-3 font-display text-xs text-accent" aria-hidden="true">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              {t(item.key)}
-            </NavLink>
-          ))}
+        <div className="wadah flex flex-col py-3">
+          {NAV_ITEMS.map((item, index) => {
+            // Nomor urut kecil di depan tiap menu: mengulang bahasa visual
+            // "01 / 02" halaman About Us, dan memakai ruang kosong di kiri yang
+            // tadinya cuma jarak. Dipakai bersama oleh kedua bentuk tautan di
+            // bawah supaya penomoran tidak hilang saat Compose nonaktif.
+            const isi = (
+              <>
+                <span className="mr-3 font-display text-xs text-accent" aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                {t(item.key)}
+              </>
+            );
+
+            const kelas =
+              "flex w-full border-b border-border/60 py-3 text-left text-sm font-medium transition-colors last:border-b-0";
+
+            // Menu Compose nonaktif selama generator belum dibuka.
+            if (item.to === "/compose") {
+              return (
+                <ComposeLink key={item.to} className={`${kelas} text-fg-muted opacity-50`}>
+                  {isi}
+                </ComposeLink>
+              );
+            }
+
+            return (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.end}
+                onClick={() => setMenuOpen(false)}
+                className={({ isActive }) =>
+                  `${kelas} ${isActive ? "font-semibold text-accent" : "text-fg-muted hover:text-fg"}`
+                }
+              >
+                {isi}
+              </NavLink>
+            );
+          })}
 
           <div className="pt-4 sm:hidden">
             <Link

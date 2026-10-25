@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useLanguage } from "../../../i18n/useLanguage";
 import AboutLogo from "../../../assets/Logo.gif";
 import HalamanBerlatar from "../../../components/guest/HalamanBerlatar";
+import ComposeLink from "../../../components/ComposeLink";
 
 /* =============================================================================
    HALAMAN STUDIO
@@ -73,14 +74,14 @@ export default function StudioPage() {
           <div className="absolute right-0 top-1/4 h-full w-1/3 -rotate-12 bg-linear-to-l from-void-red to-transparent" />
         </div>
 
-        <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-5 py-20 lg:grid-cols-[1.15fr_1fr] lg:py-28">
+        <div className="wadah relative grid items-center gap-12 py-20 sm:py-24 lg:grid-cols-[1.15fr_1fr] lg:py-28">
           <div>
-            <p className="inline-flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.28em] text-void-red">
-              <span className="h-px w-8 bg-void-red" aria-hidden="true" />
+            <p className="kicker">
+              <span className="kicker-garis" aria-hidden="true" />
               {t("about.hero.kicker")}
             </p>
 
-            <h1 className="mt-6 font-display text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
+            <h1 className="judul-halaman mt-6">
               {t("about.hero.title")}
             </h1>
 
@@ -100,7 +101,7 @@ export default function StudioPage() {
               />
               <img
                 src={AboutLogo}
-                alt="Voidline Studio"
+                alt="Voidline Iceland"
                 fetchPriority="high"
                 decoding="async"
                 className="relative h-56 w-56 rounded-full object-cover ring-4 ring-void-red/60 sm:h-64 sm:w-64 lg:h-80 lg:w-80"
@@ -130,7 +131,7 @@ export default function StudioPage() {
             </div>
           ))}
         </div>
-        <div className="mx-auto max-w-6xl px-5 py-4">
+        <div className="wadah py-4">
           <p className="text-center text-xs uppercase tracking-[0.22em] text-fg-muted">
             {t("about.style.note")}
           </p>
@@ -140,7 +141,7 @@ export default function StudioPage() {
       {/* ── 3 & 4. GAYA + FOKUS ─────────────────────────────────────────────
           Dua bagian berdampingan di layar lebar: "titik dan garis" di kiri,
           "GIF looping" di kanan. Di layar sempit menumpuk. */}
-      <section className="mx-auto max-w-6xl px-5 py-16 sm:py-20">
+      <section className="wadah bagian">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
           <article>
             {/* Nomor besar sebagai penanda urutan — pengganti garis pemisah,
@@ -153,7 +154,7 @@ export default function StudioPage() {
             >
               01
             </p>
-            <h2 className="mt-4 font-display text-2xl font-bold tracking-tight sm:text-3xl">
+            <h2 className="judul-bagian mt-4">
               {t("about.style.title")}
             </h2>
             <p className="mt-5 leading-relaxed text-fg-muted">
@@ -168,7 +169,7 @@ export default function StudioPage() {
             >
               02
             </p>
-            <h2 className="mt-4 font-display text-2xl font-bold tracking-tight sm:text-3xl">
+            <h2 className="judul-bagian mt-4">
               {t("about.focus.title")}
             </h2>
             <p className="mt-5 leading-relaxed text-fg-muted">
@@ -193,7 +194,7 @@ export default function StudioPage() {
           <div className="absolute -right-1/4 bottom-0 h-full w-1/2 -rotate-12 bg-linear-to-l from-void-red to-transparent" />
         </div>
 
-        <div className="relative mx-auto max-w-6xl px-5 py-20 text-center sm:py-24">
+        <div className="wadah relative py-20 text-center sm:py-24">
           {/* Logo kecil sebagai jangkar visual — berkas yang sama dengan
               navbar dan footer, dipakai apa adanya. */}
           <img
@@ -205,7 +206,7 @@ export default function StudioPage() {
             className="mx-auto h-20 w-20 rounded-full object-cover ring-2 ring-void-red/50 sm:h-24 sm:w-24"
           />
 
-          <h2 className="mt-8 font-display text-2xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="judul-bagian mt-8">
             {t("about.invitation.title")}
           </h2>
           <p className="mx-auto mt-5 max-w-xl leading-relaxed text-fg-muted">
@@ -213,18 +214,12 @@ export default function StudioPage() {
           </p>
 
           <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link
-              to="/collection"
-              className="inline-flex items-center justify-center rounded-xl bg-void-red px-6 py-3 text-sm font-semibold text-void-white transition-opacity hover:opacity-90"
-            >
+            <Link to="/collection" className="tombol tombol-merah">
               {t("about.invitation.ctaCollections")}
             </Link>
-            <Link
-              to="/compose"
-              className="inline-flex items-center justify-center rounded-xl border border-border-strong px-6 py-3 text-sm font-semibold text-fg transition-colors hover:border-void-red hover:text-void-red"
-            >
+            <ComposeLink className="tombol tombol-garis">
               {t("about.invitation.ctaGenerate")}
-            </Link>
+            </ComposeLink>
           </div>
         </div>
       </section>

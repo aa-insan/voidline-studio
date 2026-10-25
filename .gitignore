@@ -27,3 +27,4 @@ dist-ssr
 # Isinya salinan berkas yang sudah ada di riwayat git, jadi tidak perlu
 # disimpan dua kali. Folder ini dibuat tangan, bukan oleh alat build.
 .cadangan
+scripts/.cache-metadata.json

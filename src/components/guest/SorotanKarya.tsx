@@ -84,52 +84,74 @@ const DURASI = 720;
 
 export default function SorotanKarya() {
   const { t } = useLanguage();
-  const [atas, setAtas] = useState(0);
-  /** Arah putaran terakhir: 1 = lewat kanan, −1 = lewat kiri. */
-  const [arah, setArah] = useState<1 | -1>(1);
-  /** Indeks kartu yang sedang terbang ke belakang, atau null bila diam. */
+  /** Tumpukan kartu, urut dari yang paling belakang ke yang paling atas.
+      Kartu yang dibuang benar-benar keluar dari daftar ini; panah kiri
+      mengembalikannya. Isinya selalu potongan `sorotan` — tidak pernah
+      bertambah gambar baru. */
+  const [tumpukan, setTumpukan] = useState<number[]>(() =>
+    sorotan.map((_, i) => i),
+  );
+  /** Indeks kartu yang sedang meluncur pergi, atau null bila diam. */
   const [terbang, setTerbang] = useState<number | null>(null);
+  /** Arah luncur kartu keluar: 1 = ke kanan, −1 = ke kiri. */
+  const [arah, setArah] = useState<1 | -1>(1);
+  /** Kartu teratas sedang dipegang kursor atau fokus papan ketik. Selama
+      aktif, gambarnya dilepas dari blur. Disimpan di sini, bukan di CSS,
+      karena kartu teratas bisa berganti tanpa kursor bergerak. */
+  const [tajam, setTajam] = useState(false);
   const jamTerbang = useRef<number | undefined>(undefined);
-  const jumlah = sorotan.length;
 
-  /** Mulai satu putaran. `delta` 1 = kanan, −1 = kiri. */
-  const geser = useCallback(
+  const jumlahAwal = sorotan.length;
+  const jumlah = tumpukan.length;
+  const bisaKanan = jumlah > 0;
+  const bisaKiri = jumlah < jumlahAwal;
+
+  /** Buang kartu teratas. `delta` 1 = meluncur ke kanan, −1 = ke kiri.
+      Efek sampingnya sengaja di luar `setTumpukan`: updater state bisa
+      dijalankan dua kali oleh React, dan animasi tidak boleh terpicu ganda. */
+  const buang = useCallback(
     (delta: 1 | -1) => {
-      if (jumlah < 2) return;
+      if (tumpukan.length === 0) return;
       setArah(delta);
-      setTerbang(atas);
+      setTerbang(tumpukan[tumpukan.length - 1]);
+      setTajam(false);
       clearTimeout(jamTerbang.current);
       jamTerbang.current = window.setTimeout(() => setTerbang(null), DURASI);
-      setAtas((sebelumnya) => (sebelumnya + delta + jumlah) % jumlah);
+      setTumpukan(tumpukan.slice(0, -1));
     },
-    [atas, jumlah],
+    [tumpukan],
   );
 
-  /** Titik lompat langsung ke kartu tertentu. */
-  const ke = (i: number) => {
-    if (i === atas) return;
-    setArah(i > atas ? 1 : -1);
-    setTerbang(atas);
+  /** Kembalikan kartu terakhir yang dibuang. Kartu itu meluncur masuk dari
+      sisi yang sama dengan jalannya ia pergi — datang dari kanan bila tadi
+      dibuang ke kanan. Karena tumpukan selalu berisi `0..n−1` berurutan,
+      kartu berikutnya yang kembali selalu bernomor `n`. */
+  const kembalikan = useCallback(() => {
+    if (tumpukan.length >= jumlahAwal) return;
+    const kembali = tumpukan.length;
+    setArah(-1);
+    setTerbang(kembali);
+    setTajam(false);
     clearTimeout(jamTerbang.current);
     jamTerbang.current = window.setTimeout(() => setTerbang(null), DURASI);
-    setAtas(i);
-  };
+    setTumpukan([...tumpukan, kembali]);
+  }, [tumpukan, jumlahAwal]);
 
   useEffect(() => () => clearTimeout(jamTerbang.current), []);
 
   const onKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "ArrowRight") {
+    if (e.key === "ArrowRight" && bisaKanan) {
       e.preventDefault();
-      geser(1);
-    } else if (e.key === "ArrowLeft") {
+      buang(1);
+    } else if (e.key === "ArrowLeft" && bisaKiri) {
       e.preventDefault();
-      geser(-1);
+      kembalikan();
     }
   };
 
   /** Isi kartu untuk satu karya. Dipakai oleh kartu biasa maupun lapisan
       terbang, supaya keduanya selalu identik. */
-  const isiKartu = (i: number, terbaca: boolean) => {
+  const isiKartu = (i: number, terbaca: boolean, kartuTajam = false) => {
     const karya = sorotan[i];
     return (
       <IsiKartu
@@ -139,6 +161,7 @@ export default function SorotanKarya() {
         labelMisteri={t("sorotan.misteri")}
         labelSegera={t("sorotan.segera")}
         terbaca={terbaca}
+        tajam={kartuTajam}
       />
     );
   };
@@ -147,7 +170,7 @@ export default function SorotanKarya() {
     <section className="mx-auto max-w-6xl px-5 py-16 sm:py-20">
       <header className="flex flex-wrap items-end justify-between gap-6">
         <div className="max-w-2xl">
-          <p className="inline-flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.28em] text-void-red">
+          <p className="inline-flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.28em] text-accent-bright">
             <span className="h-px w-8 bg-void-red" aria-hidden="true" />
             {t("sorotan.kicker")}
           </p>
@@ -184,27 +207,35 @@ export default function SorotanKarya() {
             teratas yang sedang dimiringkan terpotong. */}
         <div className="relative w-[290px] pb-16 [perspective:1200px] [transform-style:preserve-3d] sm:w-[340px] sm:pb-20">
           <div className="relative h-[430px] [transform-style:preserve-3d] sm:h-[470px]">
-            {sorotan.map((_, i) => {
-              const jarak = (i - atas + jumlah) % jumlah;
+            {tumpukan.map((indeksKarya, posisi) => {
+              const jarak = jumlah - 1 - posisi;
               if (jarak >= LAPISAN) return null;
-              // Kartu yang sedang terbang digambar terpisah di bawah, supaya
-              // elemennya TIDAK ikut berpindah komponen saat mulai bergerak.
-              if (terbang === i) return null;
+              // Kartu yang sedang meluncur pergi digambar terpisah di bawah,
+              // supaya elemennya TIDAK ikut berpindah komponen saat bergerak.
+              if (terbang === indeksKarya) return null;
 
               return (
-                <Lapisan key={i} jarak={jarak} teratas={jarak === 0} terbang={false} arah={arah}>
-                  {isiKartu(i, jarak === 0)}
+                <Lapisan
+                  key={indeksKarya}
+                  jarak={jarak}
+                  teratas={jarak === 0}
+                  terbang={false}
+                  arah={arah}
+                  tajam={tajam && jarak === 0}
+                  onArahkan={jarak === 0 ? setTajam : undefined}
+                >
+                  {isiKartu(indeksKarya, jarak === 0, tajam && jarak === 0)}
                 </Lapisan>
               );
             })}
 
-            {/* ── KARTU YANG SEDANG TERBANG ────────────────────────────────
-                Kalau kartu ini sekadar diubah posisinya di tengah tumpukan,
-                peramban akan menganggap elemennya sama dan langsung
-                melompat ke tempat baru — tidak ada yang bisa dianimasikan.
-                Menaruhnya di urutan paling akhir membuatnya elemen baru saat
-                mulai bergerak, dan elemen baru MULAI dari posisi yang
-                diberikan. Jadi ia benar-benar menempuh lintasannya. */}
+            {/* ── KARTU YANG SEDANG MELUNCUR ───────────────────────────────
+                Kalau kartu ini sekadar diubah posisinya, peramban akan
+                menganggap elemennya sama dan langsung melompat ke tempat
+                baru — tidak ada yang bisa dianimasikan. Menaruhnya di urutan
+                paling akhir membuatnya elemen baru saat mulai bergerak, dan
+                elemen baru MULAI dari posisi yang diberikan. Jadi ia benar-
+                benar menempuh lintasannya sebelum dilepas dari layar. */}
             {terbang !== null && (
               <Lapisan key={"terbang-" + terbang} jarak={0} teratas={false} terbang arah={arah}>
                 {isiKartu(terbang, false)}
@@ -214,40 +245,32 @@ export default function SorotanKarya() {
         </div>
 
         {/* ── KONTROL ──────────────────────────────────────────────────────
-            Panah kiri · titik · panah kanan. Titik dibuat cukup besar untuk
-            jari (32×32) walau tampilannya kecil. */}
-        <div className="mt-6 flex w-full items-center justify-center gap-2 sm:gap-4">
+            Panah kiri · penghitung · panah kanan. Panah kiri mengembalikan
+            kartu terakhir yang dibuang, jadi keduanya nonaktif saat tumpukan
+            kosong atau penuh. */}
+        <div className="mt-6 flex w-full items-center justify-center gap-3 sm:gap-5">
           <TombolPanah
             arah="kiri"
             label={t("sorotan.sebelumnya")}
-            onClick={() => geser(-1)}
+            onClick={kembalikan}
+            nonaktif={!bisaKiri}
           />
 
-          <div className="flex shrink-0 items-center gap-0.5 sm:gap-1.5" role="tablist" aria-label={t("sorotan.judul")}>
-            {sorotan.map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                role="tab"
-                aria-selected={i === atas}
-                aria-label={t("sorotan.keKarya", { n: i + 1 })}
-                onClick={() => ke(i)}
-                className="grid h-7 w-7 place-items-center sm:h-8 sm:w-8"
-              >
-                <span
-                  className={
-                    "block h-1.5 rounded-full transition-all duration-300 " +
-                    (i === atas ? "w-6 bg-void-red" : "w-1.5 bg-void-white/25 hover:bg-void-white/50")
-                  }
-                />
-              </button>
-            ))}
-          </div>
+          {/* Penghitung: berapa kartu yang masih di tumpukan, dari jumlah awal.
+              `aria-live` membuat pembaca layar ikut mendengar perubahannya. */}
+          <p
+            aria-live="polite"
+            className="min-w-16 shrink-0 text-center font-display text-sm tabular-nums text-fg-muted"
+          >
+            <span className="text-void-red">{jumlah}</span>
+            <span className="text-fg-muted/60"> / {jumlahAwal}</span>
+          </p>
 
           <TombolPanah
             arah="kanan"
             label={t("sorotan.berikutnya")}
-            onClick={() => geser(1)}
+            onClick={() => buang(1)}
+            nonaktif={!bisaKanan}
           />
         </div>
       </div>
@@ -269,12 +292,22 @@ function Lapisan({
   teratas,
   terbang,
   arah,
+  mulai,
+  tajam,
+  onArahkan,
   children,
 }: {
   jarak: number;
   teratas: boolean;
   terbang: boolean;
   arah: 1 | -1;
+  /** Untuk kartu yang meluncur: kedalaman lapisan tempat ia berangkat.
+      Diisi 0 karena kartu yang dibuang selalu berangkat dari puncak. */
+  mulai?: number;
+  /** Hanya kartu teratas yang bisa dilepas blur-nya. */
+  tajam?: boolean;
+  /** Dipanggil saat kursor masuk/keluar atau fokus pindah. */
+  onArahkan?: (tajam: boolean) => void;
   children: React.ReactNode;
 }) {
   // ── DIAM ─────────────────────────────────────────────────────────────────
@@ -282,15 +315,13 @@ function Lapisan({
   // apa pun saat diam — tumpukannya tegak lurus.
   const diamZ = -jarak * JARAK_Z;
 
-  // ── KARTU YANG SEDANG TERBANG ───────────────────────────────────────────
+  // ── KARTU YANG SEDANG MELUNCUR ──────────────────────────────────────────
   // Elemen ini BARU dipasang saat tombol ditekan. Supaya ia terlihat
-  // menempuh lintasan (bukan langsung muncul di belakang), posisi awalnya
-  // ditulis dulu secara langsung, lalu posisi akhirnya dipasang pada bingkai
-  // berikutnya. Peramban baru bisa menganimasikan perubahan kalau nilai
-  // awal dan nilai akhir datang dari dua keadaan berbeda — bukan dari nilai
-  // bawaan elemen baru.
+  // menempuh lintasan dari tempat kartu teratas tadi berada — bukan
+  // melompat ke tengah panggung lalu meluncur — posisi awalnya disalin dari
+  // kartu teratas (`mulai`), termasuk kedalaman lapisannya.
   const awalTerbang = {
-    transform: "translateX(0px) translateZ(0px) rotateY(0deg)",
+    transform: `translateX(0px) translateZ(${(-(mulai ?? 0) * JARAK_Z).toFixed(1)}px) rotateY(0deg)`,
     opacity: 1,
     filter: "none",
     zIndex: LAPISAN + 2,
@@ -298,11 +329,10 @@ function Lapisan({
     transition: `transform ${DURASI}ms cubic-bezier(.3,.66,.24,1), opacity ${DURASI}ms cubic-bezier(.45,.05,.55,.95)`,
   };
 
-  // Dua langkah. Langkah pertama menulis posisi AWAL dan langsung
-  // "membakar" nilai itu ke tata letak (`void el.offsetWidth`), sehingga
-  // peramban menganggapnya keadaan sah — bukan nilai bawaan. Langkah kedua,
-  // pada bingkai berikutnya, mengganti ke posisi AKHIR. Baru sesudah itu
-  // peramban punya dua keadaan untuk dianimasikan.
+  // Dua langkah. Bingkai pertama menulis posisi AWAL; bingkai berikutnya
+  // mengganti ke posisi AKHIR. Peramban baru bisa menganimasikan perubahan
+  // kalau ia sempat mencatat keadaan awal — karena itu perlu dua bingkai,
+  // bukan satu.
   const [posisi, setPosisi] = useState(0);
   useEffect(() => {
     if (!terbang) return;
@@ -313,13 +343,15 @@ function Lapisan({
   const gaya: React.CSSProperties = terbang
     ? {
         ...awalTerbang,
-        // Posisi akhir: di lapisan paling belakang, sudah redup.
+        // Posisi akhir: jauh ke samping, sudah miring, dan memudar habis.
+        // Kartu ini memang dilepas dari tumpukan, bukan diselipkan ke
+        // belakang, jadi ia keluar dari layar sampai tak terlihat.
         transform:
           posisi === 0
             ? "translateX(0px) translateZ(0px) rotateY(0deg)"
-            : `translateX(${(PUNCAK * arah).toFixed(1)}px) translateZ(${(-(LAPISAN - 1) * JARAK_Z).toFixed(1)}px) rotateY(${(-18 * arah).toFixed(1)}deg)`,
-        opacity: posisi === 0 ? 1 : 0.35,
-        filter: posisi === 0 ? "none" : "blur(4px) brightness(0.7)",
+            : `translateX(${(PUNCAK * 1.6 * arah).toFixed(1)}px) translateZ(120px) rotateY(${(14 * arah).toFixed(1)}deg)`,
+        opacity: posisi === 0 ? 1 : 0,
+        filter: posisi === 0 ? "none" : "blur(2px) brightness(0.8)",
       }
     : {
         transform: `translateZ(${diamZ}px)`,
@@ -332,9 +364,18 @@ function Lapisan({
       };
 
   const kelas =
-    "absolute inset-0 flex flex-col overflow-hidden rounded-[18px] bg-[#0f0f11] " +
-    "shadow-[0_0_0_1px_rgba(224,27,36,.22),0_24px_50px_-24px_rgba(0,0,0,.95)] " +
-    "[backface-visibility:hidden]";
+    "absolute inset-0 flex flex-col overflow-hidden rounded-[18px] " +
+    // Sisi kartu dibuat terbaca dengan dua garis sungguhan, bukan bayangan:
+    // `outline` merah 1 px menempel di tepi (menandai kartu di atas dinding
+    // hitam), dan `border` putih samar 1 px di dalamnya. Border pasti mengikuti
+    // lengkung `rounded-[18px]`, sementara `inset` box-shadow tidak selalu
+    // tergambar di semua peramban. Keduanya menguat saat kartu teratas
+    // diarahkan kursor. `data-[tajam=true]` dipakai, bukan `group-data-*`,
+    // karena elemen ini yang memegang atributnya sendiri.
+    "border border-white/15 bg-[#0f0f11] " +
+    "outline outline-1 outline-void-red/35 " +
+    "data-[tajam=true]:border-white/30 data-[tajam=true]:outline-void-red/70 " +
+    "shadow-[0_24px_50px_-24px_rgba(0,0,0,.95)] transition-colors duration-300 [backface-visibility:hidden]";
 
   if (teratas) {
     return (
@@ -342,6 +383,11 @@ function Lapisan({
         to={TUJUAN_BELI}
         className={kelas + " group"}
         style={gaya}
+        data-tajam={tajam ? "true" : "false"}
+        onPointerEnter={() => onArahkan?.(true)}
+        onPointerLeave={() => onArahkan?.(false)}
+        onFocus={() => onArahkan?.(true)}
+        onBlur={() => onArahkan?.(false)}
       >
         {children}
       </Link>
@@ -365,6 +411,7 @@ function IsiKartu({
   labelMisteri,
   labelSegera,
   terbaca,
+  tajam,
 }: {
   karya: (typeof sorotan)[number];
   judul: string;
@@ -372,23 +419,41 @@ function IsiKartu({
   labelMisteri: string;
   labelSegera: string;
   terbaca: boolean;
+  tajam: boolean;
 }) {
-  const adaGambar = Boolean(karya.gambar) && karya.gambar!.startsWith("http");
+  // Gambar dianggap ada selama `gambar` terisi. Sebelumnya hanya URL http yang
+  // diterima; sekarang berkas yang diimpor dari `src/assets/` (jalur Vite)
+  // juga berlaku, karena begitu album rilis jalurnya justru begini.
+  const adaGambar = Boolean(karya.gambar);
+
+  // `blur-*` Tailwind dan `brightness-*`/`saturate-*` menulis ke variabel
+  // filter yang sama, jadi memasang `blur-0` lewat kelas tidak melepas blur.
+  // Nilainya ditulis langsung di sini; transisi blur tetap jalan karena
+  // propertinya sama.
+  const blur = tajam ? 0 : 16;
 
   return (
     <>
       <div className="relative h-[360px] overflow-hidden rounded-t-[18px] bg-void-black sm:h-[400px]">
         {adaGambar ? (
           <>
+            {/* Saat diam kartu sengaja disamarkan — bentuk dan warnanya saja.
+                Begitu kartu teratas diarahkan kursor atau disentuh, gambar
+                menjadi tajam supaya GIF-nya benar-benar terlihat berjalan.
+                Lapisan blur ada di gambar, penggelap di atasnya; keduanya
+                ikut memudar lewat `group-hover` milik tautan kartu. */}
             <img
               src={karya.gambar}
               alt=""
-              loading="lazy"
               decoding="async"
               aria-hidden="true"
-              className="absolute inset-0 h-full w-full scale-110 object-cover blur-lg brightness-75 saturate-50"
+              className="absolute inset-0 h-full w-full object-cover brightness-75 saturate-50 transition duration-500 group-data-[tajam=true]:brightness-100 group-data-[tajam=true]:saturate-100"
+              style={{ filter: `blur(${blur}px)` }}
             />
-            <div className="absolute inset-0 bg-void-black/45" aria-hidden="true" />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-void-black/45 transition-opacity duration-500 group-data-[tajam=true]:opacity-0"
+            />
           </>
         ) : (
           <>
@@ -406,7 +471,7 @@ function IsiKartu({
           </>
         )}
 
-        <span className="absolute left-3.5 top-3.5 inline-flex items-center gap-1.5 rounded-full border border-accent-line bg-void-black/70 px-2.5 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-void-white/85 backdrop-blur-sm">
+        <span className="absolute left-3.5 top-3.5 inline-flex items-center gap-1.5 rounded-full border border-accent-line bg-void-black/70 px-2.5 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-void-white/85 backdrop-blur-sm transition-opacity duration-300 group-data-[tajam=true]:opacity-0">
           <svg viewBox="0 0 24 24" className="h-3 w-3 fill-current" aria-hidden="true">
             <path d="M12 1a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-1V6a5 5 0 0 0-5-5Zm-3 8V6a3 3 0 1 1 6 0v3H9Z" />
           </svg>
@@ -418,7 +483,7 @@ function IsiKartu({
         <span className="truncate font-display text-[15px] font-semibold tracking-tight text-void-white">
           {judul}
         </span>
-        <span className="shrink-0 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-void-red">
+        <span className="shrink-0 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-accent-bright">
           {catatan}
         </span>
       </div>
@@ -432,22 +497,27 @@ function IsiKartu({
 }
 
 /* ── TOMBOL PANAH ────────────────────────────────────────────────────────
-   Lingkaran 44 px — ukuran minimum yang nyaman disentuh jari. */
+   Lingkaran 44 px — ukuran minimum yang nyaman disentuh jari. Saat tumpukan
+   kosong (atau penuh, untuk panah kiri) tombolnya `disabled`: diredupkan,
+   tidak bisa ditekan, dan tidak ikut fokus papan ketik. */
 function TombolPanah({
   arah,
   label,
   onClick,
+  nonaktif = false,
 }: {
   arah: "kiri" | "kanan";
   label: string;
   onClick: () => void;
+  nonaktif?: boolean;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-label={label}
-      className="grid h-11 w-11 place-items-center rounded-full border border-void-white/20 bg-void-white/4 text-void-white transition-colors duration-200 hover:border-accent hover:bg-accent-soft hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-void-red"
+      disabled={nonaktif}
+      className="grid h-11 w-11 place-items-center rounded-full border border-void-white/20 bg-void-white/4 text-void-white transition-colors duration-200 hover:enabled:border-accent hover:enabled:bg-accent-soft hover:enabled:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-void-red disabled:cursor-not-allowed disabled:opacity-30"
     >
       <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
         {arah === "kiri" ? (

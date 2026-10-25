@@ -78,21 +78,21 @@ export default function Footer() {
         <div className="absolute -right-1/4 bottom-0 h-full w-1/3 -rotate-12 bg-linear-to-l from-void-red/20 to-transparent" />
       </div>
 
-      <div className="relative mx-auto flex max-w-6xl flex-col items-center gap-6 px-5 py-8 text-sm text-void-white/60 sm:flex-row sm:justify-between sm:gap-4">
+      <div className="wadah relative flex flex-col items-center gap-6 py-8 text-sm text-void-white/60 sm:flex-row sm:justify-between sm:gap-4">
         {/* Kiri — logo, hak cipta, dan tagline */}
         <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-4">
           <img
             src={Logo}
-            alt="Voidline Studio"
+            alt="Voidline Iceland"
             loading="lazy"
             decoding="async"
             className="h-11 w-11 max-w-none shrink-0 rounded-full object-contain ring-1 ring-void-white/20 lg:h-12 lg:w-12"
           />
           <div className="text-center sm:text-left">
             <p className="text-void-white/60">
-              © {CURRENT_YEAR} Voidline Iceland by STUPER. {t("footer.rights")}
+              © {CURRENT_YEAR} Voidline Iceland ❤️ MENNUR. {t("footer.rights")}
             </p>
-            <p className="mt-1.5 font-display text-[0.7rem] font-semibold uppercase tracking-[0.24em] text-void-red">
+            <p className="mt-1.5 font-display text-[0.7rem] font-semibold uppercase tracking-[0.24em] text-accent-bright">
               {t("footer.tagline")}
             </p>
           </div>
