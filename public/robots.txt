@@ -10,4 +10,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://voidlineiceland.com/sitemap.xml
+Sitemap: https://nft.jajangosle.com/sitemap.xml
