@@ -1,7 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "voidline-studio",
-  "compatibility_date": "2025-10-01",
+  "compatibility_date": "2025-04-01",
 
   // ── ASET STATIS ────────────────────────────────────────────────────────────
   // Hasil `npm run build` (Vite) disajikan dari folder dist.
@@ -10,18 +10,18 @@
   // semua alamat ditangani React Router di peramban. Tanpa ini, membuka
   // /collection atau /studio langsung (atau me-refresh di sana) menghasilkan
   // 404 dari Cloudflare, bukan halaman situs.
-  //
-  // `run_worker_first: false` (bawaan) membuat aset dicari lebih dulu, baru
-  // fallback ke index.html — itulah perilaku yang diinginkan.
   "assets": {
     "directory": "./dist",
     "not_found_handling": "single-page-application"
   },
 
-  // Catatan: header keamanan TIDAK diatur di sini. Cloudflare static assets
-  // membaca public/_headers dan public/_redirects yang ikut tersalin ke dist/
-  // saat build — jadi public/_headers sudah cukup, tidak perlu diduplikasi.
+  // Catatan: header keamanan tidak diatur di sini. Cloudflare static assets
+  // membaca public/_headers yang ikut tersalin ke dist/ saat build.
   // Isinya sama dengan vercel.json supaya kebijakan tidak berbeda antar host.
+  //
+  // public/_redirects SENGAJA tidak dipakai di Workers: baris /* /index.html
+  // adalah format Netlify, dan SPA fallback di atas sudah menangani hal yang
+  // sama. Menyimpan keduanya membuat dua aturan berebut alamat yang sama.
 
   "observability": {
     "enabled": true
