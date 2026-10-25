@@ -40,7 +40,7 @@ export const translations = {
 
     page: {
       home: {
-        title: "Voidline Iceland — Jajang Osle",
+        title: "Home",
         subtitle: "Landing page content will be added here.",
       },
       collection: {
@@ -542,7 +542,7 @@ export const translations = {
 
     page: {
       home: {
-        title: "Voidline Iceland — Jajang Osle",
+        title: "Atrium",
         subtitle: "Konten halaman utama akan ditambahkan di sini.",
       },
       collection: {
