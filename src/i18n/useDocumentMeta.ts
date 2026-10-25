@@ -80,7 +80,11 @@ export function useDocumentMeta() {
     const tidakDikenal = !(pathname in JUDUL_RUTE) && !pathname.startsWith("/collection/mint/");
 
     const nama = tidakDikenal ? t("page.notFound.title") : t(JUDUL_RUTE[pathname]);
-    const judul = `${nama} · ${NAMA_SITUS}`;
+
+    // Beranda sudah memuat nama situs di dalam judulnya sendiri
+    // ("Voidline Iceland — Jajang Osle"). Menambahkan "· Voidline Iceland" lagi
+    // membuat nama studi muncul dua kali di tab dan di hasil pencarian.
+    const judul = pathname === "/" ? nama : `${nama} · ${NAMA_SITUS}`;
     const deskripsi = DESKRIPSI_RUTE[pathname] ?? DESKRIPSI_CADANGAN;
 
     document.title = judul;
