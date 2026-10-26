@@ -245,7 +245,6 @@ export const translations = {
         status: {
           open: "Taking new work",
           terms: "Scope and terms agreed up front",
-          reply: "Replies in one to two working days",
         },
         commission: {
           num: "01 — Commission",
@@ -338,7 +337,6 @@ export const translations = {
             "A drawing style built from living dots and lines, held to three colours without compromise. We make looping animated GIFs, mint them on the XRP Ledger, and build the tools that let others do the same.",
           cta: "The studio story →",
         },
-        replyNote: "The studio replies within one to two working days.",
       },
     },
 
@@ -743,7 +741,6 @@ export const translations = {
         status: {
           open: "Menerima pekerjaan baru",
           terms: "Lingkup dan ketentuan disepakati di awal",
-          reply: "Dibalas dalam satu sampai dua hari kerja",
         },
         commission: {
           num: "01 — Pesanan",
@@ -836,7 +833,6 @@ export const translations = {
             "Gaya gambar yang dibangun dari titik dan garis hidup, dijaga pada tiga warna tanpa kompromi. Kami membuat GIF animasi berulang, meng-mint-nya di XRP Ledger, dan membangun alat supaya orang lain bisa melakukannya juga.",
           cta: "Kisah studio →",
         },
-        replyNote: "Studio membalas dalam satu sampai dua hari kerja.",
       },
     },
 

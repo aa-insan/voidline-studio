@@ -130,9 +130,6 @@ export default function ReachPage() {
               <li className="text-fg-muted sm:before:mr-3 sm:before:text-white/30 sm:before:content-['·']">
                 {t("page.contact.status.terms")}
               </li>
-              <li className="text-fg-muted sm:before:mr-3 sm:before:text-white/30 sm:before:content-['·']">
-                {t("page.contact.status.reply")}
-              </li>
             </ul>
           </div>
         </div>
