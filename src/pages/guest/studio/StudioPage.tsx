@@ -101,7 +101,7 @@ export default function StudioPage() {
               />
               <img
                 src={AboutLogo}
-                alt="Voidline Iceland"
+                alt="Voidline Island"
                 fetchPriority="high"
                 decoding="async"
                 className="relative h-56 w-56 rounded-full object-cover ring-4 ring-void-red/60 sm:h-64 sm:w-64 lg:h-80 lg:w-80"

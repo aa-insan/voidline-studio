@@ -45,11 +45,11 @@ export const translations = {
       },
       collection: {
         title: "Collection",
-        subtitle: "Every Voidline Iceland collection in one place. Mint directly here — no need to leave the site.",
+        subtitle: "Every Voidline Island collection in one place. Mint directly here — no need to leave the site.",
       },
       newCollection: {
         title: "Newest Collection",
-        subtitle: "The latest release from Voidline Iceland — fresh from the XRP Ledger, updated automatically.",
+        subtitle: "The latest release from Voidline Island — fresh from the XRP Ledger, updated automatically.",
       },
       generate: {
         title: "Compose",
@@ -326,7 +326,7 @@ export const translations = {
         channels: {
           title: "Write to us",
           discordLabel: "Discord — the quickest route",
-          discordName: "Voidline Iceland",
+          discordName: "Voidline Island",
           discordCta: "Open Discord",
           x: "X",
           instagram: "Instagram",
@@ -379,15 +379,15 @@ export const translations = {
       tokenId: "NFTokenID",
       apes: {
         title: "Apes Voidline",
-        subtitle: "The Apes Voidline collection by Voidline Iceland.",
+        subtitle: "The Apes Voidline collection by Voidline Island.",
       },
       jajang: {
         title: "Jajang Voidline",
-        subtitle: "The Jajang Voidline collection by Voidline Iceland.",
+        subtitle: "The Jajang Voidline collection by Voidline Island.",
       },
       fineart: {
         title: "Fine Art Voidline",
-        subtitle: "The Fine Art Voidline collection by Voidline Iceland.",
+        subtitle: "The Fine Art Voidline collection by Voidline Island.",
       },
       filterLabel: "Collection",
       searchLabel: "Search artworks",
@@ -547,11 +547,11 @@ export const translations = {
       },
       collection: {
         title: "Koleksi",
-        subtitle: "Semua koleksi Voidline Iceland di satu tempat. Mint langsung di sini — tanpa perlu keluar dari situs.",
+        subtitle: "Semua koleksi Voidline Island di satu tempat. Mint langsung di sini — tanpa perlu keluar dari situs.",
       },
       newCollection: {
         title: "Koleksi Terbaru",
-        subtitle: "Rilis terbaru dari Voidline Iceland — langsung dari XRP Ledger, diperbarui otomatis.",
+        subtitle: "Rilis terbaru dari Voidline Island — langsung dari XRP Ledger, diperbarui otomatis.",
       },
       generate: {
         title: "Komposisi",
@@ -825,7 +825,7 @@ export const translations = {
         channels: {
           title: "Tulis ke kami",
           discordLabel: "Discord — jalur tercepat",
-          discordName: "Voidline Iceland",
+          discordName: "Voidline Island",
           discordCta: "Buka Discord",
           x: "X",
           instagram: "Instagram",
@@ -878,15 +878,15 @@ export const translations = {
       tokenId: "NFTokenID",
       apes: {
         title: "Apes Voidline",
-        subtitle: "Koleksi Apes Voidline dari Voidline Iceland.",
+        subtitle: "Koleksi Apes Voidline dari Voidline Island.",
       },
       jajang: {
         title: "Jajang Voidline",
-        subtitle: "Koleksi Jajang Voidline dari Voidline Iceland.",
+        subtitle: "Koleksi Jajang Voidline dari Voidline Island.",
       },
       fineart: {
         title: "Fine Art Voidline",
-        subtitle: "Koleksi Fine Art Voidline dari Voidline Iceland.",
+        subtitle: "Koleksi Fine Art Voidline dari Voidline Island.",
       },
       filterLabel: "Koleksi",
       searchLabel: "Cari karya",

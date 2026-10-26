@@ -47,16 +47,16 @@ const JUDUL_RUTE: Record<string, TextKey> = {
  * sebagai teks tampilan.
  */
 const DESKRIPSI_RUTE: Record<string, string> = {
-  "/": "Voidline Iceland is an independent art studio building hand-drawn NFT collections on the XRP Ledger — plus a browser-based generator for creators.",
+  "/": "Voidline Island is an independent art studio building hand-drawn NFT collections on the XRP Ledger — plus a browser-based generator for creators.",
   "/collection":
-    "Every Voidline Iceland NFT collection in one place. Mint directly on the site through the XRP Ledger.",
+    "Every Voidline Island NFT collection in one place. Mint directly on the site through the XRP Ledger.",
   "/studio":
-    "Voidline Iceland is an independent art studio: hand-drawn NFT collections in red, black, and white.",
+    "Voidline Island is an independent art studio: hand-drawn NFT collections in red, black, and white.",
   "/reach":
-    "Commission custom artwork from Voidline Iceland, or hire the studio for NFT collections, animated GIFs, and generator setups.",
+    "Commission custom artwork from Voidline Island, or hire the studio for NFT collections, animated GIFs, and generator setups.",
 };
 
-const NAMA_SITUS = "Voidline Iceland";
+const NAMA_SITUS = "Voidline Island";
 const DESKRIPSI_CADANGAN = DESKRIPSI_RUTE["/"];
 
 /** Menyetel satu <meta> berdasarkan atribut `property` atau `name`. */

@@ -123,11 +123,11 @@ export default function NavbarGuest() {
         <Link
           to="/"
           className="relative h-11 w-11 shrink-0 justify-self-start lg:h-12 lg:w-12"
-          aria-label="Voidline Iceland"
+          aria-label="Voidline Island"
         >
           <img
             src={Logo}
-            alt="Voidline Iceland"
+            alt="Voidline Island"
             fetchPriority="high"
             decoding="async"
             className="absolute left-0 top-1/2 h-11 w-11 max-w-none -translate-y-1/2 rounded-full object-contain lg:h-12 lg:w-12"

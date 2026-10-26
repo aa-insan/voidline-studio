@@ -1,7 +1,7 @@
 /* =============================================================================
    DAFTAR KOLEKSI
 
-   Satu sumber kebenaran untuk semua koleksi NFT Voidline Iceland. Setiap koleksi
+   Satu sumber kebenaran untuk semua koleksi NFT Voidline Island. Setiap koleksi
    punya kolom di halaman /collection dan halaman mint-nya sendiri di
    /collection/mint/:slug.
 

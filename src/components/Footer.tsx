@@ -83,14 +83,21 @@ export default function Footer() {
         <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-4">
           <img
             src={Logo}
-            alt="Voidline Iceland"
+            alt="Voidline Island"
             loading="lazy"
             decoding="async"
             className="h-11 w-11 max-w-none shrink-0 rounded-full object-contain ring-1 ring-void-white/20 lg:h-12 lg:w-12"
           />
           <div className="text-center sm:text-left">
             <p className="text-void-white/60">
-              © {CURRENT_YEAR} Voidline Iceland ❤️ MENNUR. {t("footer.rights")}
+              © {CURRENT_YEAR} Voidline Island by{" "}
+              <a
+                href="mailto:insanajianggoro01@gmail.com"
+                className="font-semibold text-void-white/80 underline decoration-void-white/30 underline-offset-4 transition-colors hover:text-accent-bright"
+              >
+                STUPER
+              </a>
+              . {t("footer.rights")}
             </p>
             <p className="mt-1.5 font-display text-[0.7rem] font-semibold uppercase tracking-[0.24em] text-accent-bright">
               {t("footer.tagline")}
