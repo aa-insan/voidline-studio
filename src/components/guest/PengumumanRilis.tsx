@@ -44,7 +44,7 @@ export default function PengumumanRilis({ ringkas = false, tanpaJudul = false }:
         className={
           ringkas
             ? "wadah pt-14 pb-6 text-center sm:pt-20 sm:pb-8"
-            : "text-center"
+            : "text-left"
         }
       >
         {/* Judul rilis — dilewati saat komponen dipakai di dalam kepala halaman
@@ -57,8 +57,15 @@ export default function PengumumanRilis({ ringkas = false, tanpaJudul = false }:
 
         {!ringkas && (
           <>
-            {/* Kalimat pengumuman: angka edisi dan tanggal dicetak merah. */}
-            <p className="mt-2 font-semibold uppercase tracking-[0.2em] text-void-white [font-size:clamp(0.6rem,0.5rem+0.9vw,0.875rem)] sm:mt-3">
+            {/* Label "Information :" — penciri bagian, dicetak merah selaras
+                dengan label batch dan rambu situs. */}
+            <p className="mt-2 font-semibold uppercase tracking-[0.22em] text-accent-bright [font-size:clamp(0.6rem,0.5rem+0.9vw,0.8rem)] sm:mt-3">
+              Information&nbsp;:
+            </p>
+
+            {/* Kalimat pengumuman: angka edisi dicetak merah, sejajar kiri
+                sama dengan label dan daftar batch di bawahnya. */}
+            <p className="mt-2 font-semibold uppercase tracking-[0.2em] text-void-white [font-size:clamp(0.6rem,0.5rem+0.9vw,0.875rem)]">
               {rilis.pengumuman.map((bagian, i) => (
                 <span key={i} className={bagian.merah ? "text-void-red" : undefined}>
                   {bagian.teks}
@@ -69,7 +76,7 @@ export default function PengumumanRilis({ ringkas = false, tanpaJudul = false }:
             {/* Batch: label "Batch N :" merah di awal kalimat, isi putih
                 mengalir di baris yang sama, baris lanjutan menjorok sejajar
                 (indentasi gantung). Jendela waktu ikut mengalir di akhir. */}
-            <ol className="mx-auto mt-3 max-w-3xl space-y-2 text-left sm:mt-5">
+            <ol className="mt-3 max-w-3xl space-y-2 sm:mt-5">
               {rilis.batch.map((batch) => (
                 <li
                   key={batch.nomor}

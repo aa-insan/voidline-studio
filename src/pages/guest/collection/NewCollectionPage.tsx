@@ -19,11 +19,16 @@ import { useLanguage } from "../../../i18n/useLanguage";
 import { karyaPerKelompok, kodeGrupBaru } from "../../../data/karyaNft";
 import HalamanBerlatar from "../../../components/guest/HalamanBerlatar";
 import KartuKarya from "../../../components/guest/KartuKarya";
+import DropdownKoleksi from "../../../components/guest/DropdownKoleksi";
+import { useStatusKarya } from "../../../services/statusKarya";
 import PengumumanRilis from "../../../components/guest/PengumumanRilis";
 
 export default function NewCollectionPage() {
   const { t } = useLanguage();
+  const { terjual } = useStatusKarya();
   const [kueri, setKueri] = useState("");
+  // Status yang dipilih: "semua" | "tersedia" | "laku".
+  const [ketersediaan, setKetersediaan] = useState<"semua" | "tersedia" | "laku">("semua");
 
   const kueriRendah = kueri.trim().toLowerCase();
 
@@ -39,10 +44,19 @@ export default function NewCollectionPage() {
 
   const hasil = useMemo(
     () =>
-      kueriRendah
-        ? semuakarya.filter(({ karya }) => karya[1].toLowerCase().includes(kueriRendah))
-        : semuakarya,
-    [semuakarya, kueriRendah],
+      semuakarya.filter(({ karya }) => {
+        // Saring nama — nomor edisi ikut ditemukan karena jadi bagian judul.
+        if (kueriRendah && !karya[1].toLowerCase().includes(kueriRendah)) {
+          return false;
+        }
+        // Saring ketersediaan — hanya setelah ledger menjawab. Saat masih
+        // memuat/gagal, terjual() menjawab false untuk semua, jadi status
+        // belum bisa dipakai; filter dilewati sementara.
+        if (ketersediaan === "tersedia") return !terjual(karya[3]);
+        if (ketersediaan === "laku") return terjual(karya[3]);
+        return true;
+      }),
+    [semuakarya, kueriRendah, ketersediaan, terjual],
   );
 
   return (
@@ -69,10 +83,11 @@ export default function NewCollectionPage() {
           </div>
         </header>
 
-        {/* Pencarian — sama seperti /collection, tapi tanpa dropdown. */}
+        {/* Pencarian + filter ketersediaan — lebar penuh, dropdown di pojok
+            kanan atas. Sama pola barisnya dengan /collection. */}
         {semuakarya.length > 0 && (
-          <div className="mt-10 max-w-sm">
-            <label className="relative flex-1">
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <label className="relative flex-1 sm:max-w-2xl">
               <span className="sr-only">{t("collection.searchLabel")}</span>
               <svg
                 viewBox="0 0 24 24"
@@ -90,6 +105,19 @@ export default function NewCollectionPage() {
                 className="bidang-cari"
               />
             </label>
+
+            {/* Dropdown ketersediaan — reusable, warna dan geraknya milik situs.
+                Label dari kamus (soldOut/available). */}
+            <DropdownKoleksi
+              nilai={ketersediaan}
+              ganti={(v) => setKetersediaan(v as "semua" | "tersedia" | "laku")}
+              label={t("collection.filterAvailability")}
+              opsi={[
+                { nilai: "semua", label: t("collection.filterAll") },
+                { nilai: "tersedia", label: t("collection.available") },
+                { nilai: "laku", label: t("collection.soldOut") },
+              ]}
+            />
           </div>
         )}
 
