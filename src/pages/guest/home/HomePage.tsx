@@ -1,12 +1,10 @@
 import { Link } from "react-router-dom";
 import { useLanguage } from "../../../i18n/useLanguage";
 import HalamanBerlatar from "../../../components/guest/HalamanBerlatar";
+import PengumumanRilis from "../../../components/guest/PengumumanRilis";
 import { collections } from "../../../data/collections";
-import { rilis } from "../../../data/rilis";
 import { karyaPerKelompok, urutanKelompok, kodeDariTaxon, type KodeKelompok, type KaryaNft } from "../../../data/karyaNft";
 import { daftarAlamat } from "../../../services/gambarKarya";
-
-import infMomApe from "../../../assets/Inf-MomApe.gif";
 
 /* =============================================================================
    HALAMAN HOME
@@ -17,12 +15,16 @@ import infMomApe from "../../../assets/Inf-MomApe.gif";
 
    Susunan bagian:
 
-     0. Rilis       jadwal drop koleksi terbaru + GIF selebar layar
      1. Hero        kalimat pembuka + dua tombol utama
      2. Angka       tiga angka studio — papan merah
      3. Koleksi     pratinjau tiga koleksi sebagai kartu PUTIH
      4. Galeri      strip karya terbaru dari ledger
-     5. Penutup     ajakan mengoleksi
+     5. Rilis       jadwal drop terbaru (pengingat sebelum penutup)
+     6. Penutup     ajakan mengoleksi
+
+   Pengumuman rilis di atas (nomor 5) memakai komponen yang sama dengan hero
+   /new-collection — src/components/guest/PengumumanRilis.tsx. Teksnya dari
+   src/data/rilis.ts, bukan dari kamus bahasa.
 
    IRAMA WARNA
    Seluruh halaman berlatar HITAM — itulah dindingnya. Yang membedakan satu
@@ -109,75 +111,9 @@ export default function HomePage() {
        menahan latar di dalam halaman ini saja. */
     <HalamanBerlatar>
 
-      {/* ── 0. PENGUMUMAN RILIS ───────────────────────────────────────
-          Satu bagian, dua lapis yang menempel: jadwal drop sebagai teks,
-          langsung disusul GIF selebar layar tanpa jarak. Teks lebih dulu
-          supaya ketentuan terbaca sebelum gerakan gambar menarik mata. */}
-      <section className="relative isolate overflow-hidden">
-        {/* ── Jadwal drop: teks di ATAS gambar ─────────────────────────────
-            Tanpa latar sendiri — mengikuti latar halaman (hujan garis) seperti
-            bagian lain, bukan bidang hitam tersendiri. */}
-        <div className="wadah bagian-kepala-halaman pb-6 text-center sm:pb-8">
-          {/* Judul: huruf pahat Cinzel — wajah "gothic" situs ini. Huruf
-              kecilnya sudah berbentuk kapital kecil, jadi teksnya tetap
-              ditulis apa adanya ("Mom Apes Voidline") dan tampil bergaya
-              pahat tanpa perlu diubah jadi kapital semua. Skalanya satu
-              ramping mengikuti lebar layar — cara yang sama dengan GIF
-              yang menyusut. */}
-          <h2 className="font-display font-bold leading-[1.1] tracking-[0.03em] text-void-red [font-size:clamp(1.5rem,1rem+4vw,3rem)]">
-            {rilis.judul}
-          </h2>
-
-          {/* Kalimat pengumuman: angka edisi dan tanggal dicetak merah. */}
-          <p className="mt-2 font-semibold uppercase tracking-[0.2em] text-void-white [font-size:clamp(0.6rem,0.5rem+0.9vw,0.875rem)] sm:mt-3">
-            {rilis.pengumuman.map((bagian, i) => (
-              <span key={i} className={bagian.merah ? "text-void-red" : undefined}>
-                {bagian.teks}
-              </span>
-            ))}
-          </p>
-
-          {/* Empat batch: label "Batch N :" merah menempel di awal kalimat,
-              isi putih mengalir di baris yang sama, dan baris lanjutan
-              menjorok sejajar dengan isi (indentasi gantung). Jendela waktu
-              ikut mengalir di akhir kalimat. */}
-          <ol className="mx-auto mt-3 max-w-3xl space-y-2 text-left sm:mt-5">
-            {rilis.batch.map((batch) => (
-              <li
-                key={batch.nomor}
-                className="flex text-void-white [font-size:clamp(0.72rem,0.6rem+1.1vw,0.95rem)] leading-relaxed"
-              >
-                <span className="shrink-0 font-semibold uppercase tracking-wider text-void-red">
-                  Batch&nbsp;{batch.nomor}&nbsp;:&nbsp;
-                </span>
-                <span>
-                  {batch.keterangan}
-                  {batch.jendela && (
-                    <span className="tabular-nums"> {batch.jendela}</span>
-                  )}
-                </span>
-              </li>
-            ))}
-          </ol>
-        </div>
-
-        {/* GIF selebar layar — berkasnya sudah dipangkas band hitam kosongnya
-            (dulu 62% atasnya kosong), jadi visualnya langsung menyambung
-            dengan teks di atasnya tanpa jurang. */}
-        <img
-          src={infMomApe}
-          alt={rilis.judul}
-          width={1184}
-          height={241}
-          decoding="async"
-          className="h-auto w-full"
-        />
-      </section>
-
       {/* ── 1. HERO ───────────────────────────────────────────────────────
-          Dipisah dari blok pengumuman di atasnya dengan garis abu-abu tipis,
-          sama seperti pembatas antar section di tempat lain. Kedalaman bidang
-          hitam datang dari lapisan asap di pembungkus halaman. */}
+          Bagian pertama halaman. Kedalaman bidang hitam datang dari lapisan
+          asap di pembungkus halaman. */}
       <section className="relative border-t border-border">
         <div className="wadah bagian-kepala-halaman pb-16 sm:pb-24">
           <div className="max-w-3xl">
@@ -409,7 +345,19 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 5. PENUTUP ──────────────────────────────────────────────────── */}
+      {/* ── 5. PENGUMUMAN RILIS ───────────────────────────────────────────
+          Blok pengingat drop terbaru, ditaruh tepat SEBELUM penutup supaya
+          pengunjung yang sudah menyusuri seluruh halaman tetap melihat jadwal
+          klaim sebelum menekan tombol terakhir. Isi dan gayanya satu sumber
+          dengan hero /new-collection (src/components/guest/PengumumanRilis.tsx).
+          Komponennya sudah membawa <section> sendiri — cukup diberi garis
+          pemisah. */}
+      <div className="border-t border-border">
+        <PengumumanRilis />
+      </div>
+
+      {/* ── 6. PENUTUP ──────────────────────────────────────────────────── */}
+
       <section>
         <div className="wadah bagian text-center">
           <h2 className="judul-bagian">

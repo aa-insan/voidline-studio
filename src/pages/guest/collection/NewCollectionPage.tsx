@@ -19,6 +19,7 @@ import { useLanguage } from "../../../i18n/useLanguage";
 import { karyaPerKelompok, kodeGrupBaru } from "../../../data/karyaNft";
 import HalamanBerlatar from "../../../components/guest/HalamanBerlatar";
 import KartuKarya from "../../../components/guest/KartuKarya";
+import PengumumanRilis from "../../../components/guest/PengumumanRilis";
 
 export default function NewCollectionPage() {
   const { t } = useLanguage();
@@ -46,15 +47,21 @@ export default function NewCollectionPage() {
 
   return (
     <HalamanBerlatar>
-      <section className="wadah bagian-kepala-halaman pb-16 sm:pb-20">
+      {/* ── HERO: pengumuman rilis ──────────────────────────────────────────
+          Di halaman ini pengumuman drop adalah judul utamanya, jadi ia memakai
+          varian `utama` — <h1> sendiri, jarak kepala halaman, dan GIF dimuat
+          lebih dulu. Isinya dari src/data/rilis.ts. */}
+      <PengumumanRilis utama />
+
+      <section className="wadah bagian pb-16 sm:pb-20">
         <header className="max-w-2xl">
           <p className="kicker">
             <span className="kicker-garis" aria-hidden="true" />
             {t("collection.works", { count: semuakarya.length })}
           </p>
-          <h1 className="judul-halaman mt-4">
+          <h2 className="judul-bagian mt-4">
             {t("page.newCollection.title")}
-          </h1>
+          </h2>
           <p className="mt-4 leading-relaxed text-fg-muted">
             {t("page.newCollection.subtitle")}
           </p>
