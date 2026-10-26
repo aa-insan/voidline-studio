@@ -515,7 +515,7 @@ export const translations = {
         body:
           "Enjoy your adventure on our island — and take a piece of it with you.",
         ctaCollections: "Explore collections",
-        ctaGenerate: "Try the generator",
+        ctaGenerate: "Newest collection",
       },
     },
   },
@@ -1012,7 +1012,7 @@ export const translations = {
         body:
           "Nikmati petualangan di pulau kami — dan bawa sepotong darinya pulang.",
         ctaCollections: "Jelajahi koleksi",
-        ctaGenerate: "Coba generator",
+        ctaGenerate: "Koleksi terbaru",
       },
     },
   },

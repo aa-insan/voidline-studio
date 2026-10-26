@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { useLanguage } from "../../../i18n/useLanguage";
 import AboutLogo from "../../../assets/Logo.gif";
 import HalamanBerlatar from "../../../components/guest/HalamanBerlatar";
-import ComposeLink from "../../../components/ComposeLink";
 
 /* =============================================================================
    HALAMAN STUDIO
@@ -217,9 +216,9 @@ export default function StudioPage() {
             <Link to="/collection" className="tombol tombol-merah">
               {t("about.invitation.ctaCollections")}
             </Link>
-            <ComposeLink className="tombol tombol-garis">
+            <Link to="/new-collection" className="tombol tombol-garis">
               {t("about.invitation.ctaGenerate")}
-            </ComposeLink>
+            </Link>
           </div>
         </div>
       </section>
