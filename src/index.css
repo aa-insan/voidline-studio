@@ -358,6 +358,47 @@ option:hover {
   display: none;
 }
 
+/* ── Marque galeri ────────────────────────────────────────────────────────
+   Strip karya di Atrium bergerak sendiri tanpa henti ke kiri. Isinya
+   digandakan dua kali, lalu seluruh track digeser -50% — saat potongan
+   pertama habis, potongan kedua sudah persis menggantikannya, jadi
+   sambungannya tidak terlihat.
+
+   Kenapa CSS dan bukan JavaScript: tidak ada timer, tidak ada state React,
+   tidak ada kerja di main thread. Gambar digeser lewat `transform`, jadi
+   animasinya jalan di compositor.
+
+   Berhenti saat kursor berada di atasnya atau saat strip difokus dengan
+   papan ketik — pengunjung bisa membaca judul dan mengklik kartu tanpa
+   karyanya terus menghilang. `prefers-reduced-motion` mematikan geraknya
+   sepenuhnya (aturan global di bawah), menyisakan strip yang bisa digulir
+   manual seperti sebelumnya. */
+@keyframes marquee {
+
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.marquee {
+  overflow: hidden;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee var(--marquee-durasi, 60s) linear infinite;
+}
+
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
 /* Hormati pengguna yang mematikan animasi */
 @media (prefers-reduced-motion: reduce) {
   html {

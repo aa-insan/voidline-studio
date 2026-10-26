@@ -462,8 +462,6 @@ export const translations = {
       gallery: {
         kicker: "Latest Works",
         title: "Fresh from the ledger",
-        subtitle:
-          "A rotating strip of pieces from every collection — each one live on the XRP Ledger and minted from this site.",
         cta: "See all 654 pieces",
       },
       generate: {
@@ -960,8 +958,6 @@ export const translations = {
       gallery: {
         kicker: "Karya Terbaru",
         title: "Segar dari ledger",
-        subtitle:
-          "Gulungan karya dari setiap koleksi — semuanya hidup di XRP Ledger dan bisa di-mint langsung dari situs ini.",
         cta: "Lihat semua 654 karya",
       },
       generate: {

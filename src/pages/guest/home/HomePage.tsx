@@ -275,9 +275,11 @@ export default function HomePage() {
       </section>
 
       {/* ── 4. GALERI TERBARU ─────────────────────────────────────────────
-          Strip memanjang yang bisa digulir ke samping — 12 karya nyata dari
-          ledger, bergantian dari keenam kelompok. Banyak karya terlihat
-          sekaligus, mengajak pengunjung masuk ke /collection. */}
+          Strip karya yang bergerak sendiri tanpa henti ke kiri — 12 karya
+          nyata dari ledger, bergantian dari keenam kelompok. Isinya
+          digandakan supaya sambungannya tidak terlihat (lihat `.marquee` di
+          src/index.css). Gerak berhenti saat kursor di atasnya atau saat
+          strip difokus dengan papan ketik. */}
       <section className="border-y border-border">
         <div className="wadah bagian">
           <div className="max-w-2xl">
@@ -288,47 +290,47 @@ export default function HomePage() {
             <h2 className="judul-bagian mt-4">
               {t("home.gallery.title")}
             </h2>
-            <p className="mt-3 leading-relaxed text-fg-muted">
-              {t("home.gallery.subtitle")}
-            </p>
           </div>
 
           {/* Baris galeri: gambar diklik → halaman detail karya. Gambarnya
-              GIF asli dari IPFS — dua belas saja, jadi tetap ringan. */}
-          {/* Baris galeri: gambar diklik → halaman detail karya. Gambarnya
-              GIF asli dari IPFS — dua belas saja, jadi tetap ringan. Strip
-              memakai snap-scroll: di layar sentuh kartu berhenti rapi di
-              tepian, bukan tercecer di tengah. */}
-          <div className="scrollbar-none mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scroll-padding-inline:1.25rem]">
-            {galeri.map(({ kode, karya }) => {
-              const [, judul, uri, nftId] = karya;
-              return (
-                <Link
-                  key={nftId}
-                  to={`/collection/work/${nftId}`}
-                  className="group w-40 shrink-0 snap-start sm:w-44"
-                  aria-label={judul}
-                >
-                  <div className="aspect-square overflow-hidden rounded-xl border border-border bg-void-black">
-                    <img
-                      src={daftarAlamat(uri)[0]}
-                      alt={judul}
-                      loading="lazy"
-                      decoding="async"
-                      width={300}
-                      height={300}
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.05]"
-                    />
-                  </div>
-                  <p className="mt-2 truncate text-xs font-semibold text-fg-muted" title={judul}>
-                    {judul}
-                  </p>
-                  <p className="text-[0.65rem] uppercase tracking-wider text-fg-muted/70">
-                    {t(`collection.kelompok.${kode}`)}
-                  </p>
-                </Link>
-              );
-            })}
+              GIF asli dari IPFS — dua belas saja, jadi tetap ringan. Track
+              ditulis dua kali (aria-hidden pada salinan) agar putarannya
+              mulus; lingkaran penuh 12 kartu untuk satu kali geser. */}
+          <div className="marquee mt-10 [mask-image:linear-gradient(to_right,transparent,black_4rem,black_calc(100%-4rem),transparent)]">
+            <div className="marquee-track gap-4 pb-4">
+              {[...galeri, ...galeri].map(({ kode, karya }, i) => {
+                const [, judul, uri, nftId] = karya;
+                const salinan = i >= galeri.length;
+                return (
+                  <Link
+                    key={`${nftId}-${i}`}
+                    to={`/collection/work/${nftId}`}
+                    className="group w-40 shrink-0 sm:w-44"
+                    aria-label={judul}
+                    aria-hidden={salinan || undefined}
+                    tabIndex={salinan ? -1 : undefined}
+                  >
+                    <div className="aspect-square overflow-hidden rounded-xl border border-border bg-void-black">
+                      <img
+                        src={daftarAlamat(uri)[0]}
+                        alt={salinan ? "" : judul}
+                        loading="lazy"
+                        decoding="async"
+                        width={300}
+                        height={300}
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.05]"
+                      />
+                    </div>
+                    <p className="mt-2 truncate text-xs font-semibold text-fg-muted" title={judul}>
+                      {judul}
+                    </p>
+                    <p className="text-[0.65rem] uppercase tracking-wider text-fg-muted/70">
+                      {t(`collection.kelompok.${kode}`)}
+                    </p>
+                  </Link>
+                );
+              })}
+            </div>
           </div>
 
           <div className="mt-6">
