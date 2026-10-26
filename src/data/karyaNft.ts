@@ -693,6 +693,14 @@ export const karyaPerKelompok: Partial<Record<KodeTampil, readonly KaryaNft[]>> 
     [243, "#243", "ipfs://bafybeibr436wbolxin7fyift4jxkeg4il7wl4dgvarc22rv6ulftcmicxy/243.png", "000827104B7026232C1FBF39853DA77DA0CCA5AB437594FCFED80DA10628AB09"],
     [229, "#229", "ipfs://bafybeibr436wbolxin7fyift4jxkeg4il7wl4dgvarc22rv6ulftcmicxy/229.png", "000827104B7026232C1FBF39853DA77DA0CCA5AB437594FCFF43791A0628AB84"],
   ],
+  baru: [
+    [302, "Mom Apes Voidline #302", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/302.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FC7BAE45FE0628AD5F"],
+    [199, "Mom Apes Voidline #199", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/199.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FC929416FF0628AD60"],
+    [211, "Mom Apes Voidline #211", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/211.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCA979E7F80628AD61"],
+    [191, "Mom Apes Voidline #191", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/191.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCC05FB8F90628AD62"],
+    [435, "Mom Apes Voidline #435", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/435.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCD74589FA0628AD63"],
+    [311, "Mom Apes Voidline #311", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/311.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCEE2B5AFB0628AD64"],
+  ],
 };
 
 export const karyaLookup: Record<string, KaryaNft> = Object.fromEntries(
