@@ -97,6 +97,23 @@ def judul_karya(nama, nomor):
     if re.fullmatch(r"#\s*\d+", nama): return f"#{nomor}"
     return nama
 
+def buka_escape(teks):
+    """Kembalikan string TS ter-escape menjadi teks mentah.
+
+    File menyimpan `\\"`, `\\\\`, `\\n`. Pembacaan mengembalikannya ke `"`, `\\`,
+    dan newline sungguhan — lalu penulisan meng-escape sekali lagi. Dengan
+    begitu nilai tidak menumpuk backslash setiap kali skrip dijalankan.
+    """
+    return re.sub(r'\\(["\\nrt])', lambda m: {"n": "\n", "r": "\r", "t": "\t"}.get(m.group(1), m.group(1)), teks or "")
+
+def tulis_escape(teks):
+    """Ubah teks mentah menjadi string TS yang aman dikutip ganda.
+
+    Urutan penting: backslash dulu, baru kutip. Hasil untuk teks `a"b` adalah
+    `a\\"b` di dalam file — satu lapis escape, persis seperti yang dibaca TS.
+    """
+    return (teks or "").replace("\\", "\\\\").replace('"', '\\"')
+
 # ── AMBIL SEMUA NFT DARI LEDGER ──────────────────────────────────────────────
 print("Mengambil NFT dari ledger…")
 terbit = semua_ledger("nfts_by_issuer", "nfts")
@@ -138,7 +155,46 @@ def baca_id_meta(ts_path):
     ids = re.findall(r'"([0-9A-Fa-f]{64})": \{ attrs:', s)
     return {i: True for i in ids}
 
+def baca_baris_lama(ts_path):
+    """Membaca karyaNft.ts lama → {NFTokenID: {n, j, g, id}}.
+
+    Dipakai sebagai jaring pengaman: saat cache metadata kosong (selalu begitu
+    di runner CI), baris yang sudah benar di berkas lama dipakai kembali
+    daripada ditimpa dengan "#None" dan gambar kosong.
+
+    Penting: nilai dibaca dalam bentuk MENTAH (escape `\\"` dikembalikan jadi
+    `"`). Penulisan nanti meng-escape sekali lagi. Kalau tidak, setiap tarikan
+    menambah satu lapis backslash ke judul.
+    """
+    if not ts_path.exists(): return {}
+    s = ts_path.read_text()
+    hasil = {}
+    for n, judul, gambar, nid in re.findall(
+        r'^\s+\[(\d+), "((?:[^"\\]|\\.)*)", "((?:[^"\\]|\\.)*)", "([0-9A-Fa-f]{64})"\],$',
+        s, re.M,
+    ):
+        hasil[nid] = {"n": int(n), "j": buka_escape(judul), "g": buka_escape(gambar), "id": nid}
+    return hasil
+
+def baca_detail_lama(ts_path):
+    """Membaca karyaDetail.ts lama → {NFTokenID: (attrs, desc)} dalam bentuk mentah."""
+    if not ts_path.exists(): return {}
+    s = ts_path.read_text()
+    hasil = {}
+    for nid, isi, desc in re.findall(
+        r'"([0-9A-Fa-f]{64})": \{ attrs: (\[.*?\]), desc: "((?:[^"\\]|\\.)*)" \}',
+        s,
+    ):
+        try:
+            attrs = json.loads(isi)
+        except Exception:
+            attrs = []
+        hasil[nid] = (attrs, buka_escape(desc))
+    return hasil
+
 id_lama = baca_id_meta(META_PATH)
+lama_per_id = baca_baris_lama(DATA_PATH)
+detail_lama = baca_detail_lama(META_PATH)
 baru = [n for n in terbit if n["nft_id"] not in id_lama]
 print(f"  {len(baru)} NFT baru sejak terakhir")
 if baru:
@@ -151,17 +207,27 @@ else:
 # ── AMBIL METADATA NFT BARU ─────────────────────────────────────────────────
 if baru:
     print("Mengambil metadata NFT baru dari IPFS…")
+    berhasil, gagal = 0, []
     for i, n in enumerate(baru):
         uri  = n.get("uri", "")
         data = ambil_ipfs(uri)
-        md_lama[n["nft_id"]] = data
+        if isinstance(data, dict) and data:
+            md_lama[n["nft_id"]] = data
+            berhasil += 1
+        else:
+            gagal.append(n["nft_id"])
         time.sleep(0.15)
         if (i + 1) % 20 == 0:
             print(f"  {i+1}/{len(baru)}", flush=True)
-    print(f"  {len(baru)} metadata baru diambil")
-    CACHE.parent.mkdir(parents=True, exist_ok=True)
-    json.dump(md_lama, open(CACHE, "w"))
-    print(f"  Cache metadata disimpan ke {CACHE}")
+    print(f"  {berhasil}/{len(baru)} metadata berhasil diambil")
+    if gagal:
+        print(f"  {len(gagal)} gagal (akan dicoba lagi di tarikan berikutnya)")
+    # Cache hanya diperbarui kalau ada yang berhasil — jangan timpa cache bagus
+    # dengan hasil kosong saat IPFS sedang tidak bisa diakses.
+    if berhasil:
+        CACHE.parent.mkdir(parents=True, exist_ok=True)
+        json.dump(md_lama, open(CACHE, "w"))
+        print(f"  Cache metadata disimpan ke {CACHE}")
 
 # ── SUSUN SEMUA KARYA ────────────────────────────────────────────────────────
 by_k = {}
@@ -174,20 +240,76 @@ for t in baru_taxon:
     by_k["baru"] = by_k.get("baru", []) + by_k[t]
     del by_k[t]
 
+# ── SUSUN SEMUA KARYA ────────────────────────────────────────────────────────
+# Aturan penyusunan (penting, jangan disederhanakan):
+#
+#   1. Baris lama dari karyaNft.ts adalah SUMBER KEBENARAN untuk karya yang
+#      sudah ada. Judul dan gambar yang sudah benar tidak boleh hilang.
+#   2. Metadata IPFS hanya menimpa baris lama kalau isinya valid — punya nama
+#      (atau nomor edisi) DAN punya gambar. Metadata kosong/gagal tidak pernah
+#      menimpa apa pun.
+#   3. NFT yang benar-benar baru (belum ada di karyaNft.ts) hanya ditulis kalau
+#      metadatanya berhasil diambil. Kalau gagal, ia dilewati dan dicoba lagi
+#      pada tarikan berikutnya — bukan ditulis sebagai "#None" dengan gambar
+#      kosong.
+#
+# Kenapa begini: scripts/.cache-metadata.json sengaja tidak masuk git, jadi di
+# runner GitHub Actions cache-nya selalu kosong. Dulu skrip tetap menulis ulang
+# semua baris, dan satu kali cron berjalan mengubah 654 karya menjadi
+# "#None" dengan gambar kosong — situs kehilangan seluruh judul dan gambar.
+def meta_valid(meta):
+    """True kalau metadata IPFS cukup lengkap untuk menimpa data lama."""
+    if not isinstance(meta, dict) or not meta:
+        return False
+    nama = meta.get("name") or ""
+    gam  = meta.get("animation") or meta.get("image") or ""
+    return bool(gam) and bool(nama or nomor_edisi(nama))
+
 baris, detail = [], {}
 for taxon in URUTAN + (["baru"] if by_k.get("baru") else []):
+    nomor_otomatis = 0
     for n in by_k.get(taxon, []):
-        nid   = n["nft_id"]
-        meta  = md_lama.get(nid, {})
-        nama  = meta.get("name") or ""
-        nomor = nomor_edisi(nama)
-        gam   = meta.get("animation") or meta.get("image") or ""
-        urut  = nomor if nomor else len(baris) + 1
-        baris.append({"k": taxon, "n": urut, "j": judul_karya(nama, nomor), "g": gam, "id": nid})
-        attrs = meta.get("attributes") or []
-        desc  = (meta.get("description") or "").strip()
-        if attrs or desc:
-            detail[nid] = (attrs, desc)
+        nid  = n["nft_id"]
+        meta = md_lama.get(nid) or {}
+        lama = lama_per_id.get(nid)
+
+        if lama is not None:
+            # Karya lama → mulai dari baris yang sudah ada.
+            e = {"k": taxon, "n": lama["n"], "j": lama["j"], "g": lama["g"], "id": nid}
+            if meta_valid(meta):
+                nama  = (meta.get("name") or "").strip()
+                nomor = nomor_edisi(nama)
+                e["j"] = judul_karya(nama, nomor)
+                e["g"] = meta.get("animation") or meta.get("image") or e["g"]
+                if nomor:
+                    e["n"] = nomor
+        elif meta_valid(meta):
+            # Karya baru dengan metadata lengkap.
+            nama  = (meta.get("name") or "").strip()
+            nomor = nomor_edisi(nama)
+            nomor_otomatis += 1
+            e = {
+                "k": taxon,
+                "n": nomor or nomor_otomatis,
+                "j": judul_karya(nama, nomor or nomor_otomatis),
+                "g": meta.get("animation") or meta.get("image") or "",
+                "id": nid,
+            }
+        else:
+            # Karya baru tanpa metadata → jangan tulis apa pun. Tarikan
+            # berikutnya (setelah IPFS bisa diakses) akan menangkapnya.
+            print(f"  ! {nid[:16]}… metadata belum tersedia, ditunda ke tarikan berikutnya")
+            continue
+
+        baris.append(e)
+
+        if meta_valid(meta):
+            attrs = meta.get("attributes") or []
+            desc  = (meta.get("description") or "").strip()
+            if attrs or desc:
+                detail[nid] = (attrs, desc)
+        elif nid in detail_lama:
+            detail[nid] = detail_lama[nid]
 
 # ── TULIS KARYA NFT (TANPA ATTRS/DESC) ───────────────────────────────────────
 grid = []
@@ -196,8 +318,7 @@ for taxon in URUTAN + (["baru"] if by_k.get("baru") else []):
     daftar = [e for e in baris if e["k"] == taxon]
     grid.append(f"  {kode}: [")
     for e in daftar:
-        j = e["j"].replace("\\", "\\\\").replace('"', '\\"')
-        grid.append(f'    [{e["n"]}, "{j}", "{e["g"]}", "{e["id"]}"],')
+        grid.append(f'    [{e["n"]}, "{tulis_escape(e["j"])}", "{tulis_escape(e["g"])}", "{e["id"]}"],')
     grid.append("  ],")
 
 HEADER = """\
@@ -290,8 +411,16 @@ total = len(baris)
 print(f"\nSelesai. {total} NFT ditulis ke:")
 print(f"  {DATA_PATH}")
 print(f"  {META_PATH}")
-if baru:
-    print(f"\n  {len(baru)} NFT baru ditambahkan.")
+
+ditunda = [n for n in terbit if n["nft_id"] not in {e["id"] for e in baris}]
+if total != len(lama_per_id):
+    print(f"\n  {total - len(lama_per_id)} NFT baru ditambahkan.")
     print("  Commit dan push, atau jalankan lagi setelah mint berikutnya.")
 else:
     print("  Semua NFT sudah tercacat — tidak ada yang berubah.")
+if ditunda:
+    print(f"  ! {len(ditunda)} NFT ditunda karena metadata IPFS belum tersedia:")
+    for n in ditunda[:5]:
+        print(f"      {n['nft_id'][:16]}… (taxon {n.get('nft_taxon', '?')})")
+    if len(ditunda) > 5:
+        print(f"      … +{len(ditunda) - 5} lagi")

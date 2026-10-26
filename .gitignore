@@ -28,3 +28,4 @@ dist-ssr
 # disimpan dua kali. Folder ini dibuat tangan, bukan oleh alat build.
 .cadangan
 scripts/.cache-metadata.json
+__pycache__/
