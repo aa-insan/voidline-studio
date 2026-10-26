@@ -83,11 +83,11 @@ export default function NewCollectionPage() {
           </div>
         </header>
 
-        {/* Pencarian + filter ketersediaan — lebar penuh, dropdown di pojok
-            kanan atas. Sama pola barisnya dengan /collection. */}
+        {/* Pencarian + filter ketersediaan — selebar grid kartu di bawahnya,
+            dropdown menempel di tepi kanan. */}
         {semuakarya.length > 0 && (
           <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <label className="relative flex-1 sm:max-w-2xl">
+            <label className="relative flex-[1_1_0]">  
               <span className="sr-only">{t("collection.searchLabel")}</span>
               <svg
                 viewBox="0 0 24 24"
