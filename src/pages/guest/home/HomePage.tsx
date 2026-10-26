@@ -195,9 +195,6 @@ export default function HomePage() {
             <h2 className="judul-bagian mt-4">
               {t("home.collections.title")}
             </h2>
-            <p className="mt-3 leading-relaxed text-fg-muted">
-              {t("home.collections.subtitle")}
-            </p>
           </header>
 
           {/* Kartu PUTIH di atas dinding hitam. Karena panelnya kini berwarna

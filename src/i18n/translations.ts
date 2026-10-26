@@ -457,8 +457,6 @@ export const translations = {
       collections: {
         kicker: "The Work",
         title: "Featured Collections",
-        subtitle:
-          "Each collection is drawn by hand and minted straight from this site — no detours.",
         viewAll: "View all collections",
       },
       gallery: {
@@ -957,8 +955,6 @@ export const translations = {
       collections: {
         kicker: "Karyanya",
         title: "Koleksi Unggulan",
-        subtitle:
-          "Setiap koleksi digambar dengan tangan dan di-mint langsung dari situs ini — tanpa perlu pindah tempat.",
         viewAll: "Lihat semua koleksi",
       },
       gallery: {
