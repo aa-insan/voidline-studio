@@ -3,7 +3,7 @@ import { useLanguage } from "../../../i18n/useLanguage";
 import HalamanBerlatar from "../../../components/guest/HalamanBerlatar";
 import PengumumanRilis from "../../../components/guest/PengumumanRilis";
 import { collections } from "../../../data/collections";
-import { karyaPerKelompok, urutanKelompok, kodeDariTaxon, type KodeKelompok, type KaryaNft } from "../../../data/karyaNft";
+import { karyaPerKelompok, kelompokTampil, kodeDariTaxon, type KodeTampil, type KaryaNft } from "../../../data/karyaNft";
 import { daftarAlamat } from "../../../services/gambarKarya";
 
 /* =============================================================================
@@ -61,7 +61,7 @@ export default function HomePage() {
   // Jumlah karya total di semua kelompok — angka yang sama dengan grid
   // halaman /collection, dihitung dari berkas data yang dibuat
   // scripts/tarik-karya.py, bukan angka tulis tangan.
-  const jumlahKarya = urutanKelompok.reduce(
+  const jumlahKarya = kelompokTampil.reduce(
     (total, kode) => total + (karyaPerKelompok[kode]?.length ?? 0),
     0,
   );
@@ -85,18 +85,16 @@ export default function HomePage() {
     }),
   );
 
-  // 12 karya dari ledger, interleaved dari keenam kelompok — supaya galeri
-  // merata mewakili seluruh koleksi. Karya diambil langsung dari karyaNft.ts
-  // (data yang sudah diperbarui oleh scripts/tarik-karya.py).
-  // 12 karya dari ledger, interleaved dari keenam kelompok — supaya galeri
-  // merata mewakili seluruh koleksi. Karya diambil langsung dari karyaNft.ts
+  // 12 karya dari ledger, bergantian di antara semua kelompok yang tampil
+  // (kolteksi bernama + koleksi terbaru `baru`), supaya galeri merata
+  // mewakili seluruh koleksi. Karya diambil langsung dari karyaNft.ts
   // (data yang sudah diperbarui oleh scripts/tarik-karya.py).
   const perKelompok = Object.fromEntries(
-    urutanKelompok.map((kode) => [kode, karyaPerKelompok[kode] ?? []] as const),
+    kelompokTampil.map((kode) => [kode, karyaPerKelompok[kode] ?? []] as const),
   );
-  const galeri: Array<{ kode: KodeKelompok; karya: KaryaNft }> = [];
+  const galeri: Array<{ kode: KodeTampil; karya: KaryaNft }> = [];
   for (let i = 0; galeri.length < JUMLAH_GALERI; i++) {
-    for (const kode of urutanKelompok) {
+    for (const kode of kelompokTampil) {
       const barisan = perKelompok[kode];
       if (i < barisan.length) {
         galeri.push({ kode, karya: barisan[i] });

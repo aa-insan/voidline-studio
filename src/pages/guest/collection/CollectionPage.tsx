@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useLanguage } from "../../../i18n/useLanguage";
-import { karyaPerKelompok, urutanKelompok, type KodeKelompok } from "../../../data/karyaNft";
+import { karyaPerKelompok, kelompokTampil, type KodeKelompok } from "../../../data/karyaNft";
 import DropdownKoleksi from "../../../components/guest/DropdownKoleksi";
 import HalamanBerlatar from "../../../components/guest/HalamanBerlatar";
 import KartuKarya from "../../../components/guest/KartuKarya";
@@ -33,10 +33,10 @@ import KartuKarya from "../../../components/guest/KartuKarya";
  * ditunda sampai kartu masuk layar.
  */
 
-type Pilihan = KodeKelompok | "semua";
+type Pilihan = KodeKelompok | "semua" | "baru";
 
 /** Nilai filter yang sah di dropdown — dipakai untuk memvalidasi URL. */
-const KODE_SAHIH = new Set<string>(urutanKelompok);
+const KODE_SAHIH = new Set<string>(kelompokTampil);
 
 export default function CollectionPage() {
   const { t } = useLanguage();
@@ -57,7 +57,7 @@ export default function CollectionPage() {
   // render, sehingga React tidak me-render ulang 654 kartu tanpa alasan.
   const hasil = useMemo(
     () =>
-      (pilihan === "semua" ? urutanKelompok : [pilihan]).flatMap((kode) =>
+      (pilihan === "semua" ? kelompokTampil : [pilihan]).flatMap((kode) =>
         (karyaPerKelompok[kode] ?? [])
           .filter((karya) => !kueriRendah || karya[1].toLowerCase().includes(kueriRendah))
           .map((karya) => ({ karya, kode })),
@@ -65,7 +65,7 @@ export default function CollectionPage() {
     [pilihan, kueriRendah],
   );
 
-  const jumlahSemua = urutanKelompok.reduce(
+  const jumlahSemua = kelompokTampil.reduce(
     (n, kode) => n + (karyaPerKelompok[kode]?.length ?? 0),
     0,
   );
@@ -117,7 +117,7 @@ export default function CollectionPage() {
             label={t("collection.filterLabel")}
             opsi={[
               { nilai: "semua", label: t("collection.allCollections", { count: jumlahSemua }) },
-              ...urutanKelompok.map((kode) => ({
+              ...kelompokTampil.map((kode) => ({
                 nilai: kode,
                 label: `${t(`collection.kelompok.${kode}`)} (${karyaPerKelompok[kode]?.length ?? 0})`,
               })),

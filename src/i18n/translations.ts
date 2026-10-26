@@ -401,6 +401,7 @@ export const translations = {
         neo: "Neo",
         lepas: "Standalone pieces",
         puko: "Pukonimichi",
+        baru: "Mom Apes Voidline",
       },
     },
 
@@ -899,6 +900,7 @@ export const translations = {
         neo: "Neo",
         lepas: "Karya lepas",
         puko: "Pukonimichi",
+        baru: "Mom Apes Voidline",
       },
     },
 
