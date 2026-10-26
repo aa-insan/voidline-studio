@@ -17,6 +17,8 @@
    sisanya putih. GIF hanya sebagai penutup visual, bukan latar.
    ============================================================================= */
 
+import { Link } from "react-router-dom";
+import { useLanguage } from "../../i18n/useLanguage";
 import { rilis } from "../../data/rilis";
 import infMomApe from "../../assets/Inf-MomApe.gif";
 
@@ -32,6 +34,7 @@ type Props = {
 };
 
 export default function PengumumanRilis({ utama = false, ringkas = false }: Props) {
+  const { t } = useLanguage();
   const Judul = utama ? "h1" : "h2";
 
   return (
@@ -85,6 +88,26 @@ export default function PengumumanRilis({ utama = false, ringkas = false }: Prop
               ))}
             </ol>
           </>
+        )}
+
+        {/* ── Ajakan ke /new-collection ────────────────────────────────
+            Hanya di Atrium. Pengunjung melihat judul dan GIF, tapi tanpa satu
+            kalimat pun yang menjelaskan bahwa rincian klaim ada di halaman
+            lain — jadi diberikan satu kalimat pengantar plus tombol yang jelas
+            tujuannya. Di /new-collection blok ini tidak perlu: pengunjung
+            sudah berada di halaman tujuannya. */}
+        {ringkas && (
+          <div className="mx-auto mt-5 max-w-xl sm:mt-6">
+            <p className="text-sm leading-relaxed text-fg-muted">
+              {t("home.rilis.pengantar")}
+            </p>
+            <Link to="/new-collection" className="tombol tombol-garis mt-5">
+              {t("home.rilis.ajakan")}
+              <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
+                <path d="M9.47 5.47a.75.75 0 0 1 1.06 0l6 6a.75.75 0 0 1 0 1.06l-6 6a.75.75 0 1 1-1.06-1.06L14.19 12 9.47 7.28a.75.75 0 0 1 0-1.06Z" />
+              </svg>
+            </Link>
+          </div>
         )}
       </div>
 

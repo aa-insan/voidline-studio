@@ -450,6 +450,9 @@ export const translations = {
         subtitle:
           "The newest Voidline collection is live on xrp.cafe. Grab yours while the drop is open.",
         cta: "Mint on xrp.cafe",
+        pengantar:
+          "Every claim window, every batch, and every piece in this drop is listed on one page — open it to see what you qualify for.",
+        ajakan: "See the drop details",
       },
       collections: {
         kicker: "The Work",
@@ -947,6 +950,9 @@ export const translations = {
         subtitle:
           "Koleksi Voidline terbaru sudah tayang di xrp.cafe. Ambil milikmu selama masa rilis dibuka.",
         cta: "Mint di xrp.cafe",
+        pengantar:
+          "Semua jendela klaim, tiap batch, dan seluruh karya dalam rilis ini ada di satu halaman — buka untuk melihat mana yang jadi hakmu.",
+        ajakan: "Lihat detail rilis",
       },
       collections: {
         kicker: "Karyanya",
