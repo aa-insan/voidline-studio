@@ -6,12 +6,11 @@
    ditulis di sini.
 
    DIPAKAI DI:
-     · /new-collection  → `utama` (hero halaman: <h1>, judul besar)
-     · /  (Atrium)      → tanpa `utama` (blok pengingat di atas penutup)
-
-   Varian `utama` memakai <h1> karena di halaman itu pengumuman inilah judul
-   utamanya. Varian biasa memakai <h2> supaya tidak ada dua <h1> dalam satu
-   halaman — Atrium sudah punya <h1> sendiri di bagian hero.
+     · /  (Atrium)       → `ringkas`: judul + GIF + ajakan ke /new-collection
+     · /new-collection   → `tanpaJudul`: hanya kalimat pengumuman + jadwal
+                           batch, menempel di dalam kepala halaman di bawah
+                           judul "Koleksi Terbaru". GIF tidak dipakai di sana
+                           karena karya aslinya sudah tampil di grid bawah.
 
    IRAMA WARNA mengikuti aturan situs: latar hitam, angka dan tanggal merah,
    sisanya putih. GIF hanya sebagai penutup visual, bukan latar.
@@ -23,37 +22,38 @@ import { rilis } from "../../data/rilis";
 import infMomApe from "../../assets/Inf-MomApe.gif";
 
 type Props = {
-  /** Dipakai sebagai hero /new-collection: judul <h1> dan jarak kepala halaman. */
-  utama?: boolean;
   /**
-   * Hanya judul + GIF. Dipakai di Atrium, tempat pengumuman hanya pengingat —
-   * rincian jadwal dan batch sengaja tidak diulang di sana supaya tidak
-   * bersaing dengan hero studio. Rincian lengkap tetap ada di /new-collection.
+   * Varian Atrium: pengingat visual — judul, GIF, lalu satu kalimat dan tombol
+   * menuju /new-collection. Rincian batch tidak ikut supaya Atrium tetap ringkas.
    */
   ringkas?: boolean;
+  /**
+   * Varian /new-collection: tanpa judul dan tanpa GIF. Komponen dipakai di
+   * dalam <header> halaman, jadi judul rilis sudah diwakili judul halaman —
+   * yang dibutuhkan hanya keterangan dan jadwal batch-nya.
+   */
+  tanpaJudul?: boolean;
 };
 
-export default function PengumumanRilis({ utama = false, ringkas = false }: Props) {
+export default function PengumumanRilis({ ringkas = false, tanpaJudul = false }: Props) {
   const { t } = useLanguage();
-  const Judul = utama ? "h1" : "h2";
 
   return (
-    <section className="relative isolate overflow-hidden">
-      {/* Teks di atas gambar, tanpa latar sendiri — mengikuti latar halaman. */}
+    <section className={ringkas ? "relative isolate overflow-hidden" : undefined}>
       <div
-        className={`wadah pb-6 text-center sm:pb-8 ${
-          utama ? "bagian-kepala-halaman" : "pt-14 sm:pt-20"
-        }`}
+        className={
+          ringkas
+            ? "wadah pt-14 pb-6 text-center sm:pt-20 sm:pb-8"
+            : "text-center"
+        }
       >
-        <Judul
-          className={
-            utama
-              ? "judul-halaman text-void-red"
-              : "font-display font-bold leading-[1.1] tracking-[0.03em] text-void-red [font-size:clamp(1.5rem,1rem+4vw,3rem)]"
-          }
-        >
-          {rilis.judul}
-        </Judul>
+        {/* Judul rilis — dilewati saat komponen dipakai di dalam kepala halaman
+            yang sudah punya judulnya sendiri. */}
+        {!tanpaJudul && (
+          <h2 className="font-display font-bold leading-[1.1] tracking-[0.03em] text-void-red [font-size:clamp(1.5rem,1rem+4vw,3rem)]">
+            {rilis.judul}
+          </h2>
+        )}
 
         {!ringkas && (
           <>
@@ -90,12 +90,10 @@ export default function PengumumanRilis({ utama = false, ringkas = false }: Prop
           </>
         )}
 
-        {/* ── Ajakan ke /new-collection ────────────────────────────────
-            Hanya di Atrium. Pengunjung melihat judul dan GIF, tapi tanpa satu
-            kalimat pun yang menjelaskan bahwa rincian klaim ada di halaman
-            lain — jadi diberikan satu kalimat pengantar plus tombol yang jelas
-            tujuannya. Di /new-collection blok ini tidak perlu: pengunjung
-            sudah berada di halaman tujuannya. */}
+        {/* ── Ajakan ke /new-collection ─────────────────────────────────
+            Hanya di Atrium. Pengunjung melihat judul dan GIF tanpa penjelasan
+            bahwa rincian klaim ada di halaman lain — jadi diberi satu kalimat
+            pengantar plus tombol yang jelas tujuannya. */}
         {ringkas && (
           <div className="mx-auto mt-5 max-w-xl sm:mt-6">
             <p className="text-sm leading-relaxed text-fg-muted">
@@ -113,16 +111,17 @@ export default function PengumumanRilis({ utama = false, ringkas = false }: Prop
 
       {/* GIF selebar layar — berkasnya sudah dipangkas band hitam kosongnya,
           jadi visualnya langsung menyambung dengan teks di atasnya. */}
-      <img
-        src={infMomApe}
-        alt={rilis.judul}
-        width={1184}
-        height={241}
-        decoding="async"
-        loading={utama ? "eager" : "lazy"}
-        fetchPriority={utama ? "high" : "auto"}
-        className="h-auto w-full"
-      />
+      {ringkas && (
+        <img
+          src={infMomApe}
+          alt={rilis.judul}
+          width={1184}
+          height={241}
+          decoding="async"
+          loading="lazy"
+          className="h-auto w-full"
+        />
+      )}
     </section>
   );
 }

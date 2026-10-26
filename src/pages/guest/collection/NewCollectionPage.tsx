@@ -47,24 +47,26 @@ export default function NewCollectionPage() {
 
   return (
     <HalamanBerlatar>
-      {/* ── HERO: pengumuman rilis ──────────────────────────────────────────
-          Di halaman ini pengumuman drop adalah judul utamanya, jadi ia memakai
-          varian `utama` — <h1> sendiri, jarak kepala halaman, dan GIF dimuat
-          lebih dulu. Isinya dari src/data/rilis.ts. */}
-      <PengumumanRilis utama />
-
-      <section className="wadah bagian pb-16 sm:pb-20">
+      <section className="wadah bagian-kepala-halaman pb-16 sm:pb-20">
         <header className="max-w-2xl">
-          <p className="kicker">
-            <span className="kicker-garis" aria-hidden="true" />
-            {t("collection.works", { count: semuakarya.length })}
-          </p>
-          <h2 className="judul-bagian mt-4">
+          {semuakarya.length > 0 && (
+            <p className="kicker">
+              <span className="kicker-garis" aria-hidden="true" />
+              {t("collection.works", { count: semuakarya.length })}
+            </p>
+          )}
+          <h1 className={`judul-halaman ${semuakarya.length > 0 ? "mt-4" : ""}`}>
             {t("page.newCollection.title")}
-          </h2>
-          <p className="mt-4 leading-relaxed text-fg-muted">
-            {t("page.newCollection.subtitle")}
-          </p>
+          </h1>
+
+          {/* ── Informasi rilis, menempel di bawah judul ────────────────────
+              Kalimat pengumuman dan jadwal batch berasal dari
+              src/data/rilis.ts lewat komponen bersama. Varian `tanpaJudul`
+              karena judul halaman sudah berdiri di atasnya, dan tanpa GIF
+              karena karya aslinya tampil di grid bawah. */}
+          <div className="mt-6 border-t border-border pt-6">
+            <PengumumanRilis tanpaJudul />
+          </div>
         </header>
 
         {/* Pencarian — sama seperti /collection, tapi tanpa dropdown. */}
