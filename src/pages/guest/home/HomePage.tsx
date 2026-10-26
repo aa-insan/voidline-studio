@@ -346,14 +346,12 @@ export default function HomePage() {
       </section>
 
       {/* ── 5. PENGUMUMAN RILIS ───────────────────────────────────────────
-          Blok pengingat drop terbaru, ditaruh tepat SEBELUM penutup supaya
-          pengunjung yang sudah menyusuri seluruh halaman tetap melihat jadwal
-          klaim sebelum menekan tombol terakhir. Isi dan gayanya satu sumber
-          dengan hero /new-collection (src/components/guest/PengumumanRilis.tsx).
-          Komponennya sudah membawa <section> sendiri — cukup diberi garis
-          pemisah. */}
+          Pengingat visual drop terbaru: judul + GIF saja (`ringkas`), ditaruh
+          tepat sebelum penutup. Rincian jadwal dan batch sengaja tidak diulang
+          di sini — itu tugas hero /new-collection, supaya Atrium tetap ringkas.
+          Garis pemisah atas mengikuti aturan pembatas antar bagian. */}
       <div className="border-t border-border">
-        <PengumumanRilis />
+        <PengumumanRilis ringkas />
       </div>
 
       {/* ── 6. PENUTUP ──────────────────────────────────────────────────── */}

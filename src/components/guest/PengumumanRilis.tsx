@@ -23,9 +23,15 @@ import infMomApe from "../../assets/Inf-MomApe.gif";
 type Props = {
   /** Dipakai sebagai hero /new-collection: judul <h1> dan jarak kepala halaman. */
   utama?: boolean;
+  /**
+   * Hanya judul + GIF. Dipakai di Atrium, tempat pengumuman hanya pengingat —
+   * rincian jadwal dan batch sengaja tidak diulang di sana supaya tidak
+   * bersaing dengan hero studio. Rincian lengkap tetap ada di /new-collection.
+   */
+  ringkas?: boolean;
 };
 
-export default function PengumumanRilis({ utama = false }: Props) {
+export default function PengumumanRilis({ utama = false, ringkas = false }: Props) {
   const Judul = utama ? "h1" : "h2";
 
   return (
@@ -46,36 +52,40 @@ export default function PengumumanRilis({ utama = false }: Props) {
           {rilis.judul}
         </Judul>
 
-        {/* Kalimat pengumuman: angka edisi dan tanggal dicetak merah. */}
-        <p className="mt-2 font-semibold uppercase tracking-[0.2em] text-void-white [font-size:clamp(0.6rem,0.5rem+0.9vw,0.875rem)] sm:mt-3">
-          {rilis.pengumuman.map((bagian, i) => (
-            <span key={i} className={bagian.merah ? "text-void-red" : undefined}>
-              {bagian.teks}
-            </span>
-          ))}
-        </p>
+        {!ringkas && (
+          <>
+            {/* Kalimat pengumuman: angka edisi dan tanggal dicetak merah. */}
+            <p className="mt-2 font-semibold uppercase tracking-[0.2em] text-void-white [font-size:clamp(0.6rem,0.5rem+0.9vw,0.875rem)] sm:mt-3">
+              {rilis.pengumuman.map((bagian, i) => (
+                <span key={i} className={bagian.merah ? "text-void-red" : undefined}>
+                  {bagian.teks}
+                </span>
+              ))}
+            </p>
 
-        {/* Batch: label "Batch N :" merah di awal kalimat, isi putih mengalir
-            di baris yang sama, baris lanjutan menjorok sejajar (indentasi
-            gantung). Jendela waktu ikut mengalir di akhir kalimat. */}
-        <ol className="mx-auto mt-3 max-w-3xl space-y-2 text-left sm:mt-5">
-          {rilis.batch.map((batch) => (
-            <li
-              key={batch.nomor}
-              className="flex text-void-white [font-size:clamp(0.72rem,0.6rem+1.1vw,0.95rem)] leading-relaxed"
-            >
-              <span className="shrink-0 font-semibold uppercase tracking-wider text-void-red">
-                Batch&nbsp;{batch.nomor}&nbsp;:&nbsp;
-              </span>
-              <span>
-                {batch.keterangan}
-                {batch.jendela && (
-                  <span className="tabular-nums"> {batch.jendela}</span>
-                )}
-              </span>
-            </li>
-          ))}
-        </ol>
+            {/* Batch: label "Batch N :" merah di awal kalimat, isi putih
+                mengalir di baris yang sama, baris lanjutan menjorok sejajar
+                (indentasi gantung). Jendela waktu ikut mengalir di akhir. */}
+            <ol className="mx-auto mt-3 max-w-3xl space-y-2 text-left sm:mt-5">
+              {rilis.batch.map((batch) => (
+                <li
+                  key={batch.nomor}
+                  className="flex text-void-white [font-size:clamp(0.72rem,0.6rem+1.1vw,0.95rem)] leading-relaxed"
+                >
+                  <span className="shrink-0 font-semibold uppercase tracking-wider text-void-red">
+                    Batch&nbsp;{batch.nomor}&nbsp;:&nbsp;
+                  </span>
+                  <span>
+                    {batch.keterangan}
+                    {batch.jendela && (
+                      <span className="tabular-nums"> {batch.jendela}</span>
+                    )}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </>
+        )}
       </div>
 
       {/* GIF selebar layar — berkasnya sudah dipangkas band hitam kosongnya,
