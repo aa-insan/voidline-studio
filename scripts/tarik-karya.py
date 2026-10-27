@@ -373,6 +373,14 @@ export const kodeGrupBaru: KodeTampil[] = (
   Object.keys(karyaPerKelompok) as KodeTampil[]
 ).filter((k) => !urutanKelompok.includes(k as KodeKelompok));
 
+/** Kode kelompok yang tampil di halaman koleksi: koleksi bernama dulu, lalu
+    koleksi terbaru (grup `baru`) di urutan akhir. Menjadikan rilisan baru yang
+    belum diberi nama tetap terlihat di /collection dan dropdownnya. */
+export const kelompokTampil: readonly KodeTampil[] = [
+  ...urutanKelompok,
+  ...(kodeGrupBaru.length > 0 ? kodeGrupBaru : []),
+];
+
 export const alamatIpfs = (uri: string): string =>
   uri.startsWith("ipfs://") ? `https://ipfs.io/ipfs/${uri.slice(7)}` : uri;
 """
