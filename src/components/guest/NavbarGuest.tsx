@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import Logo from "../../assets/Logo.gif";
-import { collections } from "../../data/collections";
 import { useLanguage } from "../../i18n/useLanguage";
 import LanguageSwitch from "./LanguageSwitch";
 import ComposeLink from "../ComposeLink";
@@ -56,14 +55,11 @@ const NAV_ITEMS = [
 ] as const;
 
 /**
- * Tujuan tombol "Buy Now".
- *
- * Diambil dari `collections[0]`, bukan ditulis tetap ("/collection/mint/apesvoidline"),
- * supaya tombol ini selalu menunjuk koleksi pertama yang BENAR. Begitu urutan
- * koleksi di data/collections.ts diubah, tombol ikut menyesuaikan sendiri dan
- * tidak akan menunjuk koleksi yang sudah tidak ada.
+ * Tujuan tombol "Custom Order" — koleksi jajangvoidline di xrp.cafe,
+ * dibuka di tab baru. Pembayaran tetap on-ledger; situs ini hanya
+ * mengarahkan, tidak memproses transaksi.
  */
-const BUY_NOW_TO = `/collection/mint/${collections[0].slug}`;
+const CUSTOM_ORDER_HREF = "https://xrp.cafe/id/collection/jajangvoidline";
 
 export default function NavbarGuest() {
   const { t } = useLanguage();
@@ -167,20 +163,24 @@ export default function NavbarGuest() {
           {/* Tab bahasa — satu bendera bahasa aktif; klik untuk berganti. */}
           <LanguageSwitch />
 
-          {/* Buy Now — satu tombol, latar merah, teks putih.
+          {/* Custom Order — satu tombol, latar merah, teks putih.
               Satu-satunya bidang merah di navbar: ia memang satu-satunya hal
               yang diminta untuk diklik, jadi seluruh daya tarik merah
               dikumpulkan di sini alih-alih disebar.
               Bentuknya sengaja disamakan dengan deretan tab di sebelahnya
               (sudut membulat, tinggi ~36px) supaya sejajar dan terbaca sebagai
               satu kelompok alat.
-              Tujuannya koleksi pertama; lihat BUY_NOW_TO di atas file ini. */}
-          <Link
-            to={BUY_NOW_TO}
+              Tujuannya koleksi jajangvoidline di xrp.cafe; lihat
+              CUSTOM_ORDER_HREF di atas file ini. Tautan eksternal → dibuka
+              di tab baru dengan rel noopener (aman dari tabnabbing). */}
+          <a
+            href={CUSTOM_ORDER_HREF}
+            target="_blank"
+            rel="noopener noreferrer"
             className="ml-2 hidden shrink-0 items-center rounded-lg bg-accent px-5 py-2 text-xs font-semibold text-accent-fg shadow-brand-sm transition-colors hover:bg-accent-deep sm:inline-flex"
           >
-            {t("nav.buyNow")}
-          </Link>
+            {t("nav.customOrder")}
+          </a>
 
           {/* Hamburger — mobile/tablet */}
           <button
@@ -259,13 +259,15 @@ export default function NavbarGuest() {
           })}
 
           <div className="pt-4 sm:hidden">
-            <Link
-              to={BUY_NOW_TO}
+            <a
+              href={CUSTOM_ORDER_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setMenuOpen(false)}
               className="block rounded-lg bg-accent px-4 py-2.5 text-center text-sm font-semibold text-accent-fg transition-colors hover:bg-accent-deep"
             >
-              {t("nav.buyNow")}
-            </Link>
+              {t("nav.customOrder")}
+            </a>
           </div>
         </div>
       </div>

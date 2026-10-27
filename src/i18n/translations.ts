@@ -25,7 +25,7 @@ export const translations = {
       generate: "Compose",
       about: "Studio",
       contact: "Reach",
-      buyNow: "Buy Now",
+      customOrder: "Custom Order",
       menu: "Menu",
       openMenu: "Open menu",
       closeMenu: "Close menu",
@@ -432,11 +432,11 @@ export const translations = {
 
     home: {
       hero: {
-        badge: "Welcome to Jajang Osle's NFT Gallery",
+        badge: "Welcome to Jajang Osle NFT Gallery",
         title: "NFT GIF Animation",
         subtitle:
-          "Voidline is gif animation art made frame by frame, bringing the movement of dots and lines to life.",
-        ctaCollections: "Explore Collections",
+          "open mint on going",
+        ctaCollections: "Mint Now",
         ctaLatestCollection: "Newest collection",
       },
       stats: {
@@ -463,7 +463,7 @@ export const translations = {
       gallery: {
         kicker: "Latest Works",
         title: "Fresh from the ledger",
-        cta: "See all 654 pieces",
+        cta: "See all {count} pieces",
       },
       generate: {
         kicker: "The Tool",
@@ -527,7 +527,7 @@ export const translations = {
       generate: "Komposisi",
       about: "Studio",
       contact: "Kanal",
-      buyNow: "Beli Sekarang",
+      customOrder: "Custom Order",
       menu: "Menu",
       openMenu: "Buka menu",
       closeMenu: "Tutup menu",
@@ -933,7 +933,7 @@ export const translations = {
         title: "NFT GIF Animation",
         subtitle:
           "Voidline adalah seni animasi gif yang dibuat frame by brame dengan menghidupkan gerakan titik dan garis",
-        ctaCollections: "Jelajahi Koleksi",
+        ctaCollections: "Mint Sekarang",
         ctaLatestCollection: "Koleksi terbaru",
       },
       stats: {
@@ -960,7 +960,7 @@ export const translations = {
       gallery: {
         kicker: "Karya Terbaru",
         title: "Segar dari ledger",
-        cta: "Lihat semua 654 karya",
+        cta: "Lihat semua {count} karya",
       },
       generate: {
         kicker: "Alatnya",

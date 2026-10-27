@@ -19,7 +19,7 @@
 import { Link } from "react-router-dom";
 import { useLanguage } from "../../i18n/useLanguage";
 import { rilis } from "../../data/rilis";
-import infMomApe from "../../assets/Inf-MomApe.gif";
+import infMomApe from "../../assets/atrium/hero_section.jpeg";
 
 type Props = {
   /**

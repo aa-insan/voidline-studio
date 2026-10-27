@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import { useLanguage } from "../../../i18n/useLanguage";
 import HalamanBerlatar from "../../../components/guest/HalamanBerlatar";
-import PengumumanRilis from "../../../components/guest/PengumumanRilis";
 import { collections } from "../../../data/collections";
-import { karyaPerKelompok, kelompokTampil, kodeDariTaxon, type KodeTampil, type KaryaNft } from "../../../data/karyaNft";
+import { karyaPerKelompok, kodeGrupBaru, kelompokTampil, kodeDariTaxon, type KodeTampil, type KaryaNft } from "../../../data/karyaNft";
 import { daftarAlamat } from "../../../services/gambarKarya";
+import infMomApe from "../../../assets/atrium/hero_section.jpeg";
+import heroGif from "../../../assets/atrium/hero_section2.gif";
 
 /* =============================================================================
    HALAMAN HOME
@@ -15,16 +16,14 @@ import { daftarAlamat } from "../../../services/gambarKarya";
 
    Susunan bagian:
 
-     1. Hero        kalimat pembuka + dua tombol utama
+     1. Hero        pengumuman rilis terbaru (judul + LIVE NOW + ajakan) + GIF
      2. Angka       tiga angka studio — papan merah
      3. Koleksi     pratinjau tiga koleksi sebagai kartu PUTIH
      4. Galeri      strip karya terbaru dari ledger
-     5. Rilis       jadwal drop terbaru (pengingat sebelum penutup)
-     6. Penutup     ajakan mengoleksi
+     5. Penutup     ajakan mengoleksi
 
-   Pengumuman rilis di atas (nomor 5) memakai komponen yang sama dengan hero
-   /new-collection — src/components/guest/PengumumanRilis.tsx. Teksnya dari
-   src/data/rilis.ts, bukan dari kamus bahasa.
+   Hero rilis di atas langsung membaca src/data/rilis.ts — judul, kalimat
+   DROPPING…LIVE NOW, dan sumbernya sama dengan hero /new-collection.
 
    IRAMA WARNA
    Seluruh halaman berlatar HITAM — itulah dindingnya. Yang membedakan satu
@@ -85,17 +84,24 @@ export default function HomePage() {
     }),
   );
 
-  // 12 karya dari ledger, bergantian di antara semua kelompok yang tampil
-  // (kolteksi bernama + koleksi terbaru `baru`), supaya galeri merata
-  // mewakili seluruh koleksi. Karya diambil langsung dari karyaNft.ts
-  // (data yang sudah diperbarui oleh scripts/tarik-karya.py).
-  const perKelompok = Object.fromEntries(
-    kelompokTampil.map((kode) => [kode, karyaPerKelompok[kode] ?? []] as const),
+  // Gallery: hanya karya dari grup terbaru (`kodeGrupBaru` / " baru").
+  // Jika grup baru kosong, fallback ke koleksi bernama biasa.
+  const targetGroups: readonly KodeTampil[] =
+    kodeGrupBaru.length > 0 ? kodeGrupBaru : kelompokTampil;
+
+  // Jumlah karya yang ditampilkan galeri (grup baru saja) — dipakai CTA.
+  const jumlahKaryaBaru = targetGroups.reduce(
+    (total, kode) => total + (karyaPerKelompok[kode]?.length ?? 0),
+    0,
+  );
+
+  const perGrup = Object.fromEntries(
+    targetGroups.map((kode) => [kode, karyaPerKelompok[kode] ?? []] as const),
   );
   const galeri: Array<{ kode: KodeTampil; karya: KaryaNft }> = [];
   for (let i = 0; galeri.length < JUMLAH_GALERI; i++) {
-    for (const kode of kelompokTampil) {
-      const barisan = perKelompok[kode];
+    for (const kode of targetGroups) {
+      const barisan = perGrup[kode];
       if (i < barisan.length) {
         galeri.push({ kode, karya: barisan[i] });
         if (galeri.length >= JUMLAH_GALERI) break;
@@ -110,13 +116,24 @@ export default function HomePage() {
     <HalamanBerlatar>
 
       {/* ── 1. HERO ───────────────────────────────────────────────────────
-          Bagian pertama halaman. Kedalaman bidang hitam datang dari lapisan
-          asap di pembungkus halaman. */}
-      <section className="relative border-t border-border">
-        <div className="wadah bagian-kepala-halaman pb-16 sm:pb-24">
-          <div className="max-w-3xl">
-            {/* Penanda atas: garis merah + label renggang, sama bentuknya
-                dengan kicker di halaman About Us. */}
+          Background `hero_section.jpeg` full-bleed + overlay gradasi hitam
+          dari kiri (95% → 70% → 25%) supaya teks putih dan CTA tetap terbaca.
+          Layout 2 kolom di lg: kiri teks (badge, judul, subtitle, CTA ke
+          xrp.cafe + /new-collection), kanan GIF animasi hero_section2.gif. */}
+      <section className="relative overflow-hidden border-t border-border">
+        {/* Latar full-bleed */}
+        <img
+          src={infMomApe}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        {/* Overlay gradasi hitam → transparan dari kiri, biar teks kiri terbaca */}
+        <div className="absolute inset-0 bg-gradient-to-r from-void-black/95 via-void-black/70 to-void-black/25" />
+
+        <div className="relative wadah bagian-kepala-halaman grid items-center gap-12 pb-16 sm:pb-24 lg:grid-cols-[1.1fr_1fr]">
+          {/* Kolom kiri: teks + tombol */}
+          <div className="max-w-2xl">
             <p className="kicker">
               <span className="kicker-garis" aria-hidden="true" />
               {t("home.hero.badge")}
@@ -131,18 +148,36 @@ export default function HomePage() {
             </p>
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Link to="/collection" className="tombol tombol-merah">
+              <a
+                href="https://xrp.cafe/id/collection/momapesvoidline-jajangosle"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="tombol tombol-merah"
+              >
                 {t("home.hero.ctaCollections")}
                 <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
                   <path d="M12.97 5.47a.75.75 0 0 1 1.06 0l6 6a.75.75 0 0 1 0 1.06l-6 6a.75.75 0 1 1-1.06-1.06l4.72-4.72H4.75a.75.75 0 0 1 0-1.5h12.94l-4.72-4.72a.75.75 0 0 1 0-1.06Z" />
                 </svg>
-              </Link>
+              </a>
 
-              <Link to="/new-collection" className="tombol tombol-garis">
+              {/* <Link to="/new-collection" className="tombol tombol-garis">
                 {t("home.hero.ctaLatestCollection")}
-              </Link>
+              </Link> */}
             </div>
           </div>
+
+          {/* Kolom kanan: GIF animasi 500×500 — identitas gerak studio.
+              `self-end` + margin bawah negatif menarik GIF sampai nempel di
+              tepi akhir hero (mengimbangi padding-bottom kontainer). */}
+          <img
+            src={heroGif}
+            alt=""
+            aria-hidden="true"
+            width={500}
+            height={500}
+            decoding="async"
+            className="self-end justify-self-center w-full max-w-2xl -mb-16 sm:-mb-24 lg:max-w-[44rem]"
+          />
         </div>
       </section>
 
@@ -181,8 +216,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 3. KOLEKSI UNGGULAN ─────────────────────────────────────────── */}
-      {/* ── 3. KOLEKSI UNGGULAN ─────────────────────────────────────────── */}
+      {/* ── 3. KOLEKSI UNGGULAN — DINONAKTIFKAN SEMENTARA ─────────────────
+          Blok "The Work / Featured Collections" dimatikan sesuai permintaan,
+          tetapi sengaja TIDAK dihapus karena bisa dibutuhkan lagi kapan pun.
+          Untuk mengaktifkan kembali: ganti `false && (` menjadi `true && (`.
+          Kunci terjemahannya (home.collections.*) juga masih ada di
+          src/i18n/translations.ts, jadi tidak ada yang perlu dikembalikan. */}
+      {/* eslint-disable-next-line no-constant-binary-expression -- disengaja: blok dimatikan, lihat komentar di atas */}
+      {false && (
       <section>
         <div className="wadah bagian">
           <header className="max-w-2xl">
@@ -271,13 +312,16 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      )}
+      {/* Akhir blok KOLEKSI UNGGULAN (dinonaktifkan — lihat komentar di atas). */}
 
       {/* ── 4. GALERI TERBARU ─────────────────────────────────────────────
           Strip karya yang bergerak sendiri tanpa henti ke kiri — 12 karya
-          nyata dari ledger, bergantian dari keenam kelompok. Isinya
-          digandakan supaya sambungannya tidak terlihat (lihat `.marquee` di
-          src/index.css). Gerak berhenti saat kursor di atasnya atau saat
-          strip difokus dengan papan ketik. */}
+          nyata dari grup terbaru (`kodeGrupBaru`, yaitu Mom Apes Voidline).
+          Fallback ke semua koleksi bila grup baru kosong. Track ditulis dua
+          kali (aria-hidden pada salinan) agar putarannya mulus; lingkaran
+          penuh 12 kartu untuk satu kali geser. Gerak berhenti saat kursor di
+          atasnya atau saat strip difokus dengan papan ketik. */}
       <section className="border-y border-border">
         <div className="wadah bagian">
           <div className="max-w-2xl">
@@ -332,8 +376,8 @@ export default function HomePage() {
           </div>
 
           <div className="mt-6">
-            <Link to="/collection" className="tautan-lanjut">
-              {t("home.gallery.cta")}
+            <Link to="/new-collection" className="tautan-lanjut">
+              {t("home.gallery.cta", { count: jumlahKaryaBaru })}
               <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
                 <path d="M12.97 5.47a.75.75 0 0 1 1.06 0l6 6a.75.75 0 0 1 0 1.06l-6 6a.75.75 0 1 1-1.06-1.06l4.72-4.72H4.75a.75.75 0 0 1 0-1.5h12.94l-4.72-4.72a.75.75 0 0 1 0-1.06Z" />
               </svg>
@@ -342,16 +386,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 5. PENGUMUMAN RILIS ───────────────────────────────────────────
-          Pengingat visual drop terbaru: judul + GIF saja (`ringkas`), ditaruh
-          tepat sebelum penutup. Rincian jadwal dan batch sengaja tidak diulang
-          di sini — itu tugas hero /new-collection, supaya Atrium tetap ringkas.
-          Garis pemisah atas mengikuti aturan pembatas antar bagian. */}
-      <div className="border-t border-border">
-        <PengumumanRilis ringkas />
-      </div>
-
-      {/* ── 6. PENUTUP ──────────────────────────────────────────────────── */}
+      {/* ── 5. PENUTUP ──────────────────────────────────────────────────────── */}
 
       <section>
         <div className="wadah bagian text-center">

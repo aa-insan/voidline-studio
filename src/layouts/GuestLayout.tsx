@@ -16,7 +16,7 @@ import { useDocumentMeta } from "../i18n/useDocumentMeta";
 
    SKIP-LINK — tautan "lompat ke isi" adalah elemen pertama di halaman. Tanpa
    ini, pengguna keyboard harus menekan Tab melewati logo, pemilih bahasa, lima
-   menu, dan tombol Buy Now di SETIAP halaman sebelum sampai ke isi. Tautan itu
+   menu, dan tombol Custom Order di SETIAP halaman sebelum sampai ke isi. Tautan itu
    disembunyikan dengan `sr-only` dan baru muncul saat menerima fokus, jadi
    tidak mengubah tampilan.
    ============================================================================= */
