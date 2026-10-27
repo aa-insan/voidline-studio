@@ -4,6 +4,7 @@ import HalamanBerlatar from "../../../components/guest/HalamanBerlatar";
 import { collections } from "../../../data/collections";
 import { karyaPerKelompok, kodeGrupBaru, kelompokTampil, kodeDariTaxon, type KodeTampil, type KaryaNft } from "../../../data/karyaNft";
 import { daftarAlamat } from "../../../services/gambarKarya";
+import { useStatistikLedger } from "../../../services/statistikLedger";
 import infMomApe from "../../../assets/atrium/hero_section.jpeg";
 import heroGif from "../../../assets/atrium/hero_section2.gif";
 
@@ -23,7 +24,7 @@ import heroGif from "../../../assets/atrium/hero_section2.gif";
      5. Penutup     ajakan mengoleksi
 
    Hero rilis di atas langsung membaca src/data/rilis.ts — judul, kalimat
-   DROPPING…LIVE NOW, dan sumbernya sama dengan hero /new-collection.
+   DROPPING…LIVE NOW, dan sumbernya sama dengan hero /information.
 
    IRAMA WARNA
    Seluruh halaman berlatar HITAM — itulah dindingnya. Yang membedakan satu
@@ -53,6 +54,10 @@ const JUMLAH_GALERI = 12;
 export default function HomePage() {
   const { t } = useLanguage();
 
+  // Papan angka: cadangan statis dari karyaNft.ts (instan), lalu diganti
+  // angka langsung dari ledger begitu statistikLedger selesai membaca.
+  const statistik = useStatistikLedger();
+
   // Tiga koleksi pertama dianggap unggulan. Halaman /collection tetap
   // menampilkan daftar lengkapnya.
   const featured = collections.slice(0, 3);
@@ -64,6 +69,18 @@ export default function HomePage() {
     (total, kode) => total + (karyaPerKelompok[kode]?.length ?? 0),
     0,
   );
+
+  // Jumlah koleksi dihitung dari kelompok ledger yang benar-benar berisi
+  // karya (koleksi bernama + grup terbaru) — ikut data tarik-karya.py,
+  // bukan daftar statis di collections.ts yang tidak pernah bertambah
+  // begitu taxon baru terbit di ledger.
+  const jumlahKoleksiStatis = kelompokTampil.filter(
+    (kode) => (karyaPerKelompok[kode]?.length ?? 0) > 0,
+  ).length;
+
+  // Angka akhir papan: bila ledger menjawab → pakai itu; bila tidak → statis.
+  const jumlahKoleksi = statistik.koleksi ?? jumlahKoleksiStatis;
+  const jumlahKaryaPapan = statistik.karya ?? jumlahKarya;
 
   // Satu karya nyata per koleksi unggulan: karya pertama dari kelompok
   // bertaxon yang sama. Taxon tidak dikenal → kartu tetap placeholder.
@@ -119,7 +136,7 @@ export default function HomePage() {
           Background `hero_section.jpeg` full-bleed + overlay gradasi hitam
           dari kiri (95% → 70% → 25%) supaya teks putih dan CTA tetap terbaca.
           Layout 2 kolom di lg: kiri teks (badge, judul, subtitle, CTA ke
-          xrp.cafe + /new-collection), kanan GIF animasi hero_section2.gif. */}
+          xrp.cafe + /information), kanan GIF animasi hero_section2.gif. */}
       <section className="relative overflow-hidden border-t border-border">
         {/* Latar full-bleed */}
         <img
@@ -160,7 +177,7 @@ export default function HomePage() {
                 </svg>
               </a>
 
-              {/* <Link to="/new-collection" className="tombol tombol-garis">
+              {/* <Link to="/information" className="tombol tombol-garis">
                 {t("home.hero.ctaLatestCollection")}
               </Link> */}
             </div>
@@ -187,9 +204,11 @@ export default function HomePage() {
           memakai Cinzel, sama seperti nomor "01 / 02" di halaman About Us. */}
       <section className="bg-void-red text-void-white">
         <div className="wadah grid grid-cols-1 gap-y-2 py-10 text-center sm:grid-cols-3 sm:gap-y-0 sm:py-10 sm:divide-x sm:divide-white/20 sm:text-left">
+          {/* Angka dari ledger langsung (statistikLedger.ts); statis dari
+              karyaNft.ts hanya cadangan saat node tidak menjawab. */}
           <div className="px-5 py-4 sm:py-2">
             <p className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
-              {collections.length}
+              {jumlahKoleksi}
             </p>
             <p className="mt-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-void-white/75">
               {t("home.stats.collections")}
@@ -199,7 +218,7 @@ export default function HomePage() {
               scripts/tarik-karya.py — selalu sepadan dengan grid /collection. */}
           <div className="px-5 py-2">
             <p className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
-              {jumlahKarya}
+              {jumlahKaryaPapan}
             </p>
             <p className="mt-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-void-white/75">
               {t("home.stats.artworks")}
@@ -376,7 +395,7 @@ export default function HomePage() {
           </div>
 
           <div className="mt-6">
-            <Link to="/new-collection" className="tautan-lanjut">
+            <Link to="/information" className="tautan-lanjut">
               {t("home.gallery.cta", { count: jumlahKaryaBaru })}
               <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
                 <path d="M12.97 5.47a.75.75 0 0 1 1.06 0l6 6a.75.75 0 0 1 0 1.06l-6 6a.75.75 0 1 1-1.06-1.06l4.72-4.72H4.75a.75.75 0 0 1 0-1.5h12.94l-4.72-4.72a.75.75 0 0 1 0-1.06Z" />
@@ -386,7 +405,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 5. PENUTUP ──────────────────────────────────────────────────────── */}
+      {/* ── 5. PENUTUP ────────────────────────────────────────────────────────
+          Dua tombol: "Mint Now" (merah) menuju koleksi Mom Apes di xrp.cafe —
+          pembayaran tetap on-ledger, situs hanya mengarahkan; dan "New
+          Collection" (garis) menuju /information untuk melihat rilis terbaru. */}
 
       <section>
         <div className="wadah bagian text-center">
@@ -396,9 +418,29 @@ export default function HomePage() {
           <p className="mx-auto mt-3 max-w-xl leading-relaxed text-fg-muted">
             {t("home.closing.subtitle")}
           </p>
-          <Link to="/collection" className="tombol tombol-merah mt-8">
-            {t("home.closing.cta")}
-          </Link>
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            <a
+              href="https://xrp.cafe/id/collection/momapesvoidline-jajangosle"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="tombol tombol-merah"
+            >
+              {t("home.closing.ctaMint")}
+              <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
+                <path d="M12.97 5.47a.75.75 0 0 1 1.06 0l6 6a.75.75 0 0 1 0 1.06l-6 6a.75.75 0 1 1-1.06-1.06l4.72-4.72H4.75a.75.75 0 0 1 0-1.5h12.94l-4.72-4.72a.75.75 0 0 1 0-1.06Z" />
+              </svg>
+            </a>
+            <Link
+              to={
+                kodeGrupBaru.length > 0
+                  ? `/collection?filter=${kodeGrupBaru[0]}`
+                  : "/collection"
+              }
+              className="tombol tombol-garis"
+            >
+              {t("home.closing.ctaNewCollection")}
+            </Link>
+          </div>
         </div>
       </section>
     </HalamanBerlatar>

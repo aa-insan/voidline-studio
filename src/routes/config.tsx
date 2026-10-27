@@ -6,7 +6,7 @@ import HalamanMemuat from "../pages/HalamanMemuat";
 import {
   HomePage,
   CollectionPage,
-  NewCollectionPage,
+  InformationPage,
   KaryaPage,
   MintPage,
   StudioPage,
@@ -59,8 +59,9 @@ export const routes: RouteObject[] = [
     children: [
       { index: true, element: beriFallback(<HomePage />) },
       { path: "collection", element: beriFallback(<CollectionPage />) },
-      // Koleksi terbaru: taxon yang belum terdaftar. Kosong → tombol ke /collection.
-      { path: "new-collection", element: beriFallback(<NewCollectionPage />) },
+      // Information: pengumuman rilis terbaru + karyanya. Menggantikan
+      // /new-collection (kontennya pindah ke sini; alamat lamanya musnah).
+      { path: "information", element: beriFallback(<InformationPage />) },
       // Halaman detail satu karya. Alamatnya NFTokenID, bukan nomor edisi —
       // nomor bisa berulang, NFTokenID tidak (lihat KaryaPage.tsx).
       { path: "collection/work/:nftId", element: beriFallback(<KaryaPage />) },

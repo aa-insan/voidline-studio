@@ -8,7 +8,9 @@
    ── MENGISI DROP BERIKUTNYA ────────────────────────────────────────────────
    Ganti `judul`, `pengumuman`, dan isi `batch`. `jendela` boleh dikosongkan
    untuk batch tanpa jendela waktu (mis. Public Mint) — tanda kurung waktunya
-   otomatis tidak dirender.
+   otomatis tidak dirender. `tutup: true` mencoret batch yang masa klaimnya
+   sudah lewat; hapus penanda itu (atau biarkan kosong) untuk batch yang masih
+   terbuka — hanya batch terbuka yang tampil normal tanpa coret.
 
    ── CATATAN TANGGAL & JAM ──────────────────────────────────────────────────
    Jadwal dengan tanggal dan jam cepat basi begitu hari-H lewat, sementara
@@ -28,6 +30,11 @@ export type BatchRilis = {
   keterangan: string;
   /** Jendela klaim dalam UTC. Kosongkan bila batch tidak berjendela. */
   jendela?: string;
+  /**
+   * Batch sudah ditutup (masa klaimnya lewat) → dicoret di layar.
+   * Hanya batch yang masih terbuka yang tidak dicoret.
+   */
+  tutup?: boolean;
 };
 
 export const rilis: {
@@ -47,15 +54,18 @@ export const rilis: {
       nomor: 1,
       keterangan:
         "2 Freemints for all holders of my work in the Jajang Voidline album",
+      tutup: true,
     },
     {
       nomor: 2,
       keterangan:
         "1 Freemint for 30 top holders of my work in the Apes Voidline album",
+      tutup: true,
     },
     {
       nomor: 3,
       keterangan: "50% off for all top holders of my art in the Apes Voidline album",
+      tutup: true,
     },
     {
       nomor: 4,

@@ -216,7 +216,7 @@ export default function StudioPage() {
             <Link to="/collection" className="tombol tombol-merah">
               {t("about.invitation.ctaCollections")}
             </Link>
-            <Link to="/new-collection" className="tombol tombol-garis">
+            <Link to="/information" className="tombol tombol-garis">
               {t("about.invitation.ctaGenerate")}
             </Link>
           </div>

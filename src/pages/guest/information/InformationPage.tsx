@@ -1,8 +1,13 @@
 /* =============================================================================
-   HALAMAN KOLEKSI TERBARU
+   HALAMAN INFORMASI
 
-   Menampilkan NFT dari taxon yang belum terdaftar di urutanKelompok —
-   yaitu koleksi terbaru yang belum diberi nama dalam kode.
+   Menu pengganti Compose di navbar: satu halaman yang menjawab "apa yang
+   sedang berjalan sekarang" — pengumuman rilis terbaru beserta seluruh
+   karyanya, lengkap dengan pencarian dan filter ketersediaan.
+
+   Isinya diturunkan dari halaman /new-collection yang lama (kini dihapus):
+   NFT dari taxon yang belum terdaftar di urutanKelompok — yaitu koleksi
+   terbaru yang belum diberi nama dalam kode.
 
    Halaman ini dihasilkan sepenuhnya dari data ledger: bila tidak ada
    koleksi baru (kodeGrupBaru kosong), ia menampilkan pesan kosong yang
@@ -23,7 +28,7 @@ import DropdownKoleksi from "../../../components/guest/DropdownKoleksi";
 import { useStatusKarya } from "../../../services/statusKarya";
 import PengumumanRilis from "../../../components/guest/PengumumanRilis";
 
-export default function NewCollectionPage() {
+export default function InformationPage() {
   const { t } = useLanguage();
   const { terjual } = useStatusKarya();
   const [kueri, setKueri] = useState("");
@@ -70,7 +75,7 @@ export default function NewCollectionPage() {
             </p>
           )}
           <h1 className={`judul-halaman ${semuakarya.length > 0 ? "mt-4" : ""}`}>
-            {t("page.newCollection.title")}
+            {t("page.information.title")}
           </h1>
 
           {/* ── Informasi rilis, menempel di bawah judul ────────────────────
@@ -87,7 +92,7 @@ export default function NewCollectionPage() {
             dropdown menempel di tepi kanan. */}
         {semuakarya.length > 0 && (
           <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <label className="relative flex-[1_1_0]">  
+            <label className="relative flex-[1_1_0]">
               <span className="sr-only">{t("collection.searchLabel")}</span>
               <svg
                 viewBox="0 0 24 24"
@@ -148,7 +153,7 @@ export default function NewCollectionPage() {
               <KartuKarya
                 key={`${kode}-${karya[3]}`}
                 karya={karya}
-                koleksi={t(`page.newCollection.title`)}
+                koleksi={t(`page.information.title`)}
                 prioritas={indeks < 12}
               />
             ))}

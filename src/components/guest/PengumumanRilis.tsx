@@ -6,11 +6,11 @@
    ditulis di sini.
 
    DIPAKAI DI:
-     · /  (Atrium)       → `ringkas`: judul + GIF + ajakan ke /new-collection
-     · /new-collection   → `tanpaJudul`: hanya kalimat pengumuman + jadwal
-                           batch, menempel di dalam kepala halaman di bawah
-                           judul "Koleksi Terbaru". GIF tidak dipakai di sana
-                           karena karya aslinya sudah tampil di grid bawah.
+     · /  (Atrium)      → `ringkas`: judul + GIF + ajakan ke /information
+     · /information     → `tanpaJudul`: hanya kalimat pengumuman + jadwal
+                          batch, menempel di dalam kepala halaman di bawah
+                          judul "Koleksi Terbaru". GIF tidak dipakai di sana
+                          karena karya aslinya sudah tampil di grid bawah.
 
    IRAMA WARNA mengikuti aturan situs: latar hitam, angka dan tanggal merah,
    sisanya putih. GIF hanya sebagai penutup visual, bukan latar.
@@ -24,11 +24,11 @@ import infMomApe from "../../assets/atrium/hero_section.jpeg";
 type Props = {
   /**
    * Varian Atrium: pengingat visual — judul, GIF, lalu satu kalimat dan tombol
-   * menuju /new-collection. Rincian batch tidak ikut supaya Atrium tetap ringkas.
+   * menuju /information. Rincian batch tidak ikut supaya Atrium tetap ringkas.
    */
   ringkas?: boolean;
   /**
-   * Varian /new-collection: tanpa judul dan tanpa GIF. Komponen dipakai di
+   * Varian /information: tanpa judul dan tanpa GIF. Komponen dipakai di
    * dalam <header> halaman, jadi judul rilis sudah diwakili judul halaman —
    * yang dibutuhkan hanya keterangan dan jadwal batch-nya.
    */
@@ -75,14 +75,23 @@ export default function PengumumanRilis({ ringkas = false, tanpaJudul = false }:
 
             {/* Batch: label "Batch N :" merah di awal kalimat, isi putih
                 mengalir di baris yang sama, baris lanjutan menjorok sejajar
-                (indentasi gantung). Jendela waktu ikut mengalir di akhir. */}
+                (indentasi gantung). Jendela waktu ikut mengalir di akhir.
+                Batch yang sudah tutup dicoret seluruh barisnya dan agak
+                diredupkan — yang tersisa terbaca jelas sebagai satu-satunya
+                yang masih bisa diambil. */}
             <ol className="mt-3 max-w-3xl space-y-2 sm:mt-5">
               {rilis.batch.map((batch) => (
                 <li
                   key={batch.nomor}
-                  className="flex text-void-white [font-size:clamp(0.72rem,0.6rem+1.1vw,0.95rem)] leading-relaxed"
+                  className={`flex [font-size:clamp(0.72rem,0.6rem+1.1vw,0.95rem)] leading-relaxed ${
+                    batch.tutup ? "text-void-white/50 line-through" : "text-void-white"
+                  }`}
                 >
-                  <span className="shrink-0 font-semibold uppercase tracking-wider text-void-red">
+                  <span
+                    className={`shrink-0 font-semibold uppercase tracking-wider ${
+                      batch.tutup ? "text-void-red/60" : "text-void-red"
+                    }`}
+                  >
                     Batch&nbsp;{batch.nomor}&nbsp;:&nbsp;
                   </span>
                   <span>
@@ -97,7 +106,7 @@ export default function PengumumanRilis({ ringkas = false, tanpaJudul = false }:
           </>
         )}
 
-        {/* ── Ajakan ke /new-collection ─────────────────────────────────
+        {/* ── Ajakan ke /information ─────────────────────────────────────
             Hanya di Atrium. Pengunjung melihat judul dan GIF tanpa penjelasan
             bahwa rincian klaim ada di halaman lain — jadi diberi satu kalimat
             pengantar plus tombol yang jelas tujuannya. */}
@@ -106,7 +115,7 @@ export default function PengumumanRilis({ ringkas = false, tanpaJudul = false }:
             <p className="text-sm leading-relaxed text-fg-muted">
               {t("home.rilis.pengantar")}
             </p>
-            <Link to="/new-collection" className="tombol tombol-garis mt-5">
+            <Link to="/information" className="tombol tombol-garis mt-5">
               {t("home.rilis.ajakan")}
               <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
                 <path d="M9.47 5.47a.75.75 0 0 1 1.06 0l6 6a.75.75 0 0 1 0 1.06l-6 6a.75.75 0 1 1-1.06-1.06L14.19 12 9.47 7.28a.75.75 0 0 1 0-1.06Z" />

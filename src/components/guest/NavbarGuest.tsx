@@ -3,7 +3,6 @@ import { Link, NavLink } from "react-router-dom";
 import Logo from "../../assets/Logo.gif";
 import { useLanguage } from "../../i18n/useLanguage";
 import LanguageSwitch from "./LanguageSwitch";
-import ComposeLink from "../ComposeLink";
 
 /**
  * Navbar pengunjung yang belum login.
@@ -49,7 +48,7 @@ import ComposeLink from "../ComposeLink";
 const NAV_ITEMS = [
   { key: "nav.home", to: "/", end: true },
   { key: "nav.collection", to: "/collection", end: false },
-  { key: "nav.generate", to: "/compose", end: false },
+  { key: "nav.information", to: "/information", end: false },
   { key: "nav.about", to: "/studio", end: false },
   { key: "nav.contact", to: "/reach", end: false },
 ] as const;
@@ -136,22 +135,11 @@ export default function NavbarGuest() {
           aria-label={t("nav.menu")}
           className="hidden items-center gap-5 text-sm font-medium lg:flex xl:gap-7"
         >
-          {NAV_ITEMS.map((item) =>
-            item.to === "/compose" ? (
-              // Menu Compose ikut nonaktif selama generator belum dibuka; lihat
-              // COMPOSE_TERBUKA di src/components/ComposeLink.tsx.
-              <ComposeLink
-                key={item.to}
-                className={`relative cursor-not-allowed py-2 font-normal text-fg-muted opacity-50`}
-              >
-                {t(item.key)}
-              </ComposeLink>
-            ) : (
-              <NavLink key={item.to} to={item.to} end={item.end} className={desktopLinkClass}>
-                {t(item.key)}
-              </NavLink>
-            ),
-          )}
+          {NAV_ITEMS.map((item) => (
+            <NavLink key={item.to} to={item.to} end={item.end} className={desktopLinkClass}>
+              {t(item.key)}
+            </NavLink>
+          ))}
         </nav>
 
         {/* Kolom 3 — satu deretan "tabs-lift": bahasa · auth. Semua elemen duduk
@@ -220,8 +208,7 @@ export default function NavbarGuest() {
           {NAV_ITEMS.map((item, index) => {
             // Nomor urut kecil di depan tiap menu: mengulang bahasa visual
             // "01 / 02" halaman About Us, dan memakai ruang kosong di kiri yang
-            // tadinya cuma jarak. Dipakai bersama oleh kedua bentuk tautan di
-            // bawah supaya penomoran tidak hilang saat Compose nonaktif.
+            // tadinya cuma jarak.
             const isi = (
               <>
                 <span className="mr-3 font-display text-xs text-accent" aria-hidden="true">
@@ -233,15 +220,6 @@ export default function NavbarGuest() {
 
             const kelas =
               "flex w-full border-b border-border/60 py-3 text-left text-sm font-medium transition-colors last:border-b-0";
-
-            // Menu Compose nonaktif selama generator belum dibuka.
-            if (item.to === "/compose") {
-              return (
-                <ComposeLink key={item.to} className={`${kelas} text-fg-muted opacity-50`}>
-                  {isi}
-                </ComposeLink>
-              );
-            }
 
             return (
               <NavLink

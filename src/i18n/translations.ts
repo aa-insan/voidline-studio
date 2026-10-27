@@ -22,7 +22,7 @@ export const translations = {
     nav: {
       home: "Atrium",
       collection: "Collection",
-      generate: "Compose",
+      information: "Information",
       about: "Studio",
       contact: "Reach",
       customOrder: "Custom Order",
@@ -47,7 +47,7 @@ export const translations = {
         title: "Collection",
         subtitle: "Every Voidline Island collection in one place. Mint directly here — no need to leave the site.",
       },
-      newCollection: {
+      information: {
         title: "Newest Collection",
         subtitle: "The latest release from Voidline Island — fresh from the XRP Ledger, updated automatically.",
       },
@@ -481,7 +481,8 @@ export const translations = {
         title: "Take a piece of Voidline home",
         subtitle:
           "Every piece is drawn by hand in this studio. Mint yours right here — no need to go anywhere else.",
-        cta: "Browse collections",
+        ctaMint: "Mint Now",
+        ctaNewCollection: "New Collection",
       },
     },
 
@@ -524,7 +525,7 @@ export const translations = {
     nav: {
       home: "Atrium",
       collection: "Koleksi",
-      generate: "Komposisi",
+      information: "Informasi",
       about: "Studio",
       contact: "Kanal",
       customOrder: "Custom Order",
@@ -549,7 +550,7 @@ export const translations = {
         title: "Koleksi",
         subtitle: "Semua koleksi Voidline Island di satu tempat. Mint langsung di sini — tanpa perlu keluar dari situs.",
       },
-      newCollection: {
+      information: {
         title: "Koleksi Terbaru",
         subtitle: "Rilis terbaru dari Voidline Island — langsung dari XRP Ledger, diperbarui otomatis.",
       },
@@ -978,7 +979,8 @@ export const translations = {
         title: "Bawa pulang sepotong Voidline",
         subtitle:
           "Setiap karya digambar tangan di studio ini. Mint langsung di sini — tanpa perlu pindah tempat.",
-        cta: "Jelajahi koleksi",
+        ctaMint: "Mint Sekarang",
+        ctaNewCollection: "Koleksi Terbaru",
       },
     },
 

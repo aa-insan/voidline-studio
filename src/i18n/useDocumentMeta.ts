@@ -33,6 +33,7 @@ import type { TextKey } from "./useLanguage";
 const JUDUL_RUTE: Record<string, TextKey> = {
   "/": "page.home.title",
   "/collection": "page.collection.title",
+  "/information": "page.information.title",
   // "/compose" sengaja tidak ada: rutenya dimatikan (lihat routes/config.tsx),
   // jadi alamat itu diperlakukan seperti alamat tak dikenal — judul 404 dan
   // noindex, bukan judul "Compose" untuk halaman yang tidak pernah tampil.
@@ -50,6 +51,8 @@ const DESKRIPSI_RUTE: Record<string, string> = {
   "/": "Voidline Island is an independent art studio building hand-drawn NFT collections on the XRP Ledger — plus a browser-based generator for creators.",
   "/collection":
     "Every Voidline Island NFT collection in one place. Mint directly on the site through the XRP Ledger.",
+  "/information":
+    "The latest release from Voidline Island — the newest NFT collection, fresh from the XRP Ledger.",
   "/studio":
     "Voidline Island is an independent art studio: hand-drawn NFT collections in red, black, and white.",
   "/reach":

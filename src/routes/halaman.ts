@@ -16,7 +16,7 @@ import { lazy } from "react";
 
 const HomePage = lazy(() => import("../pages/guest/home/HomePage"));
 const CollectionPage = lazy(() => import("../pages/guest/collection/CollectionPage"));
-const NewCollectionPage = lazy(() => import("../pages/guest/collection/NewCollectionPage"));
+const InformationPage = lazy(() => import("../pages/guest/information/InformationPage"));
 const KaryaPage = lazy(() => import("../pages/guest/collection/KaryaPage"));
 const MintPage = lazy(() => import("../pages/guest/collection/MintPage"));
 const StudioPage = lazy(() => import("../pages/guest/studio/StudioPage"));
@@ -28,5 +28,5 @@ const NotFoundPage = lazy(() => import("../pages/guest/not-found/NotFoundPage"))
    yang tidak pernah diminta siapa pun. Saat generator dibuka: tambahkan kembali
    baris lazy untuk ComposePage di sini, ekspornya, dan rutenya di config.tsx. */
 
-export { HomePage, CollectionPage, NewCollectionPage, KaryaPage, MintPage, StudioPage, ReachPage, NotFoundPage };
+export { HomePage, CollectionPage, InformationPage, KaryaPage, MintPage, StudioPage, ReachPage, NotFoundPage };
 
