@@ -694,12 +694,36 @@ export const karyaPerKelompok: Partial<Record<KodeTampil, readonly KaryaNft[]>> 
     [229, "#229", "ipfs://bafybeibr436wbolxin7fyift4jxkeg4il7wl4dgvarc22rv6ulftcmicxy/229.png", "000827104B7026232C1FBF39853DA77DA0CCA5AB437594FCFF43791A0628AB84"],
   ],
   baru: [
+    [260, "Mom Apes Voidline #260", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/260.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FC00F1270F0628AD70"],
+    [376, "Mom Apes Voidline #376", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/376.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FC05112C040628AD65"],
+    [348, "Mom Apes Voidline #348", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/348.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FC13B6F3130628AD7C"],
+    [293, "Mom Apes Voidline #293", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/293.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FC17D6F8080628AD71"],
+    [529, "Mom Apes Voidline #529", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/529.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FC1BF6FD050628AD66"],
+    [349, "Mom Apes Voidline #349", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/349.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FC2EBCC9090628AD72"],
+    [449, "Mom Apes Voidline #449", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/449.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FC32DCCE060628AD67"],
+    [425, "Mom Apes Voidline #425", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/425.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FC45A29A0A0628AD73"],
+    [138, "Mom Apes Voidline #138", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/138.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FC49C29F070628AD68"],
+    [533, "Mom Apes Voidline #533", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/533.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FC5C886B0B0628AD74"],
+    [152, "Mom Apes Voidline #152", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/152.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FC60A870000628AD69"],
+    [371, "Mom Apes Voidline #371", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/371.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FC736E3C140628AD75"],
+    [107, "Mom Apes Voidline #107", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/107.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FC778E41010628AD6A"],
     [302, "Mom Apes Voidline #302", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/302.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FC7BAE45FE0628AD5F"],
+    [160, "Mom Apes Voidline #160", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/160.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FC8A540D150628AD76"],
+    [166, "Mom Apes Voidline #166", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/166.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FC8E7412020628AD6B"],
     [199, "Mom Apes Voidline #199", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/199.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FC929416FF0628AD60"],
+    [510, "Mom Apes Voidline #510", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/510.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCA139DE160628AD77"],
+    [525, "Mom Apes Voidline #525", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/525.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCA559E3030628AD6C"],
     [211, "Mom Apes Voidline #211", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/211.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCA979E7F80628AD61"],
+    [134, "Mom Apes Voidline #134", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/134.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCB81FAF170628AD78"],
+    [15, "Mom Apes Voidline #15", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/15.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCBC3FB40C0628AD6D"],
     [191, "Mom Apes Voidline #191", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/191.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCC05FB8F90628AD62"],
+    [486, "Mom Apes Voidline #486", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/486.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCCF0580100628AD79"],
+    [219, "Mom Apes Voidline #219", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/219.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCD325850D0628AD6E"],
     [435, "Mom Apes Voidline #435", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/435.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCD74589FA0628AD63"],
+    [23, "Mom Apes Voidline #23", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/23.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCE5EB51110628AD7A"],
+    [243, "Mom Apes Voidline #243", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/243.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCEA0B560E0628AD6F"],
     [311, "Mom Apes Voidline #311", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/311.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCEE2B5AFB0628AD64"],
+    [38, "Mom Apes Voidline #38", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/38.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCFCD122120628AD7B"],
   ],
 };
 
@@ -719,14 +743,6 @@ export const kelompokKarya = (nftId: string): KodeTampil | undefined =>
 export const kodeGrupBaru: KodeTampil[] = (
   Object.keys(karyaPerKelompok) as KodeTampil[]
 ).filter((k) => !urutanKelompok.includes(k as KodeKelompok));
-
-/** Kode kelompok yang tampil di halaman koleksi: koleksi bernama dulu, lalu
-    koleksi terbaru (grup `baru`) di urutan akhir. Menjadikan rilisan baru yang
-    belum diberi nama tetap terlihat di /collection dan dropdownnya. */
-export const kelompokTampil: readonly KodeTampil[] = [
-  ...urutanKelompok,
-  ...(kodeGrupBaru.length > 0 ? kodeGrupBaru : []),
-];
 
 export const alamatIpfs = (uri: string): string =>
   uri.startsWith("ipfs://") ? `https://ipfs.io/ipfs/${uri.slice(7)}` : uri;
