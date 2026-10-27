@@ -151,6 +151,8 @@
   --font-display: "Cinzel", "URW Gothic", "Century Schoolbook", Georgia, serif;
   --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-sans: var(--font-body);
+  /* Paragraf naratif — serif ringan sejiwa dengan Cinzel. */
+  --font-lead: "Marcellus", "Century Schoolbook", Georgia, serif;
 }
 
 html {
@@ -280,6 +282,15 @@ option:hover {
     @apply inline-flex items-center gap-1.5 text-sm font-semibold text-void-red underline-offset-4 hover:underline;
   }
 
+  /* Paragraf naratif — pembuka/deskripsi yang membawa suara studio, bukan
+     teks fungsional. Marcellus (serif ukiran, sejiwa Cinzel) memberi rasa
+     tulisan-tangan pada kalimat pembuka; ukuran & spasi tetap santai agar
+     enak dibaca panjang. */
+  .teks-lead {
+    font-family: var(--font-lead);
+    letter-spacing: 0.01em;
+  }
+
   /* Formulir pencarian — wajah yang sama di /collection dan /new-collection. */
   .bidang-cari {
     @apply w-full rounded-xl border border-border bg-surface py-2.5 pl-10 pr-9 text-sm text-fg outline-none transition-colors placeholder:text-fg-muted/60 hover:border-border-strong focus:border-accent focus:bg-surface-hover;
@@ -397,6 +408,44 @@ option:hover {
 .marquee:hover .marquee-track,
 .marquee:focus-within .marquee-track {
   animation-play-state: paused;
+}
+
+/* ── Pas panah penutup halaman Information ────────────────────────────────
+   Kiri (← /collection) dan kanan (xrp.cafe →) bergerak sebagai SATU:
+   keyframes tunggal `geser-nudge` — tiga geseran kecil cepat lalu jeda,
+   ulang (bahasa "scroll indicator"). Arah dibedakan lewat variabel
+   --geser-jarak: positif untuk kanan, negatif untuk kiri. Karena nama
+   animasi, durasi, dan titik mulainya identik, fase keduanya tidak mungkin
+   lepas — keduanya selalu bergerak pada momen yang sama.
+   Seperti marquee: hanya transform, jalan di compositor, dan ikut mati
+   lewat aturan prefers-reduced-motion global di bawah. */
+@keyframes geser-nudge {
+  0%,
+  45%,
+  100% {
+    transform: translateX(0);
+  }
+
+  8%,
+  24%,
+  40% {
+    transform: translateX(var(--geser-jarak));
+  }
+
+  16%,
+  32% {
+    transform: translateX(calc(var(--geser-jarak) / 3.5));
+  }
+}
+
+.panah-geser {
+  --geser-jarak: 0.35rem;
+  animation: geser-nudge 2.2s ease-in-out infinite;
+}
+
+.panah-geser-kiri {
+  --geser-jarak: -0.35rem;
+  animation: geser-nudge 2.2s ease-in-out infinite;
 }
 
 /* Hormati pengguna yang mematikan animasi */

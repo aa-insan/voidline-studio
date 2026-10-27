@@ -208,7 +208,7 @@ export default function StudioPage() {
           <h2 className="judul-bagian mt-8">
             {t("about.invitation.title")}
           </h2>
-          <p className="mx-auto mt-5 max-w-xl leading-relaxed text-fg-muted">
+          <p className="teks-lead mx-auto mt-5 max-w-xl leading-relaxed text-fg-muted">
             {t("about.invitation.body")}
           </p>
 

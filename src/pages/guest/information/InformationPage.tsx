@@ -148,16 +148,57 @@ export default function InformationPage() {
             {t("collection.noMatch")}
           </p>
         ) : (
-          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4 xl:grid-cols-5">
-            {hasil.map(({ karya, kode }, indeks) => (
-              <KartuKarya
-                key={`${kode}-${karya[3]}`}
-                karya={karya}
-                koleksi={t(`page.information.title`)}
-                prioritas={indeks < 12}
-              />
-            ))}
-          </div>
+          <>
+            <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4 xl:grid-cols-5">
+              {hasil.map(({ karya, kode }, indeks) => (
+                <KartuKarya
+                  key={`${kode}-${karya[3]}`}
+                  karya={karya}
+                  koleksi={t(`page.information.title`)}
+                  prioritas={indeks < 12}
+                />
+              ))}
+            </div>
+
+            {/* Pas panah penutup — kiri ke /collection, kanan ke xrp.cafe;
+                keduanya di luar grid, tepat di atas garis pembatas footer.
+                Margin bawah negatif meniadakan padding section
+                (pb-16 sm:pb-20) hingga tinggal 0.5rem jarak ke garis.
+                Gerak: panah-geser (kanan) dan panah-geser-kiri di index.css. */}
+            <div className="-mb-14 mt-6 flex items-center justify-between sm:-mb-[4.5rem]">
+              <Link
+                to="/collection"
+                aria-label={t("collection.viewCollection")}
+                title={t("collection.viewCollection")}
+                className="panah-geser-kiri group inline-flex"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-16 w-16 fill-current text-void-white sm:h-20 sm:w-20"
+                  aria-hidden="true"
+                >
+                  <path d="M11.03 5.47a.75.75 0 0 0-1.06 0l-6 6a.75.75 0 0 0 0 1.06l6 6a.75.75 0 1 0 1.06-1.06L6.31 12.75h12.94a.75.75 0 0 0 0-1.5H6.31l4.72-4.72a.75.75 0 0 0 0-1.06Z" />
+                </svg>
+              </Link>
+
+              <a
+                href="https://xrp.cafe/id/collection/momapesvoidline-jajangosle"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={t("home.rilis.cta")}
+                title={t("home.rilis.cta")}
+                className="panah-geser group inline-flex"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-16 w-16 fill-current text-void-white sm:h-20 sm:w-20"
+                  aria-hidden="true"
+                >
+                  <path d="M12.97 5.47a.75.75 0 0 1 1.06 0l6 6a.75.75 0 0 1 0 1.06l-6 6a.75.75 0 1 1-1.06-1.06l4.72-4.72H4.75a.75.75 0 0 1 0-1.5h12.94l-4.72-4.72a.75.75 0 0 1 0-1.06Z" />
+                </svg>
+              </a>
+            </div>
+          </>
         )}
       </section>
     </HalamanBerlatar>

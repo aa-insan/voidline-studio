@@ -50,7 +50,7 @@ const JUDUL_RUTE: Record<string, TextKey> = {
 const DESKRIPSI_RUTE: Record<string, string> = {
   "/": "Voidline Island is an independent art studio building hand-drawn NFT collections on the XRP Ledger — plus a browser-based generator for creators.",
   "/collection":
-    "Every Voidline Island NFT collection in one place. Mint directly on the site through the XRP Ledger.",
+    "Every Voidline Island NFT collection in one place. Mint on xrp.cafe through the XRP Ledger.",
   "/information":
     "The latest release from Voidline Island — the newest NFT collection, fresh from the XRP Ledger.",
   "/studio":

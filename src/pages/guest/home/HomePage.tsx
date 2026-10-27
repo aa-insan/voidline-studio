@@ -160,7 +160,7 @@ export default function HomePage() {
               {t("home.hero.title")}
             </h1>
 
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-fg-muted sm:text-lg">
+            <p className="teks-lead mt-6 max-w-2xl text-base leading-relaxed text-fg-muted sm:text-lg">
               {t("home.hero.subtitle")}
             </p>
 
@@ -203,7 +203,7 @@ export default function HomePage() {
           angkanya sedikit dan besar — cocok dibaca di atas merah. Tiga angka
           memakai Cinzel, sama seperti nomor "01 / 02" di halaman About Us. */}
       <section className="bg-void-red text-void-white">
-        <div className="wadah grid grid-cols-1 gap-y-2 py-10 text-center sm:grid-cols-3 sm:gap-y-0 sm:py-10 sm:divide-x sm:divide-white/20 sm:text-left">
+        <div className="wadah grid grid-cols-1 gap-y-2 py-10 text-center sm:grid-cols-3 sm:gap-y-0 sm:py-10 sm:divide-x sm:divide-white/20">
           {/* Angka dari ledger langsung (statistikLedger.ts); statis dari
               karyaNft.ts hanya cadangan saat node tidak menjawab. */}
           <div className="px-5 py-4 sm:py-2">
@@ -415,7 +415,7 @@ export default function HomePage() {
           <h2 className="judul-bagian">
             {t("home.closing.title")}
           </h2>
-          <p className="mx-auto mt-3 max-w-xl leading-relaxed text-fg-muted">
+          <p className="teks-lead mx-auto mt-3 max-w-xl leading-relaxed text-fg-muted">
             {t("home.closing.subtitle")}
           </p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">

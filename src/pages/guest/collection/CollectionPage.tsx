@@ -81,7 +81,7 @@ export default function CollectionPage() {
           <h1 className="judul-halaman mt-4">
             {t("page.collection.title")}
           </h1>
-          <p className="mt-4 leading-relaxed text-fg-muted">{t("page.collection.subtitle")}</p>
+          <p className="teks-lead mt-4 leading-relaxed text-fg-muted">{t("page.collection.subtitle")}</p>
         </header>
 
         {/* ── PENCARIAN ──────────────────────────────────────────────────────

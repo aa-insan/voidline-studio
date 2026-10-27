@@ -45,7 +45,7 @@ export const translations = {
       },
       collection: {
         title: "Collection",
-        subtitle: "Every Voidline Island collection in one place. Mint directly here — no need to leave the site.",
+        subtitle: "Every Voidline Island collection in one place. Minting happens on xrp.cafe.",
       },
       information: {
         title: "Newest Collection",
@@ -308,7 +308,7 @@ export const translations = {
           nft: {
             title: "Buying an NFT",
             body:
-              "Every collection is minted on the XRP Ledger and minted directly on its own page. Minting does not happen by message — see",
+              "Every collection is minted on the XRP Ledger through xrp.cafe. Minting does not happen by message — see",
             link: "the collections",
           },
           karya: {
@@ -548,7 +548,7 @@ export const translations = {
       },
       collection: {
         title: "Koleksi",
-        subtitle: "Semua koleksi Voidline Island di satu tempat. Mint langsung di sini — tanpa perlu keluar dari situs.",
+        subtitle: "Semua koleksi Voidline Island di satu tempat. Mint dilakukan di xrp.cafe.",
       },
       information: {
         title: "Koleksi Terbaru",
@@ -808,7 +808,7 @@ export const translations = {
           nft: {
             title: "Membeli NFT",
             body:
-              "Setiap koleksi di-mint di XRP Ledger dan di-mint langsung di halamannya sendiri. Mint tidak lewat pesan — lihat",
+              "Setiap koleksi di-mint di XRP Ledger melalui xrp.cafe. Mint tidak lewat pesan — lihat",
             link: "koleksinya",
           },
           karya: {
@@ -932,8 +932,7 @@ export const translations = {
       hero: {
         badge: "Selamat Datang di Galeri NFT Jajang Osle",
         title: "NFT GIF Animation",
-        subtitle:
-          "Voidline adalah seni animasi gif yang dibuat frame by brame dengan menghidupkan gerakan titik dan garis",
+        subtitle: "Mint terbuka sedang berjalan",
         ctaCollections: "Mint Sekarang",
         ctaLatestCollection: "Koleksi terbaru",
       },
