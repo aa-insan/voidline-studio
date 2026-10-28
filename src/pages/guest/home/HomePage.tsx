@@ -48,8 +48,10 @@ import heroGif from "../../../assets/atrium/hero_section2.gif";
    src/data/collections.ts.
    ============================================================================= */
 
-/** Jumlah karya di galeri terbaru — satu baris memanjang yang bisa digulir. */
-const JUMLAH_GALERI = 12;
+/** Jumlah karya di galeri terbaru — dibagi dua baris marquee yang berlawanan
+    arah: 12 per baris (24 total). Satu baris cukup tipis; dua baris membuat
+    bagian ini terasa seperti dinding galeri, bukan satu garis tipis. */
+const GALERI_PER_BARIS = 12;
 
 export default function HomePage() {
   const { t } = useLanguage();
@@ -112,16 +114,20 @@ export default function HomePage() {
     0,
   );
 
+  // Dua baris galeri, masing-masing GALERI_PER_BARIS kartu. Baris kedua diambil
+  // dari karya berikutnya (bukan duplikat baris pertama) supaya ke 24 kartu
+  // menampilkan karya yang berbeda, bukan pengulangan.
   const perGrup = Object.fromEntries(
     targetGroups.map((kode) => [kode, karyaPerKelompok[kode] ?? []] as const),
   );
   const galeri: Array<{ kode: KodeTampil; karya: KaryaNft }> = [];
-  for (let i = 0; galeri.length < JUMLAH_GALERI; i++) {
+  const totalGaleri = GALERI_PER_BARIS * 2;
+  for (let i = 0; galeri.length < totalGaleri; i++) {
     for (const kode of targetGroups) {
       const barisan = perGrup[kode];
       if (i < barisan.length) {
         galeri.push({ kode, karya: barisan[i] });
-        if (galeri.length >= JUMLAH_GALERI) break;
+        if (galeri.length >= totalGaleri) break;
       }
     }
   }
@@ -353,45 +359,58 @@ export default function HomePage() {
             </h2>
           </div>
 
-          {/* Baris galeri: gambar diklik → halaman detail karya. Gambarnya
-              GIF asli dari IPFS — dua belas saja, jadi tetap ringan. Track
-              ditulis dua kali (aria-hidden pada salinan) agar putarannya
-              mulus; lingkaran penuh 12 kartu untuk satu kali geser. */}
-          <div className="marquee mt-10 [mask-image:linear-gradient(to_right,transparent,black_4rem,black_calc(100%-4rem),transparent)]">
-            <div className="marquee-track gap-4 pb-4">
-              {[...galeri, ...galeri].map(({ kode, karya }, i) => {
-                const [, judul, uri, nftId] = karya;
-                const salinan = i >= galeri.length;
-                return (
-                  <Link
-                    key={`${nftId}-${i}`}
-                    to={`/collection/work/${nftId}`}
-                    className="group w-40 shrink-0 sm:w-44"
-                    aria-label={judul}
-                    aria-hidden={salinan || undefined}
-                    tabIndex={salinan ? -1 : undefined}
-                  >
-                    <div className="aspect-square overflow-hidden rounded-xl border border-border bg-void-black">
-                      <img
-                        src={daftarAlamat(uri)[0]}
-                        alt={salinan ? "" : judul}
-                        loading="lazy"
-                        decoding="async"
-                        width={300}
-                        height={300}
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.05]"
-                      />
-                    </div>
-                    <p className="mt-2 truncate text-xs font-semibold text-fg-muted" title={judul}>
-                      {judul}
-                    </p>
-                    <p className="text-[0.65rem] uppercase tracking-wider text-fg-muted/70">
-                      {t(`collection.kelompok.${kode}`)}
-                    </p>
-                  </Link>
-                );
-              })}
-            </div>
+          {/* Dua baris galeri berlawanan arah: baris atas meluncur ke kiri
+              (seperti sebelumnya), baris bawah ke kanan — dinding galeri yang
+              hidup. Masing-masing 12 karya nyata dari grup terbaru; track
+              ditulis dua kali (aria-hidden pada salinan) agar putaran mulus.
+              Gerak berhenti saat kursor di atasnya atau saat strip difokus. */}
+          <div className="mt-10 space-y-6">
+            {[0, 1].map((baris) => (
+              <div
+                key={baris}
+                className="marquee [mask-image:linear-gradient(to_right,transparent,black_4rem,black_calc(100%-4rem),transparent)]"
+                style={{ ["--marquee-durasi" as string]: baris === 0 ? "60s" : "75s" }}
+              >
+                <div
+                  className={`marquee-track gap-4 pb-4 ${baris === 1 ? "marquee-track-kiri" : ""}`}
+                >
+                  {(baris === 0 ? galeri.slice(0, GALERI_PER_BARIS) : galeri.slice(GALERI_PER_BARIS))
+                    .concat(baris === 0 ? galeri.slice(0, GALERI_PER_BARIS) : galeri.slice(GALERI_PER_BARIS))
+                    .map(({ kode, karya }, i) => {
+                      const [, judul, uri, nftId] = karya;
+                      const salinan = i >= GALERI_PER_BARIS;
+                      return (
+                        <Link
+                          key={`${nftId}-${baris}-${i}`}
+                          to={`/collection/work/${nftId}`}
+                          className="group w-40 shrink-0 sm:w-44"
+                          aria-label={judul}
+                          aria-hidden={salinan || undefined}
+                          tabIndex={salinan ? -1 : undefined}
+                        >
+                          <div className="aspect-square overflow-hidden rounded-xl border border-border bg-void-black">
+                            <img
+                              src={daftarAlamat(uri)[0]}
+                              alt={salinan ? "" : judul}
+                              loading="lazy"
+                              decoding="async"
+                              width={300}
+                              height={300}
+                              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.05]"
+                            />
+                          </div>
+                          <p className="mt-2 truncate text-xs font-semibold text-fg-muted" title={judul}>
+                            {judul}
+                          </p>
+                          <p className="text-[0.65rem] uppercase tracking-wider text-fg-muted/70">
+                            {t(`collection.kelompok.${kode}`)}
+                          </p>
+                        </Link>
+                      );
+                    })}
+                </div>
+              </div>
+            ))}
           </div>
 
           <div className="mt-6">

@@ -405,6 +405,24 @@ option:hover {
   animation: marquee var(--marquee-durasi, 60s) linear infinite;
 }
 
+/* Baris kedua galeri — arah sebaliknya: meluncur ke KANAN. Keyframes
+   dicerminkan; durasinya sedikit lebih lambat (diatur inline per baris)
+   supaya kedua baris tidak menyinkron dan terlihat sebagai dua arus. */
+@keyframes marquee-kiri {
+
+  from {
+    transform: translate3d(-50%, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.marquee-track-kiri {
+  animation-name: marquee-kiri;
+}
+
 .marquee:hover .marquee-track,
 .marquee:focus-within .marquee-track {
   animation-play-state: paused;
