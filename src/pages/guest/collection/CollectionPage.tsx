@@ -33,7 +33,7 @@ import KartuKarya from "../../../components/guest/KartuKarya";
  * ditunda sampai kartu masuk layar.
  */
 
-type Pilihan = KodeKelompok | "semua" | "baru";
+type Pilihan = Exclude<KodeKelompok | "baru", "semua">;
 
 /** Nilai filter yang sah di dropdown — dipakai untuk memvalidasi URL. */
 const KODE_SAHIH = new Set<string>(kelompokTampil);
@@ -44,7 +44,7 @@ export default function CollectionPage() {
   // unggulan di halaman atrium yang membuka koleksi tertentu langsung.
   const [parameter] = useSearchParams();
   const filterUrl = parameter.get("filter") ?? "";
-  const awal: Pilihan = KODE_SAHIH.has(filterUrl) ? (filterUrl as Pilihan) : "semua";
+  const awal: Pilihan = KODE_SAHIH.has(filterUrl) ? (filterUrl as Pilihan) : "baru";
   const [pilihan, setPilihan] = useState<Pilihan>(awal);
   const [kueri, setKueri] = useState("");
 
@@ -57,7 +57,8 @@ export default function CollectionPage() {
   // render, sehingga React tidak me-render ulang 654 kartu tanpa alasan.
   const hasil = useMemo(
     () =>
-      (pilihan === "semua" ? kelompokTampil : [pilihan]).flatMap((kode) =>
+      // "semua" tidak ada lagi di dropdown; tanpa pilihan, tampilkan grup baru.
+      (pilihan === "baru" ? kelompokTampil : [pilihan]).flatMap((kode) =>
         (karyaPerKelompok[kode] ?? [])
           .filter((karya) => !kueriRendah || karya[1].toLowerCase().includes(kueriRendah))
           .map((karya) => ({ karya, kode })),
@@ -116,7 +117,6 @@ export default function CollectionPage() {
             ganti={(v) => setPilihan(v as Pilihan)}
             label={t("collection.filterLabel")}
             opsi={[
-              { nilai: "semua", label: t("collection.allCollections", { count: jumlahSemua }) },
               ...kelompokTampil.map((kode) => ({
                 nilai: kode,
                 label: `${t(`collection.kelompok.${kode}`)} (${karyaPerKelompok[kode]?.length ?? 0})`,
