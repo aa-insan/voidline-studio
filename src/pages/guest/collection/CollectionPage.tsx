@@ -57,18 +57,13 @@ export default function CollectionPage() {
   // render, sehingga React tidak me-render ulang 654 kartu tanpa alasan.
   const hasil = useMemo(
     () =>
-      // "semua" tidak ada lagi di dropdown; tanpa pilihan, tampilkan grup baru.
-      (pilihan === "baru" ? kelompokTampil : [pilihan]).flatMap((kode) =>
+      // Dropdown hanya berisi koleksi tunggal — tanpa opsi "semua".
+      [pilihan].flatMap((kode) =>
         (karyaPerKelompok[kode] ?? [])
           .filter((karya) => !kueriRendah || karya[1].toLowerCase().includes(kueriRendah))
           .map((karya) => ({ karya, kode })),
       ),
     [pilihan, kueriRendah],
-  );
-
-  const jumlahSemua = kelompokTampil.reduce(
-    (n, kode) => n + (karyaPerKelompok[kode]?.length ?? 0),
-    0,
   );
 
   return (
@@ -77,7 +72,7 @@ export default function CollectionPage() {
         <header className="max-w-2xl">
           <p className="kicker">
             <span className="kicker-garis" aria-hidden="true" />
-            {t("collection.works", { count: jumlahSemua })}
+            {t("collection.works", { count: hasil.length })}
           </p>
           <h1 className="judul-halaman mt-4">
             {t("page.collection.title")}
