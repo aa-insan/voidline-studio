@@ -156,6 +156,7 @@ export default function InformationPage() {
                   karya={karya}
                   koleksi={t(`page.information.title`)}
                   prioritas={indeks < 12}
+                  showStatus={false}
                 />
               ))}
             </div>

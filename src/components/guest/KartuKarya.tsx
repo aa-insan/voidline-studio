@@ -30,9 +30,17 @@ type Props = {
   /** Nama koleksi induk. Tidak tampil di kartu — dipakai untuk label pembaca layar. */
   koleksi: string;
   prioritas?: boolean;
+  /** Sembunyikan badge Available / Sold out. Dipakai halaman information yang
+      tidak perlu membedakan status jual per kartu. Koleksi tetap menampilkannya. */
+  showStatus?: boolean;
 };
 
-export default function KartuKarya({ karya, koleksi, prioritas = false }: Props) {
+export default function KartuKarya({
+  karya,
+  koleksi,
+  prioritas = false,
+  showStatus = true,
+}: Props) {
   const { t } = useLanguage();
   const [nomor, judul, uri, nftId] = karya;
 
@@ -122,7 +130,7 @@ export default function KartuKarya({ karya, koleksi, prioritas = false }: Props)
 
         {/* Status jual di pojok kanan atas. Muncul setelah ledger menjawab —
             sebelum itu kartu polos, bukan menebak. */}
-        {keadaan === "siap" && (
+        {showStatus && keadaan === "siap" && (
           <span
             className={
               sudahLaku
