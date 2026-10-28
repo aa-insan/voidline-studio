@@ -87,7 +87,7 @@ export default function KaryaPage() {
     <HalamanBerlatar>
       <section className="wadah bagian-kepala-halaman pb-16 sm:pb-20">
         <Link
-          to="/collection"
+          to={`/collection?filter=${kode ?? ""}`}
           className="inline-flex items-center gap-1.5 text-sm font-medium text-fg-muted underline-offset-4 transition-colors hover:text-fg hover:underline"
         >
           <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
