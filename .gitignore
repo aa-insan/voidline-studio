@@ -26,6 +26,8 @@ dist-ssr
 # Arsip rollback manual (cadangan sebelum perubahan besar).
 # Isinya salinan berkas yang sudah ada di riwayat git, jadi tidak perlu
 # disimpan dua kali. Folder ini dibuat tangan, bukan oleh alat build.
-.cadangan
+# Trailing slash + /** supaya folder baru di dalamnya ikut terabaikan,
+# bukan hanya folder tingkat pertama.
+.cadangan/**
 scripts/.cache-metadata.json
 __pycache__/
