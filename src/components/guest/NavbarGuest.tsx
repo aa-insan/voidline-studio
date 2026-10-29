@@ -3,11 +3,6 @@ import { Link, NavLink } from "react-router-dom";
 import Logo from "../../assets/Logo.gif";
 import { useLanguage } from "../../i18n/useLanguage";
 import LanguageSwitch from "./LanguageSwitch";
-import {
-  karyaPerKelompok,
-  kelompokTampil,
-} from "../../data/karyaNft";
-import { daftarAlamat } from "../../services/gambarKarya";
 
 /**
  * Navbar pengunjung yang belum login.
@@ -140,66 +135,11 @@ export default function NavbarGuest() {
           aria-label={t("nav.menu")}
           className="hidden items-center gap-5 text-sm font-medium lg:flex xl:gap-7"
         >
-          {NAV_ITEMS.map((item) =>
-            item.to === "/collection" ? (
-              <div key={item.to} className="relative">
-                <button
-                  popoverTarget="collection-panel"
-                  className="flex items-center gap-1 py-2 text-fg-muted transition-colors hover:text-fg"
-                >
-                  {t(item.key)}
-                  <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-current" aria-hidden="true">
-                    <path d="M12 15.5 5.5 9h13L12 15.5Z" />
-                  </svg>
-                </button>
-                <div popover="auto" id="collection-panel" className="p-0">
-                  <div className="wadah py-5">
-                    <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-fg-muted">
-                      {t("collection.allCollections")}
-                    </p>
-                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-                      {kelompokTampil.map((kode) => {
-                        const karya = karyaPerKelompok[kode] ?? [];
-                        const nama = t(`collection.kelompok.${kode}`);
-                        const contoh = karya[0];
-                        const jumlah = karya.length;
-                        const gambar = contoh ? daftarAlamat(contoh[2])[0] : undefined;
-                        return (
-                          <NavLink
-                            key={kode}
-                            to={`/collection?filter=${kode}`}
-                            className="group flex flex-col gap-2 rounded-xl border border-border bg-surface p-3 transition-colors hover:border-accent hover:bg-surface-hover"
-                          >
-                            {gambar && (
-                              <div className="aspect-square overflow-hidden rounded-lg bg-void-black">
-                                <img
-                                  src={gambar}
-                                  alt={nama}
-                                  loading="lazy"
-                                  decoding="async"
-                                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                />
-                              </div>
-                            )}
-                            <div>
-                              <p className="truncate text-xs font-semibold text-fg">{nama}</p>
-                              <p className="text-[0.65rem] text-fg-muted">
-                                {jumlah} {jumlah === 1 ? "piece" : "pieces"}
-                              </p>
-                            </div>
-                          </NavLink>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <NavLink key={item.to} to={item.to} end={item.end} className={desktopLinkClass}>
-                {t(item.key)}
-              </NavLink>
-            )
-          )}
+          {NAV_ITEMS.map((item) => (
+            <NavLink key={item.to} to={item.to} end={item.end} className={desktopLinkClass}>
+              {t(item.key)}
+            </NavLink>
+          ))}
         </nav>
 
         {/* Kolom 3 — satu deretan "tabs-lift": bahasa · auth. Semua elemen duduk
