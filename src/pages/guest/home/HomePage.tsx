@@ -103,31 +103,48 @@ export default function HomePage() {
     }),
   );
 
-  // Gallery: hanya karya dari grup terbaru (`kodeGrupBaru` / " baru").
-  // Jika grup baru kosong, fallback ke koleksi bernama biasa.
-  const targetGroups: readonly KodeTampil[] =
+  // Gallery: dua baris dari dua grup berbeda.
+  // Baris atas - grup terbaru (Mom Apes Voidline / "baru").
+  // Baris bawah - koleksi utama Apes Voidline ("apid").
+  // Jika grup baru kosong, baris atas fallback ke kelompokTampil.
+  const targetGroupsAtas: readonly KodeTampil[] =
     kodeGrupBaru.length > 0 ? kodeGrupBaru : kelompokTampil;
 
-  // Jumlah karya yang ditampilkan galeri (grup baru saja) — dipakai CTA.
-  const jumlahKaryaBaru = targetGroups.reduce(
+  // Baris bawah selalu dari "apid" (Apes Voidline) - grup utama studio.
+  const targetGroupsBawah: readonly KodeTampil[] = ["apid"];
+
+  // Jumlah karya baris atas - dipakai CTA.
+  const jumlahKaryaBaru = targetGroupsAtas.reduce(
     (total, kode) => total + (karyaPerKelompok[kode]?.length ?? 0),
     0,
   );
 
-  // Dua baris galeri, masing-masing GALERI_PER_BARIS kartu. Baris kedua diambil
-  // dari karya berikutnya (bukan duplikat baris pertama) supaya ke 24 kartu
-  // menampilkan karya yang berbeda, bukan pengulangan.
-  const perGrup = Object.fromEntries(
-    targetGroups.map((kode) => [kode, karyaPerKelompok[kode] ?? []] as const),
+  // Baris atas: GALERI_PER_BARIS kartu dari grup terbaru.
+  const perGrupAtas = Object.fromEntries(
+    targetGroupsAtas.map((kode) => [kode, karyaPerKelompok[kode] ?? []] as const),
   );
-  const galeri: Array<{ kode: KodeTampil; karya: KaryaNft }> = [];
-  const totalGaleri = GALERI_PER_BARIS * 2;
-  for (let i = 0; galeri.length < totalGaleri; i++) {
-    for (const kode of targetGroups) {
-      const barisan = perGrup[kode];
+  const galeriAtas: Array<{ kode: KodeTampil; karya: KaryaNft }> = [];
+  for (let i = 0; galeriAtas.length < GALERI_PER_BARIS; i++) {
+    for (const kode of targetGroupsAtas) {
+      const barisan = perGrupAtas[kode];
       if (i < barisan.length) {
-        galeri.push({ kode, karya: barisan[i] });
-        if (galeri.length >= totalGaleri) break;
+        galeriAtas.push({ kode, karya: barisan[i] });
+        if (galeriAtas.length >= GALERI_PER_BARIS) break;
+      }
+    }
+  }
+
+  // Baris bawah: GALERI_PER_BARIS kartu dari Apes Voidline ("apid").
+  const perGrupBawah = Object.fromEntries(
+    targetGroupsBawah.map((kode) => [kode, karyaPerKelompok[kode] ?? []] as const),
+  );
+  const galeriBawah: Array<{ kode: KodeTampil; karya: KaryaNft }> = [];
+  for (let i = 0; galeriBawah.length < GALERI_PER_BARIS; i++) {
+    for (const kode of targetGroupsBawah) {
+      const barisan = perGrupBawah[kode];
+      if (i < barisan.length) {
+        galeriBawah.push({ kode, karya: barisan[i] });
+        if (galeriBawah.length >= GALERI_PER_BARIS) break;
       }
     }
   }
@@ -360,8 +377,7 @@ export default function HomePage() {
           </div>
 
           {/* Dua baris galeri berlawanan arah: baris atas meluncur ke kiri
-              (seperti sebelumnya), baris bawah ke kanan — dinding galeri yang
-              hidup. Masing-masing 12 karya nyata dari grup terbaru; track
+              (Mom Apes Voidline), baris bawah ke kanan (Apes Voidline). Track
               ditulis dua kali (aria-hidden pada salinan) agar putaran mulus.
               Gerak berhenti saat kursor di atasnya atau saat strip difokus. */}
           <div className="mt-10 space-y-6">
@@ -374,8 +390,8 @@ export default function HomePage() {
                 <div
                   className={`marquee-track gap-4 pb-4 ${baris === 1 ? "marquee-track-kiri" : ""}`}
                 >
-                  {(baris === 0 ? galeri.slice(0, GALERI_PER_BARIS) : galeri.slice(GALERI_PER_BARIS))
-                    .concat(baris === 0 ? galeri.slice(0, GALERI_PER_BARIS) : galeri.slice(GALERI_PER_BARIS))
+                  {(baris === 0 ? galeriAtas : galeriBawah)
+                    .concat(baris === 0 ? galeriAtas : galeriBawah)
                     .map(({ kode, karya }, i) => {
                       const [, judul, uri, nftId] = karya;
                       const salinan = i >= GALERI_PER_BARIS;
