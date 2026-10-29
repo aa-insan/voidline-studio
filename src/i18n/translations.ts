@@ -461,8 +461,8 @@ export const translations = {
         viewAll: "View all collections",
       },
       gallery: {
-        kicker: "Latest Works",
-        title: "Fresh from the ledger",
+        kicker: "Mate your apes! Illegal apes marriage",
+        title: "",
         cta: "See all {count} pieces",
       },
       generate: {
@@ -958,8 +958,8 @@ export const translations = {
         viewAll: "Lihat semua koleksi",
       },
       gallery: {
-        kicker: "Karya Terbaru",
-        title: "Segar dari ledger",
+        kicker: "Kawinkan Apes-mu! Pernikahan Ilegal Apes",
+        title: "",
         cta: "Lihat semua {count} karya",
       },
       generate: {
