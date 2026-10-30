@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import Logo from "../../assets/Logo.gif";
 import { useLanguage } from "../../i18n/useLanguage";
 import LanguageSwitch from "./LanguageSwitch";
+import { kelompokTampil } from "../../data/karyaNft";
 
 /**
  * Navbar pengunjung yang belum login.
@@ -62,7 +63,31 @@ const CUSTOM_ORDER_HREF = "https://xrp.cafe/id/collection/jajangvoidline";
 
 export default function NavbarGuest() {
   const { t } = useLanguage();
+  const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Jika di halaman koleksi, tampilkan nama koleksi aktif di tombol Collection.
+  const koleksiAktif =
+    location.pathname === "/collection"
+      ? new URLSearchParams(location.search).get("collection")
+      : null;
+  const labelCollection = koleksiAktif
+    ? t(`collection.kelompok.${koleksiAktif}`)
+    : t("nav.collection");
+
+  // Klik di luar dropdown menutup panel.
+  useEffect(() => {
+    if (!dropdownOpen) return;
+    const handleClick = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [dropdownOpen]);
 
   // Kunci gulir halaman selama panel mobile terbuka, supaya latar belakang
   // tidak ikut bergulir saat pengunjung membaca menu.
@@ -135,11 +160,48 @@ export default function NavbarGuest() {
           aria-label={t("nav.menu")}
           className="hidden items-center gap-5 text-sm font-medium lg:flex xl:gap-7"
         >
-          {NAV_ITEMS.map((item) => (
-            <NavLink key={item.to} to={item.to} end={item.end} className={desktopLinkClass}>
-              {t(item.key)}
-            </NavLink>
-          ))}
+          {NAV_ITEMS.map((item) =>
+            item.to === "/collection" ? (
+              <div key={item.to} ref={dropdownRef} className="relative">
+                <button
+                  onClick={() => setDropdownOpen((o) => !o)}
+                  className={`relative flex items-center gap-1 py-2 transition-colors ${
+                    koleksiAktif
+                      ? "font-semibold text-accent after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:rounded-full after:bg-accent"
+                      : "text-fg-muted hover:text-fg"
+                  }`}
+                >
+                  {labelCollection}
+                  <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-current" aria-hidden="true">
+                    <path d="M12 15.5 5.5 9h13L12 15.5Z" />
+                  </svg>
+                </button>
+                {dropdownOpen && (
+                  <div className="absolute left-0 top-full z-50 mt-1 min-w-52 rounded-xl border border-border bg-void-black shadow-brand-lg">
+                    <div className="wadah py-3">
+                    {kelompokTampil.map((kode) => {
+                      const nama = t(`collection.kelompok.${kode}`);
+                      return (
+                        <NavLink
+                          key={kode}
+                          to={`/collection?collection=${kode}`}
+                          onClick={() => setDropdownOpen(false)}
+                          className="block border-b border-border/60 py-3 text-sm last:border-b-0 hover:text-accent"
+                        >
+                          <span className="font-medium">{nama}</span>
+                        </NavLink>
+                      );
+                    })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <NavLink key={item.to} to={item.to} end={item.end} className={desktopLinkClass}>
+                {t(item.key)}
+              </NavLink>
+            )
+          )}
         </nav>
 
         {/* Kolom 3 — satu deretan "tabs-lift": bahasa · auth. Semua elemen duduk

@@ -1,8 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useLanguage } from "../../../i18n/useLanguage";
 import { karyaPerKelompok, kelompokTampil, type KodeKelompok } from "../../../data/karyaNft";
-import DropdownKoleksi from "../../../components/guest/DropdownKoleksi";
 import HalamanBerlatar from "../../../components/guest/HalamanBerlatar";
 import KartuKarya from "../../../components/guest/KartuKarya";
 
@@ -40,12 +39,19 @@ const KODE_SAHIH = new Set<string>(kelompokTampil);
 
 export default function CollectionPage() {
   const { t } = useLanguage();
-  // Filter awal bisa datang dari URL (?filter=apid) — dipakai tombol kartu
-  // unggulan di halaman atrium yang membuka koleksi tertentu langsung.
   const [parameter] = useSearchParams();
-  const filterUrl = parameter.get("filter") ?? "";
-  const awal: Pilihan = KODE_SAHIH.has(filterUrl) ? (filterUrl as Pilihan) : "baru";
-  const [pilihan, setPilihan] = useState<Pilihan>(awal);
+  // Koleksi awal dari URL (?collection=) — dipakai navbar dropdown.
+  const collectionUrl = parameter.get("collection") ?? "";
+  const awalCollection: Pilihan = KODE_SAHIH.has(collectionUrl) ? (collectionUrl as Pilihan) : "baru";
+  const [pilihan, setPilihan] = useState<Pilihan>(awalCollection);
+
+  // Urutan: "asc" = terlama dulu (1,2,3…), "desc" = terbaru dulu (…,3,2,1). null = tanpa sort.
+  const [urutan, setUrutan] = useState<"asc" | "desc" | null>(null);
+
+  // Sync pilihan dengan URL saat collection berubah (misal dari navbar dropdown).
+  useEffect(() => {
+    setPilihan(awalCollection);
+  }, [awalCollection]);
   const [kueri, setKueri] = useState("");
 
   // Cari di judul, apa adanya: tanpa memandang huruf besar-kecil. Nomor edisi
@@ -55,16 +61,18 @@ export default function CollectionPage() {
   // Menyaring 654 judul adalah pekerjaan yang tidak terasa — useMemo di sini
   // bukan demi kecepatan, melainkan supaya identitas daftarnya stabil antar
   // render, sehingga React tidak me-render ulang 654 kartu tanpa alasan.
-  const hasil = useMemo(
-    () =>
-      // Dropdown hanya berisi koleksi tunggal — tanpa opsi "semua".
-      [pilihan].flatMap((kode) =>
-        (karyaPerKelompok[kode] ?? [])
-          .filter((karya) => !kueriRendah || karya[1].toLowerCase().includes(kueriRendah))
-          .map((karya) => ({ karya, kode })),
-      ),
-    [pilihan, kueriRendah],
-  );
+  const hasil = useMemo(() => {
+    const filtered = [pilihan].flatMap((kode) =>
+      (karyaPerKelompok[kode] ?? [])
+        .filter((karya) => !kueriRendah || karya[1].toLowerCase().includes(kueriRendah))
+        .map((karya) => ({ karya, kode })),
+    );
+    return [...filtered].sort((a, b) => {
+      const noA = parseInt(a.karya[1].match(/#(\d+)/)?.[1] ?? "0", 10);
+      const noB = parseInt(b.karya[1].match(/#(\d+)/)?.[1] ?? "0", 10);
+      return urutan === "asc" ? noA - noB : noB - noA;
+    });
+  }, [pilihan, kueriRendah, urutan]);
 
   return (
     <HalamanBerlatar>
@@ -105,19 +113,37 @@ export default function CollectionPage() {
             />
           </label>
 
-          {/* Dropdown custom — bukan <select> asli, supaya sorotan, warna, dan
-              geraknya milik situs, bukan milik sistem operasi. */}
-          <DropdownKoleksi
-            nilai={pilihan}
-            ganti={(v) => setPilihan(v as Pilihan)}
-            label={t("collection.filterLabel")}
-            opsi={[
-              ...kelompokTampil.map((kode) => ({
-                nilai: kode,
-                label: `${t(`collection.kelompok.${kode}`)} (${karyaPerKelompok[kode]?.length ?? 0})`,
-              })),
-            ]}
-          />
+          {/* Tombol urutan — panah atas (terlama dulu) / panah bawah (terbaru dulu). */}
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setUrutan("asc")}
+              title={t("collection.sortAsc")}
+              aria-label={t("collection.sortAsc")}
+              className={`rounded-lg p-2.5 transition-colors ${
+                urutan === "asc"
+                  ? "bg-accent text-accent-fg"
+                  : "text-fg-muted hover:bg-surface-hover hover:text-fg"
+              }`}
+            >
+              <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
+                <path d="M12 4 4 14h5v6h6v-6h5L12 4Z" />
+              </svg>
+            </button>
+            <button
+              onClick={() => setUrutan("desc")}
+              title={t("collection.sortDesc")}
+              aria-label={t("collection.sortDesc")}
+              className={`rounded-lg p-2.5 transition-colors ${
+                urutan === "desc"
+                  ? "bg-accent text-accent-fg"
+                  : "text-fg-muted hover:bg-surface-hover hover:text-fg"
+              }`}
+            >
+              <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
+                <path d="M12 20 4 10h5V4h6v6h5L12 20Z" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <p className="sr-only" role="status" aria-live="polite">
