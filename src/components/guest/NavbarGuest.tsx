@@ -3,7 +3,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import Logo from "../../assets/Logo.gif";
 import { useLanguage } from "../../i18n/useLanguage";
 import LanguageSwitch from "./LanguageSwitch";
-import { kelompokTampil } from "../../data/karyaNft";
+import { kelompokTampil, type KodeTampil } from "../../data/karyaNft";
 
 /**
  * Navbar pengunjung yang belum login.
@@ -73,8 +73,12 @@ export default function NavbarGuest() {
     location.pathname === "/collection"
       ? new URLSearchParams(location.search).get("collection")
       : null;
-  const labelCollection = koleksiAktif
-    ? t(`collection.kelompok.${koleksiAktif}`)
+  const koleksiValid: KodeTampil | null =
+    koleksiAktif && kelompokTampil.includes(koleksiAktif as KodeTampil)
+      ? (koleksiAktif as KodeTampil)
+      : null;
+  const labelCollection = koleksiValid
+    ? t(`collection.kelompok.${koleksiValid}`)
     : t("nav.collection");
 
   // Klik di luar dropdown menutup panel.
