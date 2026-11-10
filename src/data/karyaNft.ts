@@ -775,6 +775,7 @@ export const karyaPerKelompok: Partial<Record<KodeTampil, readonly KaryaNft[]>> 
     [557, "Mom Apes Voidline #557", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/557.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCA79F9B3B0628ADA4"],
     [211, "Mom Apes Voidline #211", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/211.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCA979E7F80628AD61"],
     [344, "Mom Apes Voidline #344", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/344.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCABBFA0300628AD99"],
+    [526, "Mom Apes Voidline #526", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/526.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCAE0558680628ADD1"],
     [226, "Mom Apes Voidline #226", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/226.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCAFDFA52D0628AD8E"],
     [177, "Mom Apes Voidline #177", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/177.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCB3FFAA1A0628AD83"],
     [457, "Mom Apes Voidline #457", "ipfs://bafybeia7yztscgfrsbfhauvlay4mkrzkent65nc5akddn53ngyjkk4cfzq/457.gif", "001827104B7026232C1FBF39853DA77DA0CCA5AB437594FCB64562520628ADBB"],
